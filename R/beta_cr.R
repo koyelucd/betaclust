@@ -18,7 +18,7 @@ beta_cr<-function(X,K=3,patients,samples,seed,register=NULL){
     set.seed(seed)
 
   ## select the # of cores on which the parallel code is to run
-  if(!is.null(register)){
+  if(is.null(register)){
     ncores = parallel::detectCores()
     doParallel::registerDoParallel(ncores-1)}
 
