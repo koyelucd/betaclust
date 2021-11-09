@@ -15,7 +15,7 @@ beta_c<-function(X,K=3,seed,register=NULL){
   ## select the # of cores on which the parallel code is to run
   if(!is.null(register)){
     ncores = parallel::detectCores()
-    doParallel::registerDoParallel(ncores)}
+    doParallel::registerDoParallel(ncores-1)}
 
   ## declare aliases for dopar command
   `%dopar%` <- foreach::`%dopar%`
