@@ -18,10 +18,16 @@ beta_cn<-function(X,K=3,seed,register=NULL){
     ncores = parallel::detectCores()
     doParallel::registerDoParallel(ncores-1)}
 
+
   ## declare aliases for dopar command
   `%dopar%` <- foreach::`%dopar%`
   `%do%` <- foreach::`%do%`
 
+  X<-as.data.frame(X)
+  if(any(is.na(X)))
+  {
+    stop("Missing values observed in dataset")
+  }
 
   ## Initial clustering using k-means
   k_cluster<-stats::kmeans(X,K)

@@ -26,6 +26,12 @@ beta_cr<-function(X,K=3,patients,samples,seed,register=NULL){
   `%dopar%` <- foreach::`%dopar%`
   `%do%` <- foreach::`%do%`
 
+  ## Check for missing data
+  X<-as.data.frame(X)
+  if(any(is.na(X)))
+  {
+    stop("Missing values observed in dataset")
+  }
   ## Initial clustering using k-means
   ## K= 3 for hypo,hyper and hemi methylation. For R sample types there can be
   ## 3^R combinations of these profiles hence K^R clusters

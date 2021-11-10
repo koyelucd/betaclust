@@ -21,6 +21,12 @@ beta_c<-function(X,K=3,seed,register=NULL){
   `%dopar%` <- foreach::`%dopar%`
   `%do%` <- foreach::`%do%`
 
+  X<-as.data.frame(X)
+  if(any(is.na(X)))
+  {
+    stop("Missing values observed in dataset")
+  }
+
   ## Initial clustering using k-means
   k_cluster<-stats::kmeans(X,K)
   mem <- k_cluster$cluster
