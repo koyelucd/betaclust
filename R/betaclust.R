@@ -1,0 +1,106 @@
+#' betaclust wrapper function
+#' @export
+#' @param  X methylation values for CpG sites frpm R samples collected from N patients
+#' @param K number of methylation groups to be identified (default=3)
+#' @param patients number of patients in the study
+#' @param samples number of samples collected from each patient for study
+#' @param mixm mixture model to run (Models= c(C..,CN.,C.R), default=C..)
+#' @param model_selection optimal model selection based on information criterion. (Methods=AIC,BIC,ICL,default=BIC)
+#' @param seed seed for reproducible work
+#' @param register setting for parallelization
+#' @importFrom foreach %dopar%
+#' @importFrom stats C
+
+betaclust<-function(X,K=3,patients,samples,mixm="C..",model_selection="BIC",seed,register=NULL){
+  len=length(mixm)
+  llk<-vector()
+  z<-vector(mode = "list", length = len)
+  if(length(mixm))
+  {
+    for(i in len)
+    {
+      ## Call for C.. function
+      if(i == "C..")
+      {
+        ## check if samples>1
+        if(samples>1)
+          warning("C.. method can run for single sample and not multiple samples.
+                  Method run for 1st sample only.", call. = FALSE)
+        call_data<-X[,1:patients]
+        c_out<-beta_c(X,K,seed,register)
+        len_llk<-length(c_out$llk)
+        llk<-c(llk,c_out$llk[len_llk])
+        z[[i]]<-c_out$z
+      }
+      ## Call for CN. function
+      if(i == "CN.")
+      {
+        ## check if samples>1
+        if(samples>1)
+          warning("CN. method can run for single sample and not multiple samples.
+                  Method run for 1st sample only.", call. = FALSE)
+        call_data<-X[,1:patients]
+        cn_out<-beta_cn(X,K,seed,register)
+        len_llk<-length(cn_out$llk)
+        llk<-c(llk,cn_out$llk[len_llk])
+        z[[i]]<-cn_out$z
+      }
+      ## Call for C.R function
+      if(i == "C.R")
+      {
+        ## check if samples>1
+        if(samples<=1){
+          warning("C.R can only run for multiple samples. Please pass DNA methylation values for more than 1 sample.", call. = FALSE)
+          llk<-c(llk,NA)
+          }else {
+          cr_out<-beta_cr(X,K,patients,samples,seed,register)
+          len_llk<-length(cr_out$llk)
+          llk<-c(llk,cr_out$llk[len_llk])
+          z[[i]]<-cr_out$z
+        }
+      }
+    }
+
+  }
+
+  ### Optimal model selection and output
+
+  if(model_selection=="BIC")
+  {
+    ## compare bic value
+    ic_op<-em_bic(llk,C,K,mixm,patients,samples)
+    min_index<-which.min(ic_op)
+    min_method<-mixm[min_index]
+
+  }else if(model_selection=="AIC")
+  {
+    ## compare aic value
+    ic_op<-em_aic(llk,C,K,mixm,patients,samples)
+    min_index<-which.min(ic_op)
+    min_method<-mixm[min_index]
+  }else if(model_selection=="ICL")
+  {
+    ## compare icl value
+    ic_op<-em_icl(llk,C,K,mixm,patients,samples,z)
+    min_index<-which.min(ic_op)
+    min_method<-mixm[min_index]
+  }
+
+  call_function<-match.call()
+
+  if(min_method=="C..")
+  {
+    final_output<-c_out
+  }else if(min_method=="CN.")
+  {
+    final_output<-cn_out
+  }else if(min_method=="C.R")
+  {
+    final_output<-cr_out
+  }
+
+
+  return(list(information_criterion=model_selection,ic_output=ic_op,function_call=call_function,best_model=final_output))
+}
+
+

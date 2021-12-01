@@ -5,6 +5,7 @@
 #' @param seed seed for reproducible work
 #' @param register setting for parallelization
 #' @importFrom foreach %dopar%
+#' @importFrom stats C
 
 beta_cn<-function(X,K=3,seed,register=NULL){
 
