@@ -15,6 +15,7 @@ betaclust<-function(X,K=3,patients,samples,mixm="C..",model_selection="BIC",seed
   len=length(mixm)
   llk<-vector()
   z<-vector(mode = "list", length = len)
+  print(mixm)
   if(length(mixm))
   {
     for(i in len)
