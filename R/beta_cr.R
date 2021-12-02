@@ -21,7 +21,8 @@ beta_cr<-function(X,K=3,patients,samples,seed,register=NULL){
   ## select the # of cores on which the parallel code is to run
   if(is.null(register)){
     ncores = parallel::detectCores()
-    doParallel::registerDoParallel(ncores-1)}
+    my.cluster <- parallel::makeCluster(ncores-1)
+    doParallel::registerDoParallel(cl = my.cluster)}
 
   ## declare aliases for dopar command
   `%dopar%` <- foreach::`%dopar%`
@@ -210,7 +211,7 @@ beta_cr<-function(X,K=3,patients,samples,seed,register=NULL){
   cert=apply(z_new,1,max)
   uc=1-cert
 
-  parallel::stopCluster(ncores-1)
+  parallel::stopCluster(cl=my.cluster)
 
   #### Return data
   return(list(llk=llk_iter,data=complete_data,alpha=alpha,beta=beta,tau=tau,z=z_new,uncertainity=uc))
