@@ -27,10 +27,12 @@ betaclust<-function(X,K=3,patients,samples,mixm="C..",model_selection="BIC",seed
           warning("C.. method can run for single sample and not multiple samples.
                   Method run for 1st sample only.", call. = FALSE)
         call_data<-X[,1:patients]
-        c_out<-beta_c(X,K,seed,register)
+        c_out<-beta_c(call_data,K,seed,register)
         len_llk<-length(c_out$llk)
         llk<-c(llk,c_out$llk[len_llk])
         z[[i]]<-c_out$z
+        print(c_out$alpha)
+        print(c_out$beta)
       }
       ## Call for CN. function
       if(mixm[i] == "CN.")
@@ -40,10 +42,12 @@ betaclust<-function(X,K=3,patients,samples,mixm="C..",model_selection="BIC",seed
           warning("CN. method can run for single sample and not multiple samples.
                   Method run for 1st sample only.", call. = FALSE)
         call_data<-X[,1:patients]
-        cn_out<-beta_cn(X,K,seed,register)
+        cn_out<-beta_cn(call_data,K,seed,register)
         len_llk<-length(cn_out$llk)
         llk<-c(llk,cn_out$llk[len_llk])
         z[[i]]<-cn_out$z
+        print(c_out$alpha)
+        print(c_out$beta)
       }
       ## Call for C.R function
       if(mixm[i] == "C.R")
@@ -57,31 +61,36 @@ betaclust<-function(X,K=3,patients,samples,mixm="C..",model_selection="BIC",seed
           len_llk<-length(cr_out$llk)
           llk<-c(llk,cr_out$llk[len_llk])
           z[[i]]<-cr_out$z
+          print(c_out$alpha)
+          print(c_out$beta)
         }
       }
     }
 
   }
 
+  print(llk)
+  print(mixm)
+  print(model_selection)
   ### Optimal model selection and output
 
   if(model_selection=="BIC")
   {
     ## compare bic value
-    ic_op<-em_bic(llk,C,K,mixm,patients,samples)
+    ic_op<-em_bic(llk,C,K,patients,samples,mixm)
     min_index<-which.min(ic_op)
     min_method<-mixm[min_index]
 
   }else if(model_selection=="AIC")
   {
     ## compare aic value
-    ic_op<-em_aic(llk,C,K,mixm,patients,samples)
+    ic_op<-em_aic(llk,C,K,patients,samplesmixm)
     min_index<-which.min(ic_op)
     min_method<-mixm[min_index]
   }else if(model_selection=="ICL")
   {
     ## compare icl value
-    ic_op<-em_icl(llk,C,K,mixm,patients,samples,z)
+    ic_op<-em_icl(llk,C,K,patients,samples,mixm,z)
     min_index<-which.min(ic_op)
     min_method<-mixm[min_index]
   }
