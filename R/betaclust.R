@@ -24,7 +24,7 @@ betaclust<-function(X,K=3,patients,samples,mixm="C..",model_selection="BIC",seed
       ## Call for C.. function
       if(mixm[i] == "C..")
       {
-        print(mixm[i])
+        #print(mixm[i])
         ## check if samples>1
         if(samples>1)
         {
@@ -33,13 +33,13 @@ betaclust<-function(X,K=3,patients,samples,mixm="C..",model_selection="BIC",seed
         }
 
         call_data=X[,1:patients]
-        print(call_data[1:4,])
+        #print(call_data[1:4,])
         c_out<-beta_c(call_data,K,seed,register)
         len_llk<-length(c_out$llk)
         llk<-c(llk,c_out$llk[len_llk])
         z[[i]]<-c_out$z
-        print(c_out$alpha)
-        print(c_out$beta)
+        #print(c_out$alpha)
+        #print(c_out$beta)
       }
       ## Call for CN. function
       if(mixm[i] == "CN.")
@@ -53,8 +53,8 @@ betaclust<-function(X,K=3,patients,samples,mixm="C..",model_selection="BIC",seed
         len_llk<-length(cn_out$llk)
         llk<-c(llk,cn_out$llk[len_llk])
         z[[i]]<-cn_out$z
-        print(cn_out$alpha)
-        print(cn_out$beta)
+        #print(cn_out$alpha)
+        #print(cn_out$beta)
       }
       ## Call for C.R function
       if(mixm[i] == "C.R")
@@ -68,8 +68,8 @@ betaclust<-function(X,K=3,patients,samples,mixm="C..",model_selection="BIC",seed
           len_llk<-length(cr_out$llk)
           llk<-c(llk,cr_out$llk[len_llk])
           z[[i]]<-cr_out$z
-          print(cr_out$alpha)
-          print(cr_out$beta)
+          #print(cr_out$alpha)
+          #print(cr_out$beta)
         }
       }
     }
@@ -116,7 +116,7 @@ betaclust<-function(X,K=3,patients,samples,mixm="C..",model_selection="BIC",seed
   }
 
 
-  return(list(information_criterion=model_selection,ic_output=ic_op,function_call=call_function,best_model=final_output))
+  return(list(information_criterion=model_selection,ic_output=ic_op,optimal_model=min_method,function_call=call_function,best_model=final_output))
 }
 
 
