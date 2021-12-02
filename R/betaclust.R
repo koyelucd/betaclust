@@ -15,7 +15,7 @@ betaclust<-function(X,K=3,patients,samples,mixm="C..",model_selection="BIC",seed
   len=length(mixm)
   llk<-vector()
   z<-vector(mode = "list", length = len)
-  print(mixm)
+  #print(mixm)
   if(length(mixm))
   {
     for(i in len)
@@ -23,11 +23,13 @@ betaclust<-function(X,K=3,patients,samples,mixm="C..",model_selection="BIC",seed
       ## Call for C.. function
       if(mixm[i] == "C..")
       {
+        print(mixm[i])
         ## check if samples>1
         if(samples>1)
           warning("C.. method can run for single sample and not multiple samples.
                   Method run for 1st sample only.", call. = FALSE)
         call_data<-X[,1:patients]
+        print(call_data[1:4,])
         c_out<-beta_c(call_data,K,seed,register)
         len_llk<-length(c_out$llk)
         llk<-c(llk,c_out$llk[len_llk])
@@ -70,9 +72,9 @@ betaclust<-function(X,K=3,patients,samples,mixm="C..",model_selection="BIC",seed
 
   }
 
-  print(llk)
-  print(mixm)
-  print(model_selection)
+  # print(llk)
+  # print(mixm)
+  # print(model_selection)
   ### Optimal model selection and output
 
   if(model_selection=="BIC")
