@@ -20,7 +20,7 @@ betaclust<-function(X,K=3,patients,samples,mixm="C..",model_selection="BIC",seed
     for(i in len)
     {
       ## Call for C.. function
-      if(i == "C..")
+      if(mixm[i] == "C..")
       {
         ## check if samples>1
         if(samples>1)
@@ -33,7 +33,7 @@ betaclust<-function(X,K=3,patients,samples,mixm="C..",model_selection="BIC",seed
         z[[i]]<-c_out$z
       }
       ## Call for CN. function
-      if(i == "CN.")
+      if(mixm[i] == "CN.")
       {
         ## check if samples>1
         if(samples>1)
@@ -46,7 +46,7 @@ betaclust<-function(X,K=3,patients,samples,mixm="C..",model_selection="BIC",seed
         z[[i]]<-cn_out$z
       }
       ## Call for C.R function
-      if(i == "C.R")
+      if(mixm[i] == "C.R")
       {
         ## check if samples>1
         if(samples<=1){
