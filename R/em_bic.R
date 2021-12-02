@@ -17,6 +17,7 @@ em_bic<-function(llk,C,K,patients=4,samples=1,mixm="C.."){
 
   for(i in 1:mod_len)
   {
+    num_par=0
     if(mixm[i] ==  "C..") ##C
     {
       num_par = (K*2)+(K-1)
