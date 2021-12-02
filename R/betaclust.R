@@ -15,10 +15,10 @@ betaclust<-function(X,K=3,patients,samples,mixm="C..",model_selection="BIC",seed
   len=length(mixm)
   llk<-vector()
   z<-vector(mode = "list", length = len)
-  print(X[1:3,])
+  #print(X[1:3,])
   if(length(mixm))
   {
-    for(i in len)
+    for(i in 1:len)
     {
       ## Call for C.. function
       if(mixm[i] == "C..")
@@ -52,8 +52,8 @@ betaclust<-function(X,K=3,patients,samples,mixm="C..",model_selection="BIC",seed
         len_llk<-length(cn_out$llk)
         llk<-c(llk,cn_out$llk[len_llk])
         z[[i]]<-cn_out$z
-        print(c_out$alpha)
-        print(c_out$beta)
+        print(cn_out$alpha)
+        print(cn_out$beta)
       }
       ## Call for C.R function
       if(mixm[i] == "C.R")
@@ -67,8 +67,8 @@ betaclust<-function(X,K=3,patients,samples,mixm="C..",model_selection="BIC",seed
           len_llk<-length(cr_out$llk)
           llk<-c(llk,cr_out$llk[len_llk])
           z[[i]]<-cr_out$z
-          print(c_out$alpha)
-          print(c_out$beta)
+          print(cr_out$alpha)
+          print(cr_out$beta)
         }
       }
     }
