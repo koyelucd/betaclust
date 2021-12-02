@@ -210,6 +210,7 @@ beta_cr<-function(X,K=3,patients,samples,seed,register=NULL){
   cert=apply(z_new,1,max)
   uc=1-cert
 
+  doParallel::stopImplicitCluster()
 
   #### Return data
   return(list(llk=llk_iter,data=complete_data,alpha=alpha,beta=beta,tau=tau,z=z_new,uncertainity=uc))

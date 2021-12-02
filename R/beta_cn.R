@@ -201,6 +201,7 @@ beta_cn<-function(X,K=3,seed,register=NULL){
   uc=1-cert
 
 
+  doParallel::stopImplicitCluster()
   #### Return data
   return(list(llk=llk_iter,data=complete_data,alpha=alpha,beta=beta,tau=tau,z=z_new,uncertainity=uc))
 
