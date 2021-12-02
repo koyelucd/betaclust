@@ -195,7 +195,7 @@ beta_c<-function(X,K=3,seed,register=NULL){
   uc=1-cert
 
 
-  doParallel::stopImplicitCluster()
+  parallel::stopCluster(ncores-1)
 
   #### Return data
   return(list(data=complete_data,alpha=alpha,beta=beta,tau=tau,z=z_new,uncertainity=uc,llk=llk_iter))
