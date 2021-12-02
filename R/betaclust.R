@@ -91,7 +91,7 @@ betaclust<-function(X,K=3,patients,samples,mixm="C..",model_selection="BIC",seed
   }else if(model_selection=="AIC")
   {
     ## compare aic value
-    ic_op<-em_aic(llk,C,K,patients,samplesmixm)
+    ic_op<-em_aic(llk,C,K,patients,samples,mixm)
     min_index<-which.min(ic_op)
     min_method<-mixm[min_index]
   }else if(model_selection=="ICL")
