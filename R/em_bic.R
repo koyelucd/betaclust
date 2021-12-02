@@ -20,12 +20,15 @@ em_bic<-function(llk,C,K,patients=4,samples=1,mixm="C.."){
     if(mixm[i] ==  "C..") ##C
     {
       num_par = (K*2)+(K-1)
+      print(num_par)
     }else if(mixm[i] == "CN.") ##CN
     {
-      num_par = (K*N*R*2)+(K-1)
+      num_par = (K*N*2)+(K-1)
+      print(num_par)
     }else if(mixm[i] == "C.R") ##CR
     {
       num_par = (K*R*2)+(K-1)
+      print(num_par)
     }
 
     if(is.na(llk[i]))
