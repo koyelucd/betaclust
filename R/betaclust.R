@@ -115,6 +115,7 @@ betaclust<-function(X,K=3,patients,samples,mixm="C..",model_selection="BIC",seed
     final_output<-cr_out
   }
 
+  print("Execution is complete")
 
   return(list(information_criterion=model_selection,ic_output=ic_op,optimal_model=min_method,function_call=call_function,best_model=final_output))
 }
