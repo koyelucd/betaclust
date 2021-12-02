@@ -14,6 +14,8 @@ em_bic<-function(llk,C,K,patients=4,samples=1,mixm="C.."){
   N=patients
   mod_len=length(mixm)
   bic=vector("numeric",mod_len)
+  print(mixm)
+  num_par=0
 
   for(i in 1:mod_len)
   {
