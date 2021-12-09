@@ -18,7 +18,7 @@ summary.betaclust<-function(object)
               cluster_count = clust_count,
               modelName = object$optimal_model,
               loglik = loglik,
-              information_criterion=object$model_selection,
+              information_criterion=object$information_criterion,
               ic_output=ic_value)
   class(obj) <- "summary.betaclust"
   return(obj)
