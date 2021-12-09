@@ -207,6 +207,7 @@ beta_cr<-function(data,K=3,patients,samples,seed,register=NULL){
   complete_data<-matrix(NA,C,(N*R+1))
   mem_final<-apply(z_new, 1, which.max)
   complete_data<-cbind(x,mem_final)
+  cluster_count=table(mem_final)
 
 
   ### uncertainty
@@ -216,6 +217,6 @@ beta_cr<-function(data,K=3,patients,samples,seed,register=NULL){
   parallel::stopCluster(cl=my.cluster)
 
   #### Return data
-  return(list(llk=llk_iter,data=complete_data,alpha=alpha,beta=beta,tau=tau,z=z_new,uncertainty=uc))
+  return(list(cluster_count=cluster_count,llk=llk_iter,data=complete_data,alpha=alpha,beta=beta,tau=tau,z=z_new,uncertainty=uc))
 
 }
