@@ -136,8 +136,10 @@ betaclust<-function(data,K=3,patients,samples,model_names="C..",model_selection=
 
   print("Execution is complete")
 
-  return(list(information_criterion=model_selection,ic_output=ic_op,
-              optimal_model=min_method,function_call=call_function,best_model=final_output))
+  beta_out<-list(information_criterion=model_selection,ic_output=ic_op,
+                 optimal_model=min_method,function_call=call_function,best_model=final_output)
+  class(beta_out)<-"betaclust"
+  return(beta_out)
 }
 
 
