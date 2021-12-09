@@ -26,7 +26,7 @@ betaclust<-function(data,K=3,patients,samples,model_names="C..",model_selection=
   ## Progress bar
   cat("fitting ...\n")
   #flush.console()
-  pbar <- utils::txtProgressBar(min = 0, max = model_len+1, style = 3)
+  pbar <- utils::txtProgressBar(min = 0, max = model_len, style = 3)
   on.exit(close(pbar))
 
 
