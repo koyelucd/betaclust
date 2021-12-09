@@ -9,7 +9,7 @@ summary.betaclust<-function(object)
   C=nrow(object$best_model$data)
   d=ncol(object$best_model$data)-1
   title <- paste("Multivariate Beta mixture model fitted by EM algorithm")
-  ic_value=min(object$ic_op)
+  ic_value=min(object$ic_output)
   clust_count=length(object$best_model$cluster_count)
   loglik=object$best_model$llk[length(object$best_model$llk)]
   obj <- list(title = title,

@@ -25,7 +25,7 @@ print.summary.betaclust <- function(x, digits = getOption("digits"), ...)
 
 
 
-  tab <- data.frame("log-likelihood" = x$loglik, "C" = x$C, "Information criterion"=x$information_criterion,"IC value" = x$ic_output,
+  tab <- data.frame("log-likelihood" = x$loglik, "C" = x$C, "Information_criterion"=x$information_criterion,"IC_value" = x$ic_output,
                     row.names = "", check.names = FALSE)
   print(tab)
   #
