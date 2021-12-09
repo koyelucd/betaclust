@@ -1,0 +1,43 @@
+#' ICL to compare the methods
+#' @export
+#' @param x summary of betaclust object
+
+print.summary.betaclust <- function(x, digits = getOption("digits"), ...)
+{
+  txt <- paste(rep("-", min(nchar(x$title), getOption("width"))), collapse = "")
+  cat(txt)
+  cat("\n")
+  cat(x$title)
+  cat("\n")
+  cat(txt)
+  #
+  cat("\n")
+  if(x$cluster_count == 0)
+  {
+    cat("betaclust model with only a noise component:")
+  } else
+  {
+    cat(paste0("betaclust ", x$modelName, " model with ",
+               x$cluster_count, ifelse(x$cluster_count > 1, " components", " component"),
+               ":"))
+  }
+  cat("\n")
+
+
+  if(x$information_criterion == "AIC")
+  {
+    ic_txt="AIC"
+  }
+  else if(x$information_criterion=="BIC")
+    ic_txt="BIC"
+  else
+    ic_txt="ICL"
+  tab <- data.frame("log-likelihood" = x$loglik, "C" = x$C,
+                    "NR" = x$d, ic_txt = x$ic_output,
+                    row.names = "", check.names = FALSE)
+  print(tab, digits = digits)
+  #
+
+  #
+  invisible(x)
+}

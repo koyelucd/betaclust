@@ -140,57 +140,6 @@ betaclust<-function(data,K=3,patients,samples,model_names="C..",model_selection=
               optimal_model=min_method,function_call=call_function,best_model=final_output))
 }
 
-summary.betaclust<-function(object)
-{
-  K<-object$K
-  title <- paste("Multivariate Beta mixture model fitted by EM algorithm")
-  obj <- list(title = title,
-              C = nrow(object$final_output$data),
-              d = ncol(object$final_output$data),
-              cluster_count = object$final_output$cluster_count,
-              modelName = object$optimal_model,
-              loglik = object$final_output$llk[length(object$final_output$llk)],
-              information_criterion=object$model_selection,ic_output=object$ic_op)
-  class(obj) <- "summary.betaclust"
-  return(obj)
-}
-
-print.summary.betaclust <- function(x, digits = getOption("digits"), ...)
-{
-  txt <- paste(rep("-", min(nchar(x$title), getOption("width"))), collapse = "")
-  cat(txt)
-  cat("\n")
-  cat(x$title)
-  cat("\n")
-  cat(txt)
-  #
-  cat("\n")
-  if(x$cluster_count == 0)
-  {
-    cat("betaclust model with only a noise component:")
-  } else
-  {
-    cat(paste0("betaclust ", x$modelName, " model with ",
-                   x$cluster_count, ifelse(x$cluster_count > 1, " components", " component"),
-                   ":"))
-  }
-  cat("\n")
 
 
-  if(x$information_criterion == "AIC")
-  {
-    ic_txt="AIC"
-  }
-  else if(x$information_criterion=="BIC")
-    ic_txt="BIC"
-  else
-    ic_txt="ICL"
-  tab <- data.frame("log-likelihood" = x$loglik, "C" = x$C,
-                    "NR" = x$d, ic_txt = x$ic_output,
-                    row.names = "", check.names = FALSE)
-  print(tab, digits = digits)
-  #
 
-  #
-  invisible(x)
-}
