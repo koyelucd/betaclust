@@ -5,32 +5,32 @@
 \title{betaclust wrapper function}
 \usage{
 betaclust(
-  X,
+  data,
   K = 3,
   patients,
   samples,
-  mixm = "C..",
+  model_names = "C..",
   model_selection = "BIC",
   seed,
   register = NULL
 )
 }
 \arguments{
-\item{X}{methylation values for CpG sites frpm R samples collected from N patients}
-
 \item{K}{number of methylation groups to be identified (default=3)}
 
 \item{patients}{number of patients in the study}
 
 \item{samples}{number of samples collected from each patient for study}
 
-\item{mixm}{mixture model to run (Models= c(C..,CN.,C.R), default=C..)}
+\item{model_names}{mixture model to run (Models= c(C..,CN.,C.R), default=C..)}
 
 \item{model_selection}{optimal model selection based on information criterion. (Methods=AIC,BIC,ICL,default=BIC)}
 
 \item{seed}{seed for reproducible work}
 
 \item{register}{setting for parallelization}
+
+\item{X}{methylation values for CpG sites frpm R samples collected from N patients}
 }
 \description{
 betaclust wrapper function

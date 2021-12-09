@@ -8,10 +8,12 @@
 #' @param register setting for parallelization
 #' @importFrom foreach %dopar%
 #' @importFrom stats C
+#' @importFrom utils txtProgressBar
 
 
-beta_cr<-function(X,K=3,patients,samples,seed,register=NULL){
+beta_cr<-function(data,K=3,patients,samples,seed,register=NULL){
 
+  X=data
   ##### CR Model #######
 
   ## set the seed for reproducible work
@@ -207,13 +209,13 @@ beta_cr<-function(X,K=3,patients,samples,seed,register=NULL){
   complete_data<-cbind(x,mem_final)
 
 
-  ### Uncertainity
+  ### uncertainty
   cert=apply(z_new,1,max)
   uc=1-cert
 
   parallel::stopCluster(cl=my.cluster)
 
   #### Return data
-  return(list(llk=llk_iter,data=complete_data,alpha=alpha,beta=beta,tau=tau,z=z_new,uncertainity=uc))
+  return(list(llk=llk_iter,data=complete_data,alpha=alpha,beta=beta,tau=tau,z=z_new,uncertainty=uc))
 
 }

@@ -6,9 +6,11 @@
 #' @param register setting for parallelization
 #' @importFrom foreach %dopar%
 #' @importFrom stats C
+#' @importFrom utils txtProgressBar
 
-beta_c<-function(X,K=3,seed,register=NULL){
+beta_c<-function(data,K=3,seed,register=NULL){
 
+  X=data
   ## set the seed for reproducible work
   if (!missing(seed))
     set.seed(seed)
@@ -191,7 +193,7 @@ beta_c<-function(X,K=3,seed,register=NULL){
   mem_final<-apply(z_new, 1, which.max)
   complete_data<-cbind(x,mem_final)
 
-  ### Uncertainity
+  ### Uncertainty
   cert=apply(z_new,1,max)
   uc=1-cert
 
@@ -199,6 +201,6 @@ beta_c<-function(X,K=3,seed,register=NULL){
   parallel::stopCluster(cl=my.cluster)
 
   #### Return data
-  return(list(data=complete_data,alpha=alpha,beta=beta,tau=tau,z=z_new,uncertainity=uc,llk=llk_iter))
+  return(list(data=complete_data,alpha=alpha,beta=beta,tau=tau,z=z_new,uncertainty=uc,llk=llk_iter))
 
 }

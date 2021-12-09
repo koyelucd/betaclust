@@ -4,7 +4,7 @@
 \alias{em_icl}
 \title{ICL to compare the methods}
 \usage{
-em_icl(llk, C, K, patients = 4, samples = 1, mixm = "C..", z)
+em_icl(llk, C, K, patients = 4, samples = 1, model_names = "C..", z)
 }
 \arguments{
 \item{llk}{log-likelihood value}
@@ -17,7 +17,7 @@ em_icl(llk, C, K, patients = 4, samples = 1, mixm = "C..", z)
 
 \item{samples}{no. of samples}
 
-\item{mixm}{mixture model (method=c("C..","CN.","C.R"))}
+\item{model_names}{mixture model (method=c("C..","CN.","C.R"))}
 
 \item{z}{z matrix for each output}
 }

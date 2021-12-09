@@ -4,32 +4,46 @@
 #' @param K number of methylation groups to be identified (default=3)
 #' @param patients number of patients in the study
 #' @param samples number of samples collected from each patient for study
-#' @param mixm mixture model to run (Models= c(C..,CN.,C.R), default=C..)
+#' @param model_names mixture model to run (Models= c(C..,CN.,C.R), default=C..)
 #' @param model_selection optimal model selection based on information criterion. (Methods=AIC,BIC,ICL,default=BIC)
 #' @param seed seed for reproducible work
 #' @param register setting for parallelization
 #' @importFrom foreach %dopar%
 #' @importFrom stats C
+#' @importFrom utils txtProgressBar
 
-betaclust<-function(X,K=3,patients,samples,mixm="C..",model_selection="BIC",seed,register=NULL){
-  len=length(mixm)
+betaclust<-function(data,K=3,patients,samples,model_names="C..",model_selection="BIC",seed,register=NULL){
+
+  X=data
+  len=length(model_names)
   llk<-vector()
   C=nrow(X)
   z<-vector(mode = "list", length = len)
+
+  K_len=K
+  model_len=length(model_names)
+
+  ## Progress bar
+  cat("fitting ...\n")
+  #flush.console()
+  pbar <- utils::txtProgressBar(min = 0, max = K_len*model_len+1, style = 3)
+  on.exit(close(pbar))
+
+
   #print(X[1:3,])
-  if(length(mixm))
+  if(length(model_names))
   {
     for(i in 1:len)
     {
       ## Call for C.. function
-      if(mixm[i] == "C..")
+      if(model_names[i] == "C..")
       {
-        #print(mixm[i])
+        #print(model_names[i])
         ## check if samples>1
         if(samples>1)
         {
-          warning("C.. method can run for single sample and not multiple samples.
-                  Method run for 1st sample only.", call. = FALSE)
+          warning("C.. method can run for a single sample and not multiple samples.
+                  Method is run for 1st sample only.", call. = FALSE)
         }
 
         call_data=X[,1:patients]
@@ -42,12 +56,12 @@ betaclust<-function(X,K=3,patients,samples,mixm="C..",model_selection="BIC",seed
         #print(c_out$beta)
       }
       ## Call for CN. function
-      if(mixm[i] == "CN.")
+      if(model_names[i] == "CN.")
       {
         ## check if samples>1
         if(samples>1)
-          warning("CN. method can run for single sample and not multiple samples.
-                  Method run for 1st sample only.", call. = FALSE)
+          warning("CN. method can run for a single sample and not multiple samples.
+                  Method is run for 1st sample only.", call. = FALSE)
         call_data<-X[,1:patients]
         cn_out<-beta_cn(call_data,K,seed,register)
         len_llk<-length(cn_out$llk)
@@ -57,7 +71,7 @@ betaclust<-function(X,K=3,patients,samples,mixm="C..",model_selection="BIC",seed
         #print(cn_out$beta)
       }
       ## Call for C.R function
-      if(mixm[i] == "C.R")
+      if(model_names[i] == "C.R")
       {
         ## check if samples>1
         if(samples<=1){
@@ -72,34 +86,36 @@ betaclust<-function(X,K=3,patients,samples,mixm="C..",model_selection="BIC",seed
           #print(cr_out$beta)
         }
       }
+      ##Set Progress bar
+      utils::setTxtProgressBar(pbar,i)
     }
 
   }
 
   # print(llk)
-  # print(mixm)
+  # print(model_names)
   # print(model_selection)
   ### Optimal model selection and output
 
   if(model_selection=="BIC")
   {
     ## compare bic value
-    ic_op<-em_bic(llk,C,K,patients,samples,mixm)
+    ic_op<-em_bic(llk,C,K,patients,samples,model_names)
     min_index<-which.min(ic_op)
-    min_method<-mixm[min_index]
+    min_method<-model_names[min_index]
 
   }else if(model_selection=="AIC")
   {
     ## compare aic value
-    ic_op<-em_aic(llk,C,K,patients,samples,mixm)
+    ic_op<-em_aic(llk,C,K,patients,samples,model_names)
     min_index<-which.min(ic_op)
-    min_method<-mixm[min_index]
+    min_method<-model_names[min_index]
   }else if(model_selection=="ICL")
   {
     ## compare icl value
-    ic_op<-em_icl(llk,C,K,patients,samples,mixm,z)
+    ic_op<-em_icl(llk,C,K,patients,samples,model_names,z)
     min_index<-which.min(ic_op)
-    min_method<-mixm[min_index]
+    min_method<-model_names[min_index]
   }
 
   call_function<-match.call()
@@ -114,6 +130,8 @@ betaclust<-function(X,K=3,patients,samples,mixm="C..",model_selection="BIC",seed
   {
     final_output<-cr_out
   }
+
+
 
   print("Execution is complete")
 

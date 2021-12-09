@@ -4,7 +4,7 @@
 \alias{em_aic}
 \title{AIC to compare the methods}
 \usage{
-em_aic(llk, C, K, patients = 4, samples = 1, mixm = "C..")
+em_aic(llk, C, K, patients = 4, samples = 1, model_names = "C..")
 }
 \arguments{
 \item{llk}{log-likelihood value}
@@ -17,7 +17,7 @@ em_aic(llk, C, K, patients = 4, samples = 1, mixm = "C..")
 
 \item{samples}{no. of samples}
 
-\item{mixm}{mixture model (method=c("C..","CN.","C.R"))}
+\item{model_names}{mixture model (method=c("C..","CN.","C.R"))}
 }
 \value{
 aic

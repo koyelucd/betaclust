@@ -4,11 +4,9 @@
 \alias{beta_cr}
 \title{C.R Model from the family of beta mixture models for DNA methylation data}
 \usage{
-beta_cr(X, K = 3, patients, samples, seed, register = NULL)
+beta_cr(data, K = 3, patients, samples, seed, register = NULL)
 }
 \arguments{
-\item{X}{methylation values for CpG sites frpm R samples collected from N patients}
-
 \item{K}{number of methylation groups to be identified (default=3)}
 
 \item{patients}{number of patients in the study}
@@ -18,6 +16,8 @@ beta_cr(X, K = 3, patients, samples, seed, register = NULL)
 \item{seed}{seed for reproducible work}
 
 \item{register}{setting for parallelization}
+
+\item{X}{methylation values for CpG sites frpm R samples collected from N patients}
 }
 \description{
 C.R Model from the family of beta mixture models for DNA methylation data
