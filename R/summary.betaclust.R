@@ -7,7 +7,7 @@ summary.betaclust<-function(object)
 {
   #K<-object$K
   C=nrow(object$best_model$data)
-  d=ncol(object$best_model$data)
+  d=ncol(object$best_model$data)-1
   title <- paste("Multivariate Beta mixture model fitted by EM algorithm")
   ic_value=min(object$ic_op)
   clust_count=length(object$best_model$cluster_count)
