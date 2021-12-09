@@ -24,16 +24,9 @@ print.summary.betaclust <- function(x, digits = getOption("digits"), ...)
   cat("\n")
 
 
-  if(x$information_criterion == "AIC")
-  {
-    ic_txt="AIC"
-  }
-  else if(x$information_criterion=="BIC")
-    ic_txt="BIC"
-  else
-    ic_txt="ICL"
+
   tab <- data.frame("log-likelihood" = x$loglik, "C" = x$C,
-                    "NR" = x$d, ic_txt = x$ic_output,
+                    "NR" = x$d, "Information criterion"=x$information_criterion,"IC value" = x$ic_output,
                     row.names = "", check.names = FALSE)
   print(tab, digits = digits)
   #
