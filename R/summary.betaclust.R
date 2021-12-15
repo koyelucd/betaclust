@@ -14,9 +14,9 @@ summary.betaclust<-function(object)
   loglik=object$best_model$llk[length(object$best_model$llk)]
   classification<-as.factor(object$best_model$data[,ncol(object$best_model$data)])
   obj <- list(title = title,
-              CpG_sites=CpG_sites,
-              patients=patients,
-              samples=samples,
+              CpG_sites=object$CpG_sites,
+              patients=object$patients,
+              samples=object$samples,
               cluster_count = clust_count,
               modelName = object$optimal_model,
               loglik = loglik,
