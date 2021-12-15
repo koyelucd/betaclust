@@ -6,20 +6,23 @@
 summary.betaclust<-function(object)
 {
   #K<-object$K
-  C=nrow(object$best_model$data)
-  d=ncol(object$best_model$data)-1
+  #C=nrow(object$best_model$data)
+  #d=ncol(object$best_model$data)-1
   title <- paste("Multivariate Beta mixture model fitted by EM algorithm")
   ic_value=min(object$ic_output)
   clust_count=length(object$best_model$cluster_count)
   loglik=object$best_model$llk[length(object$best_model$llk)]
+  classification<-as.factor(object$best_model$data[,ncol(object$best_model$data)])
   obj <- list(title = title,
-              C = C,
-              d = d,
+              CpG_sites=CpG_sites,
+              patients=patients,
+              samples=samples,
               cluster_count = clust_count,
               modelName = object$optimal_model,
               loglik = loglik,
               information_criterion=object$information_criterion,
-              ic_output=ic_value)
+              ic_output=ic_value,
+              classification=classification)
   class(obj) <- "summary.betaclust"
   return(obj)
 }

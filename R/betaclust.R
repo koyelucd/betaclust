@@ -121,23 +121,29 @@ betaclust<-function(data,K=3,patients,samples,model_names="C..",model_selection=
 
   call_function<-match.call()
 
+  N=patients
+  R=0
   if(min_method=="C..")
   {
     final_output<-c_out
+    R=1
   }else if(min_method=="CN.")
   {
     final_output<-cn_out
+    R=1
   }else if(min_method=="C.R")
   {
     final_output<-cr_out
+    R=samples
   }
 
 
 
-  print("Execution is complete")
+  #print("Execution is complete")
 
   beta_out<-list(information_criterion=model_selection,ic_output=ic_op,
-                 optimal_model=min_method,function_call=call_function,best_model=final_output)
+                 optimal_model=min_method,function_call=call_function,CpG_sites=C,patients=N,samples=R,
+                 best_model=final_output)
   class(beta_out)<-"betaclust"
   return(beta_out)
 }
