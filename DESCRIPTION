@@ -12,7 +12,7 @@ Description: A family of novel beta mixture models is proposed based on model-ba
   The code has been optimized by using parallel programming throughout and 
   digamma function approximation at M-step which has reduced run-time considerable. 
 License: GPL-3
-Imports: foreach, doParallel, stats, utils, ggplot2
+Imports: foreach, doParallel, stats, utils, ggplot2, plotly
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.2

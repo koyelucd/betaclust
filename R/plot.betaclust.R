@@ -2,8 +2,9 @@
 #' @export
 #' @param object betaclust object
 #' @param what The different plots that can be obtained from the object (default="density") (what=c("density","uncertainty","InformationCriterion"))
-#' @param plot_type The plot type to be displayed (default="ggplot")(plot_type=c("ggplot","plotly"))
+#' @param plot_type The plot type to be displayed (default="ggplot")(plot_type="ggplot" or"plotly")
 #' @importFrom ggplot2 ggplot aes
+#' @importFrom  plotly ggplotly
 
 plot.betaclust <- function(object,what="density",
                                     plot_type="ggplot")
@@ -15,12 +16,19 @@ plot.betaclust <- function(object,what="density",
   colnames(data_ggplot)[length(data_ggplot)]<-"Cluster"
   if(object$optimal_model == "C.." || object$optimal_model == "CN.")
   {
-    plot_density<-ggplot2::ggplot(data_ggplot,ggplot2::aes(x=P_Sam1_1, fill=Cluster))+
+    col_1<-colnames(data_ggplot)[1]
+    plot_density<-ggplot2::ggplot(data_ggplot,ggplot2::aes(x=col_1, fill=Cluster))+
             ggplot2::geom_density(alpha=0.6)+
       ggplot2::labs(x="Beta value", y="Density",
                     title=paste0("Density estimates for ",object$optimal_model,"  clustering solution"),
                     fill ="Cluster")
-    plot_density
+    #plot_density
+    if(plot_type=="ggplot")
+      plot_density
+    else
+      plotly::ggplotly(plot_density)
+
+
   }else
   {
     cols=ncol(data_ggplot)
@@ -56,14 +64,18 @@ plot.betaclust <- function(object,what="density",
       ggplot2::xlab("Beta Value")+
       ggplot2::ylab("Density")+
       ggplot2::scale_color_manual(values=colours)+
-      ggplot2::facet_wrap(~Cluster ,scales = "free"
+      ggplot2::facet_wrap(~Cluster,scales = "free"
                           # ,labeller = ggplot2::labeller(Cluster= cluster_count_label)
                           )+
       ggplot2::theme(axis.title.x = ggplot2::element_text(size=10),
             axis.title.y = ggplot2::element_text(size=10)) +
       ggplot2::ggtitle("Density estimates for C.R clustering solution")
 
-    plot_density
+    #plot_density
+    if(plot_type=="ggplot")
+      plot_density
+    else
+      plotly::ggplotly(plot_density)
 
 
   }

@@ -11,7 +11,7 @@
 
 \item{what}{The different plots that can be obtained from the object (default="density") (what=c("density","uncertainty","InformationCriterion"))}
 
-\item{plot_type}{The plot type to be displayed (default="ggplot")(plot_type=c("ggplot","plotly"))}
+\item{plot_type}{The plot type to be displayed (default="ggplot")(plot_type="ggplot" or"plotly")}
 }
 \description{
 Plots for betaclust object
