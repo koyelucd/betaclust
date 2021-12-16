@@ -1,4 +1,4 @@
-#' ICL to compare the methods
+#' Print summary of betaclust output
 #' @export
 #' @param x summary of betaclust object
 

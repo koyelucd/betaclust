@@ -1,4 +1,4 @@
-#' ICL to compare the methods
+#' Calculating summary of the betaclust object
 #' @export
 #' @param x betaclust object
 #' @return obj

@@ -2,7 +2,7 @@
 % Please edit documentation in R/summary.betaclust.R
 \name{summary.betaclust}
 \alias{summary.betaclust}
-\title{ICL to compare the methods}
+\title{Calculating summary of the betaclust object}
 \usage{
 \method{summary}{betaclust}(object)
 }
@@ -13,5 +13,5 @@
 obj
 }
 \description{
-ICL to compare the methods
+Calculating summary of the betaclust object
 }
