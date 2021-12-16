@@ -56,8 +56,7 @@ plot.betaclust <- function(object,what="density",
       ggplot2::xlab("Beta Value")+
       ggplot2::ylab("Density")+
       ggplot2::scale_color_manual(values=colours)+
-      ggplot2::facet_wrap(~Cluster
-                          # ,scales = "free"
+      ggplot2::facet_wrap(~Cluster ,scales = "free"
                           # ,labeller = ggplot2::labeller(Cluster= cluster_count_label)
                           )+
       ggplot2::theme(axis.title.x = ggplot2::element_text(size=10),
