@@ -55,8 +55,8 @@ plot.betaclust <- function(object,what="density",
       ggplot2::ylab("Density")+
       ggplot2::scale_color_manual(values=colours)+
       ggplot2::facet_wrap(~Cluster,scales = "free",labeller = ggplot2::labeller(Cluster= cluster_count_label))+
-      ggplot2::theme(axis.title.x = element_text(size=10),
-            axis.title.y = element_text(size=10)) +
+      ggplot2::theme(axis.title.x = ggplot2::element_text(size=10),
+            axis.title.y = ggplot2::element_text(size=10)) +
       ggplot2::ggtitle("Density estimates for C.R clustering solution")
 
     plot_density
