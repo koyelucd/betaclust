@@ -15,12 +15,12 @@ plot.betaclust <- function(object,what="density",
   colnames(data_ggplot)[length(data_ggplot)]<-"Cluster"
   if(object$optimal_model == "C.." || object$optimal_model == "CN.")
   {
-    ggplot2::ggplot(data_ggplot,ggplot2::aes(x=P_Sam1_1, fill=Cluster))+
+    plot_density<-ggplot2::ggplot(data_ggplot,ggplot2::aes(x=P_Sam1_1, fill=Cluster))+
             ggplot2::geom_density(alpha=0.6)+
       ggplot2::labs(x="Beta value", y="Density",
                     title=paste0("Density estimates for ",object$optimal_model,"  clustering solution"),
                     fill ="Cluster")
-    #plot_density
+    plot_density
   }else
   {
     cols=ncol(data_ggplot)
@@ -40,30 +40,35 @@ plot.betaclust <- function(object,what="density",
     data_plot<-cbind(data_new,Cluster,Patient_sample)
     data_plot<-as.data.frame(data_plot)
     colnames(data_plot)<-c("beta_value","Cluster","Patient_Sample")
-    cluster_count<-length(table(data_ggplot[,cols]))
-    cluster_count_label<-vector
-    for(j in 1:cluster_count)
-    {
-      text_label=paste0("Cluster ",j)
-      cluster_count_label<-c(cluster_count_label,text_label)
-    }
+    data_plot$beta_value<-as.numeric(data_plot$beta_value)
+    # cluster_count<-length(table(data_ggplot[,cols]))
+    # cluster_count_label<-vector()
+    # for(j in 1:cluster_count)
+    # {
+    #   text_label=paste0(j,"=", "Cluster ",j)
+    #   cluster_count_label<-c(cluster_count_label,text_label)
+    # }
     color_length<-col_len-1
     colours<-scales::seq_gradient_pal(low="#FFC20A",high="#0C7BDC",space = "Lab")(1:color_length/color_length)
-    ggplot2::ggplot(data_plot)+
-      ggplot2::geom_density(aes(x=beta_value,colour=Patient_Sample))+
+
+    plot_density<-ggplot2::ggplot(data_plot)+
+      ggplot2::geom_density(aes(x=beta_value,color=Patient_Sample))+
       ggplot2::xlab("Beta Value")+
       ggplot2::ylab("Density")+
       ggplot2::scale_color_manual(values=colours)+
-      ggplot2::facet_wrap(~Cluster,scales = "free",labeller = ggplot2::labeller(Cluster= cluster_count_label))+
+      ggplot2::facet_wrap(~Cluster
+                          # ,scales = "free"
+                          # ,labeller = ggplot2::labeller(Cluster= cluster_count_label)
+                          )+
       ggplot2::theme(axis.title.x = ggplot2::element_text(size=10),
             axis.title.y = ggplot2::element_text(size=10)) +
       ggplot2::ggtitle("Density estimates for C.R clustering solution")
 
-   # plot_density
+    plot_density
 
 
   }
 
 
-  #invisible()
+  invisible()
 }
