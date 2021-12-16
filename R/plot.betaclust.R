@@ -15,11 +15,11 @@ plot.betaclust <- function(object,what="density",
   colnames(data_ggplot)[length(data_ggplot)]<-"Cluster"
   if(object$optimal_model == "C.." || object$optimal_model == "CN.")
   {
-    plot_density<-ggplot(data_ggplot,aes(x=P_Sam1_1, fill=Cluster))+
-            geom_density(alpha=0.6)+
-            labs(x="Beta value", y="Density",
-            title=paste0("Density estimates for ",object$optimal_model,"  clustering solution"),
-            fill ="Cluster")
+    plot_density<-ggplot2::ggplot(data_ggplot,ggplot2::aes(x=P_Sam1_1, fill=Cluster))+
+            ggplot2::geom_density(alpha=0.6)+
+      ggplot2::labs(x="Beta value", y="Density",
+                    title=paste0("Density estimates for ",object$optimal_model,"  clustering solution"),
+                    fill ="Cluster")
     plot_density
   }else
   {
@@ -49,15 +49,15 @@ plot.betaclust <- function(object,what="density",
     }
     color_length<-col_len-1
     colours<-seq_gradient_pal(low="#FFC20A",high="#0C7BDC",space = "Lab")(1:color_length/color_length)
-    plot_density<-ggplot(data_plot)+
-      geom_density(aes(x=beta_value,colour=Patient_Sample))+
-      xlab("Beta Value")+
-      ylab("Density")+
-      scale_color_manual(values=colours)+
-      facet_wrap(~Cluster,scales = "free",labeller = labeller(Cluster= cluster_count_label))+
-      theme(axis.title.x = element_text(size=10),
+    plot_density<-ggplot2::ggplot(data_plot)+
+      ggplot2::geom_density(aes(x=beta_value,colour=Patient_Sample))+
+      ggplot2::xlab("Beta Value")+
+      ggplot2::ylab("Density")+
+      ggplot2::scale_color_manual(values=colours)+
+      ggplot2::facet_wrap(~Cluster,scales = "free",labeller = labeller(Cluster= cluster_count_label))+
+      ggplot2::theme(axis.title.x = element_text(size=10),
             axis.title.y = element_text(size=10)) +
-      ggtitle("Density estimates for C.R clustering solution")
+      ggplot2::ggtitle("Density estimates for C.R clustering solution")
 
     plot_density
 
