@@ -65,5 +65,5 @@ plot.betaclust <- function(object,what="density",
   }
 
 
-  invisible()
+  #invisible()
 }
