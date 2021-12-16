@@ -5,7 +5,7 @@
 #' @param plot_type The plot type to be displayed (default="ggplot")(plot_type=c("ggplot","plotly"))
 #' @importFrom ggplot2 ggplot aes
 
-print.summary.betaclust <- function(object,what="density",
+plot.betaclust <- function(object,what="density",
                                     plot_type="ggplot")
 {
 
