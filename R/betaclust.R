@@ -1,6 +1,7 @@
-#' betaclust wrapper function
+#' The betaclust wrapper function
 #' @export
-#' @param  X methylation values for CpG sites frpm R samples collected from N patients
+#' @description A family of Model based clustering techniques to identify the methylation profiles of the beta valued DNA methylation data
+#' @param X methylation values for CpG sites frpm R samples collected from N patients
 #' @param K number of methylation groups to be identified (default=3)
 #' @param patients number of patients in the study
 #' @param samples number of samples collected from each patient for study
@@ -11,7 +12,6 @@
 #' @importFrom foreach %dopar%
 #' @importFrom stats C
 #' @importFrom utils txtProgressBar
-#'
 
 betaclust<-function(data,K=3,patients,samples,model_names="C..",model_selection="BIC",seed,register=NULL){
 

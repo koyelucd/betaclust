@@ -2,7 +2,7 @@
 % Please edit documentation in R/betaclust.R
 \name{betaclust}
 \alias{betaclust}
-\title{betaclust wrapper function}
+\title{The betaclust wrapper function}
 \usage{
 betaclust(
   data,
@@ -33,5 +33,5 @@ betaclust(
 \item{X}{methylation values for CpG sites frpm R samples collected from N patients}
 }
 \description{
-betaclust wrapper function
+A family of Model based clustering techniques to identify the methylation profiles of the beta valued DNA methylation data
 }

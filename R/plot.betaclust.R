@@ -16,7 +16,7 @@ plot.betaclust <- function(object,what="density",
   colnames(data_ggplot)[length(data_ggplot)]<-"Cluster"
   if(object$optimal_model == "C.." || object$optimal_model == "CN.")
   {
-    #col_1<-colnames(data_ggplot)[1]
+    #col_1<-data_ggplot[,1]
     plot_density<-ggplot2::ggplot(data_ggplot,ggplot2::aes(x=data_ggplot[,1], fill=Cluster))+
             ggplot2::geom_density(alpha=0.6)+
       ggplot2::labs(x="Beta value", y="Density",
@@ -64,7 +64,7 @@ plot.betaclust <- function(object,what="density",
       ggplot2::xlab("Beta Value")+
       ggplot2::ylab("Density")+
       ggplot2::scale_color_manual(values=colours)+
-      ggplot2::facet_wrap(~Cluster,scales = "free"
+      ggplot2::facet_wrap(~Cluster,scales = "free_y"
                           # ,labeller = ggplot2::labeller(Cluster= cluster_count_label)
                           )+
       ggplot2::theme(axis.title.x = ggplot2::element_text(size=10),

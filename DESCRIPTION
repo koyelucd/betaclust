@@ -1,10 +1,10 @@
 Package: betaclust
 Type: Package
 Title: Family of mixture models for beta valued DNA methylation data for Clustering and Density Estimation
-Version: 0.1.0
+Version: 1.0.0
 Author: Koyel Majumdar [aut] <koyel.majumdar@ucdconnect.ie>,
-  Claire Gormley [aut] <claire.gormley@ucd.ie>,
-  Brendan Murphy [aut] <brendan.murphy@ucd.ie>
+  Isobel Claire Gormley [aut] <claire.gormley@ucd.ie>,
+  Thomas Brendan Murphy [aut] <brendan.murphy@ucd.ie>
 Maintainer: Koyel Majumdar <koyel.majumdar@ucdconnect.ie>
 Description: A family of novel beta mixture models is proposed based on model-based
   clustering approach to identify the different methylation profiles and the DMRs 
@@ -12,6 +12,7 @@ Description: A family of novel beta mixture models is proposed based on model-ba
   The code has been optimized by using parallel programming throughout and 
   digamma function approximation at M-step which has reduced run-time considerable. 
 License: GPL-3
+Depends: R (>= 3.1.0)
 Imports: foreach, doParallel, stats, utils, ggplot2, plotly
 Encoding: UTF-8
 LazyData: true
