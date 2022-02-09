@@ -10,7 +10,7 @@
 plot.betaclust <- function(object,what="density",
                                     plot_type="ggplot",scale_param="free_y")
 {
-  print(what)
+  #print(what)
 
   if(what == "density")
   {
