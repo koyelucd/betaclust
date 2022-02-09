@@ -10,7 +10,7 @@
 plot.betaclust <- function(object,what="density",
                                     plot_type="ggplot",scale_param="free_y")
 {
-  if(what=="density")
+  if(what == "density")
   {
     data<-object$best_model$data
     data_ggplot<-as.data.frame(data)
@@ -73,8 +73,9 @@ plot.betaclust <- function(object,what="density",
 
 
     }
-  }else if(what=="uncertainty")
+  }else if(what == "uncertainty")
   {
+    print("\n UNC")
     unc_df<-cbind(object$best_model$uncertainty,object$best_model$data[,"mem_final"])
     unc_df<-as.data.frame(unc_df)
     colnames(unc_df)<-c("Uncertainty","Cluster")
@@ -94,7 +95,7 @@ plot.betaclust <- function(object,what="density",
     else
       plotly::ggplotly(plot_uncertainty)
 
-  }else
+  }else if(what == "InformationCriterion")
   {
     if(length(object$ic_output)>1)
     {
