@@ -81,7 +81,7 @@ plot.betaclust <- function(object,what="density",
     unc_df$Cluster<-as.factor(unc_df$Cluster)
     unc_df_sorted<-unc_df[order(unc_df$Cluster),]
     max_unc=1-1/(length(object$best_model$tau))
-    plot_uncertainty<-ggplot2::ggplot(unc_df_sorted, aes(x=Cluster, y=Uncertainty, color=Cluster)) +
+    plot_uncertainty<-ggplot2::ggplot(unc_df_sorted, ggplot2::aes(x=Cluster, y=Uncertainty, color=Cluster)) +
       ggplot2::geom_boxplot()+ ggplot2::theme(legend.position = "none")+
       ggplot2::ggtitle("Boxplot for uncertainties in clustering solution")+
       ggplot2::coord_cartesian(ylim = c(0, 1))+
@@ -104,7 +104,7 @@ plot.betaclust <- function(object,what="density",
       ic_df<-do.call(rbind, Map(data.frame, A=ic_op, B=model_name_wo_dot))
       colnames(ic_df)<-c("IC_value","ModelName")
       ic_df2<-ic_df[order(ic_df$IC_value),]
-      plot_ic<-ggplot2::ggplot(data=ic_df,aes(x=ModelName,y=IC_value,group=1))+
+      plot_ic<-ggplot2::ggplot(data=ic_df,ggplot2::aes(x=ModelName,y=IC_value,group=1))+
         ggplot2::geom_line()+
         ggplot2::ggtitle(paste0(wrapper_out2$information_criterion," Information Criterion Plot for optimal model selection"))+
         ggplot2::xlab("Model Name")+
