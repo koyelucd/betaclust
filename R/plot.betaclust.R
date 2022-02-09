@@ -10,7 +10,8 @@
 plot.betaclust <- function(object,what="density",
                                     plot_type="ggplot",scale_param="free_y")
 {
-  if(what == "density")
+
+  if(what=="density")
   {
     data<-object$best_model$data
     data_ggplot<-as.data.frame(data)
@@ -18,16 +19,12 @@ plot.betaclust <- function(object,what="density",
     colnames(data_ggplot)[length(data_ggplot)]<-"Cluster"
     if(object$optimal_model == "C.." || object$optimal_model == "CN.")
     {
-      plot_density<-ggplot2::ggplot(data_ggplot,ggplot2::aes(x=data_ggplot[,1], fill=Cluster))+
+      plot_graph<-ggplot2::ggplot(data_ggplot,ggplot2::aes(x=data_ggplot[,1], fill=Cluster))+
         ggplot2::geom_density(alpha=0.6)+
         ggplot2::labs(x="Beta value", y="Density",
                       title=paste0("Density estimates for ",object$optimal_model,"  clustering solution"),
                       fill ="Cluster")
-      #plot_density
-      if(plot_type=="ggplot")
-        plot_density
-      else
-        plotly::ggplotly(plot_density)
+
 
 
     }else
@@ -53,7 +50,7 @@ plot.betaclust <- function(object,what="density",
       color_length<-col_len-1
       colours<-scales::seq_gradient_pal(low="#FFC20A",high="#0C7BDC",space = "Lab")(1:color_length/color_length)
 
-      plot_density<-ggplot2::ggplot(data_plot)+
+      plot_graph<-ggplot2::ggplot(data_plot)+
         ggplot2::geom_density(aes(x=beta_value,color=Patient_Sample))+
         ggplot2::xlab("Beta Value")+
         ggplot2::ylab("Density")+
@@ -65,25 +62,18 @@ plot.betaclust <- function(object,what="density",
                        axis.title.y = ggplot2::element_text(size=10)) +
         ggplot2::ggtitle("Density estimates for C.R clustering solution")
 
-      #plot_density
-      if(plot_type=="ggplot")
-        plot_density
-      else
-        plotly::ggplotly(plot_density)
 
 
     }
-  }
-  if(what == "uncertainty")
+  }else if(what=="uncertainty")
   {
-    print("\n UNC")
     unc_df<-cbind(object$best_model$uncertainty,object$best_model$data[,"mem_final"])
     unc_df<-as.data.frame(unc_df)
     colnames(unc_df)<-c("Uncertainty","Cluster")
     unc_df$Cluster<-as.factor(unc_df$Cluster)
     unc_df_sorted<-unc_df[order(unc_df$Cluster),]
     max_unc=1-1/(length(object$best_model$tau))
-    plot_uncertainty<-ggplot2::ggplot(unc_df_sorted, ggplot2::aes(x=Cluster, y=Uncertainty, color=Cluster)) +
+    plot_graph<-ggplot2::ggplot(unc_df_sorted, ggplot2::aes(x=Cluster, y=Uncertainty, color=Cluster)) +
       ggplot2::geom_boxplot()+ ggplot2::theme(legend.position = "none")+
       ggplot2::ggtitle("Boxplot for uncertainties in clustering solution")+
       ggplot2::coord_cartesian(ylim = c(0, 1))+
@@ -91,13 +81,12 @@ plot.betaclust <- function(object,what="density",
       ggplot2::annotate(geom="text", label="maximum uncertainty",
                x=3, y=(max_unc+0.015), vjust=-1)
 
-    if(plot_type=="ggplot")
-      plot_uncertainty
-    else
-      plotly::ggplotly(plot_uncertainty)
+    # if(plot_type=="ggplot")
+    #   plot_uncertainty
+    # else
+    #   plotly::ggplotly(plot_uncertainty)
 
-  }
-  if(what == "InformationCriterion")
+  }else
   {
     if(length(object$ic_output)>1)
     {
@@ -107,20 +96,26 @@ plot.betaclust <- function(object,what="density",
       ic_df<-do.call(rbind, Map(data.frame, A=ic_op, B=model_name_wo_dot))
       colnames(ic_df)<-c("IC_value","ModelName")
       ic_df2<-ic_df[order(ic_df$IC_value),]
-      plot_ic<-ggplot2::ggplot(data=ic_df,ggplot2::aes(x=ModelName,y=IC_value,group=1))+
+      plot_graph<-ggplot2::ggplot(data=ic_df,ggplot2::aes(x=ModelName,y=IC_value,group=1))+
         ggplot2::geom_line()+
         ggplot2::ggtitle(paste0(wrapper_out2$information_criterion," Information Criterion Plot for optimal model selection"))+
         ggplot2::xlab("Model Name")+
         ggplot2::ylab("Information criterion value")
 
-      if(plot_type=="ggplot")
-        plot_ic
-      else
-        plotly::ggplotly(plot_ic)
+      # if(plot_type=="ggplot")
+      #   plot_ic
+      # else
+      #   plotly::ggplotly(plot_ic)
     }else
       stop("Information criteria graph cannot be plotted for a single model.
       \n More than one model needs to be run to visualize this graph")
 
   }
+
+  #plot_density
+  if(plot_type=="ggplot")
+    plot_graph
+  else
+    plotly::ggplotly(plot_graph)
 
 }
