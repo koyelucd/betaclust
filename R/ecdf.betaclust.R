@@ -47,7 +47,7 @@ ecdf.betaclust <- function(x, samples=2, sample_name = c("Sample 1","Sample 2"))
     ggplot2::stat_ecdf()+
     ggplot2::scale_color_manual(values=colours)+
     ggplot2::ggtitle("Empirical Cumulative Distribution Function")+
-    ggplot2::xlab("Beta value")+ylab("F(Beta value)")
+    ggplot2::xlab("Beta value")+ggplot2::ylab("F(Beta value)")
 
   # if(plot_type=="ggplot")
   #   pecdf
