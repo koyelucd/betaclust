@@ -27,7 +27,7 @@ plot.betaclust <- function(object,what="density",
                       fill ="Cluster")
 
       # build the data displayed on the plot.
-      p.data <- ggplot_build(plot_graph)$data[[1]]
+      p.data <- ggplot2::ggplot_build(plot_graph)$data[[1]]
 
       # Note that column 'scaled' is used for plotting
       # so we extract the max density row for each group
@@ -37,7 +37,7 @@ plot.betaclust <- function(object,what="density",
       p.text <- do.call(rbind, p.text)  # we can also get p.text with dplyr.
 
       # now add the text layer to the plot
-      plot_graph + annotate('text', x = p.text$x, y = p.text$y,
+      plot_graph + ggplot2::annotate('text', x = p.text$x, y = p.text$y,
                             label = sprintf('n = %d', p.text$n), vjust = 0)
 
 
