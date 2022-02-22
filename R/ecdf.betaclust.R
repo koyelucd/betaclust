@@ -15,8 +15,10 @@ ecdf.betaclust <- function(x, samples=2, sample_name = c("Sample 1","Sample 2"))
   data_matrix<-as.matrix(x[,1:col_len])
   data_new<-as.vector(data_matrix)
   ecdf_df<-as.data.frame(data_new)
-  ecdf_df$Patient_Samples<-NA
+  ecdf_df$Patient_Sample<-NA
   ecdf_df$Samples<-NA
+  Patient_sample<-vector()
+  Samples<-vector()
   colnames(ecdf_df)[1]<-"beta_value"
   for(i in 1:(col_len))
   {
@@ -41,7 +43,7 @@ ecdf.betaclust <- function(x, samples=2, sample_name = c("Sample 1","Sample 2"))
   colours<-scales::seq_gradient_pal(low="#FFC20A",high="#0C7BDC",space = "Lab")(1:color_length/color_length)
 
 
-  pecdf<-ggplot2::ggplot(ecdf_df, ggplot2::aes(beta_values, colour = Patient_Samples)) +
+  pecdf<-ggplot2::ggplot(ecdf_df, ggplot2::aes(beta_values, colour = Patient_Sample)) +
     ggplot2::stat_ecdf()+
     ggplot2::scale_color_manual(values=colours)+
     ggplot2::ggtitle("Empirical Cumulative Distribution Function")+
