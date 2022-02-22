@@ -26,6 +26,19 @@ plot.betaclust <- function(object,what="density",
                       title=paste0("Density estimates for ",object$optimal_model,"  clustering solution"),
                       fill ="Cluster")
 
+      # build the data displayed on the plot.
+      p.data <- ggplot_build(plot_graph)$data[[1]]
+
+      # Note that column 'scaled' is used for plotting
+      # so we extract the max density row for each group
+      p.text <- lapply(split(p.data, f = p.data$group), function(df){
+        df[which.max(df$scaled), ]
+      })
+      p.text <- do.call(rbind, p.text)  # we can also get p.text with dplyr.
+
+      # now add the text layer to the plot
+      plot_graph + annotate('text', x = p.text$x, y = p.text$y,
+                            label = sprintf('n = %d', p.text$n), vjust = 0)
 
 
     }else
@@ -63,12 +76,12 @@ plot.betaclust <- function(object,what="density",
                        axis.title.y = ggplot2::element_text(size=10)) +
         ggplot2::ggtitle("Density estimates for C.R clustering solution")
 
+      f_labels<-data.frame(Cluster=seq(1,length(object$best_model$cluster_count),by=1),label=as.vector(object$best_model$cluster_count))
+      plot_graph<-plot_graph+
+        ggplot2::geom_text(x = 0.2, y = 1, ggplot2::aes(label = label), data = f_labels)
 
 
     }
-    f_labels<-data.frame(Cluster=seq(1,length(object$best_model$cluster_count),by=1),label=as.vector(object$best_model$cluster_count))
-    plot_graph<-plot_graph+
-      ggplot2::geom_text(x = 0.2, y = 1, ggplot2::aes(label = label), data = f_labels)
 
 
   }
