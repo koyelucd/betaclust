@@ -66,6 +66,11 @@ plot.betaclust <- function(object,what="density",
 
 
     }
+    f_labels<-data.frame(Cluster=seq(1,length(object$best_model$cluster_count),by=1),label=as.vector(object$best_model$cluster_count))
+    plot_graph<-plot_graph+
+      ggplot2::geom_text(x = 0.2, y = 1, ggplot2::aes(label = label), data = f_labels)
+
+
   }
   if(what == "uncertainty")
   {
