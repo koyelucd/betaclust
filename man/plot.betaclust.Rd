@@ -4,7 +4,7 @@
 \alias{plot.betaclust}
 \title{Plots for betaclust object}
 \usage{
-\method{plot}{betaclust}(object, what = "density", plot_type = "ggplot")
+\method{plot}{betaclust}(object, what = "density", plot_type = "ggplot", scale_param = "free_y")
 }
 \arguments{
 \item{object}{betaclust object}
@@ -12,6 +12,8 @@
 \item{what}{The different plots that can be obtained from the object (default="density") (what=c("density","uncertainty","InformationCriterion"))}
 
 \item{plot_type}{The plot type to be displayed (default="ggplot")(plot_type="ggplot" or"plotly")}
+
+\item{scale_param}{The axis that needs to be fixed or not for facet plot (default="free_y") (scales=c("free_y","free_x","free"))}
 }
 \description{
 Plots for betaclust object

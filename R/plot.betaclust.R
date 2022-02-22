@@ -8,7 +8,7 @@
 #' @importFrom  plotly ggplotly
 
 plot.betaclust <- function(object,what="density",
-                                    plot_type="ggplot",scale_param="free_y")
+                           plot_type="ggplot",scale_param="free_y")
 {
   #print(what)
 
@@ -81,7 +81,7 @@ plot.betaclust <- function(object,what="density",
       ggplot2::coord_cartesian(ylim = c(0, 1))+
       ggplot2::geom_hline(yintercept=max_unc)+
       ggplot2::annotate(geom="text", label="maximum uncertainty",
-               x=3, y=(max_unc+0.015), vjust=-1)
+                        x=3, y=(max_unc+0.015), vjust=-1)
 
     # if(plot_type=="ggplot")
     #   plot_uncertainty
