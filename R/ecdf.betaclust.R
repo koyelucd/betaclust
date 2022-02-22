@@ -33,6 +33,8 @@ ecdf.betaclust <- function(x, samples=2, sample_name = c("Sample 1","Sample 2"))
       Samples<-c(Samples,samp_names)
     }
   }
+  
+  #head(ecdf_df)
 
   data_plot<-cbind(ecdf_df,Patient_sample,Samples)
   data_plot<-as.data.frame(data_plot)
@@ -43,7 +45,7 @@ ecdf.betaclust <- function(x, samples=2, sample_name = c("Sample 1","Sample 2"))
   colours<-scales::seq_gradient_pal(low="#FFC20A",high="#0C7BDC",space = "Lab")(1:color_length/color_length)
 
 
-  pecdf<-ggplot2::ggplot(ecdf_df, ggplot2::aes(beta_value, colour = Patient_Sample)) +
+  pecdf<-ggplot2::ggplot(data_plot, ggplot2::aes(beta_value, colour = Patient_Sample)) +
     ggplot2::stat_ecdf()+
     ggplot2::scale_color_manual(values=colours)+
     ggplot2::ggtitle("Empirical Cumulative Distribution Function")+
