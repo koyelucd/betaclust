@@ -12,7 +12,7 @@ ecdf.betaclust <- function(x, samples=2, sample_name = c("Sample 1","Sample 2"))
   col_len<-ncol(x)
   row_len<-nrow(x)
   col_names<-colnames(x)
-  data_matrix<-as.matrix(x[,1:cols])
+  data_matrix<-as.matrix(x[,1:col_len])
   data_new<-as.vector(data_matrix)
   ecdf_df<-as.data.frame(data_new)
   ecdf_df$Patient_Samples<-NA
