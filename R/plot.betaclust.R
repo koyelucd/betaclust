@@ -37,7 +37,7 @@ plot.betaclust <- function(object,what="density",
       p.text <- do.call(rbind, p.text)  # we can also get p.text with dplyr.
 
       # now add the text layer to the plot
-      plot_graph + ggplot2::annotate('text', x = p.text$x, y = p.text$y,
+      plot_graph<-plot_graph + ggplot2::annotate('text', x = p.text$x, y = p.text$y,
                             label = sprintf('n = %d', p.text$n), vjust = 0)
 
 
