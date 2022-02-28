@@ -34,18 +34,35 @@ ecdf.betaclust <- function(x, samples=2, sample_name = c("Sample 1","Sample 2"))
       colnames(data_plot)<-c("beta_value","Patient_Sample","Samples")
 
       data_plot$beta_value<-as.numeric(data_plot$beta_value)
-      color_length<- samples #col_len
-      colours<-scales::seq_gradient_pal(low="#FFC20A",
-                                        high="#0C7BDC",
-                                        space = "Lab")(1:color_length/color_length)
+      #color_length<- samples #col_len
+      #colours<-scales::seq_gradient_pal(low="#FFC20A",
+          #                              high="#0C7BDC",
+           #                             space = "Lab")(1:color_length/color_length)
 
 
-      pecdf<-ggplot2::ggplot(data_plot, ggplot2::aes(beta_value, colour = Patient_Sample)) +
-      ggplot2::stat_ecdf()+
-      ggplot2::scale_color_manual(values=colours)+
-      ggplot2::ggtitle("Empirical Cumulative Distribution Function")+
-      ggplot2::xlab("Beta value")+
-      ggplot2::ylab("F(Beta value)")
+
+      if(samples<8)
+      {
+        patient_count<-col_len/samples
+        colours<-vector()
+        colours<-c(colours,rep("black",times=patient_count),rep("red",times=patient_count),rep("darkblue",times=patient_count),
+                   rep("darkgreen",times=patient_count),rep("yellow",times=patient_count),rep("brown",times=patient_count),
+                   rep("lavender",times=patient_count))
+        colours<-colours[1:col_len]
+        pecdf<-ggplot2::ggplot(data_plot, ggplot2::aes(beta_value, colour = Patient_Sample)) +
+          ggplot2::stat_ecdf()+
+          ggplot2::scale_color_manual(values=colours)+
+          ggplot2::ggtitle("Empirical Cumulative Distribution Function")+
+          ggplot2::xlab("Beta value")+
+          ggplot2::ylab("F(Beta value)")
+      }else{
+        pecdf<-ggplot2::ggplot(data_plot, ggplot2::aes(beta_value, colour = Patient_Sample)) +
+          ggplot2::stat_ecdf()+
+          #ggplot2::scale_color_manual(values=colours)+
+          ggplot2::ggtitle("Empirical Cumulative Distribution Function")+
+          ggplot2::xlab("Beta value")+
+          ggplot2::ylab("F(Beta value)")
+      }
 
 
       pecdf
