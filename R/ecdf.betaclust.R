@@ -41,7 +41,7 @@ ecdf.betaclust <- function(x, samples=2, sample_name = c("Sample 1","Sample 2"))
 
 
 
-      if(samples<8)
+      if(samples<7)
       {
         patient_count<-col_len/samples
         colours<-vector()

@@ -33,12 +33,13 @@ plot.betaclust <- function(object,what="density",
             df[which.max(df$scaled), ]
           })
           p.text <- do.call(rbind, p.text)
+          p.text$prop=p.text$n(sum(p.text$n))
 
 
           plot_graph<-plot_graph + ggplot2::annotate('text', x = p.text$x,
                                                      y = p.text$y,
-                                                     label = sprintf('n = %d',
-                                                                     p.text$n),
+                                                     label = sprintf('%d',
+                                                                     p.text$prop),
                                                      vjust = 0)
 
 
@@ -77,7 +78,7 @@ plot.betaclust <- function(object,what="density",
                            axis.title.y = ggplot2::element_text(size=10)) +
             ggplot2::ggtitle("Density estimates for C.R clustering solution")
 
-          f_labels<-data.frame(Cluster=seq(1,length(object$best_model$cluster_count),by=1),label=as.vector(object$best_model$cluster_count))
+          f_labels<-data.frame(Cluster=seq(1,length(object$best_model$cluster_count),by=1),label=as.vector(object$best_model$tau))
           plot_graph<-plot_graph+
             ggplot2::geom_text(x = 0.2, y = 1, ggplot2::aes(label = label), data = f_labels)
 

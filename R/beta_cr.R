@@ -211,12 +211,44 @@ beta_cr<-function(data,K=3,patients,samples,seed,register=NULL){
 
 
   ### uncertainty
-  cert=apply(z_new,1,max)
-  uc=1-cert
+  #cert=apply(z_new,1,max)
+  #uc=1-cert
 
   parallel::stopCluster(cl=my.cluster)
 
+  #### Sorting the clusters as per interest
+  mean_beta=as.data.frame(alpha/(alpha+beta))
+  mean_beta$diff<-abs(mean_beta$V1-mean_beta$V2)
+  mean_sorted<-mean_beta[order(mean_beta$diff,decreasing = T),]
+  mean_row<-row.names(mean_sorted)
+  data_final=as.data.frame(complete_data)
+  data_final$mem_final<-as.numeric(data_final$mem_final)
+  data_final$new_mem_final<-NA
+  mean_row<-as.numeric(mean_row)
+  mean_row<-cbind(mean_row,seq(1,K,by=1))
+  alpha_final=matrix(NA,nrow=K,ncol=R)
+  beta_final=matrix(NA,nrow=K,ncol=R)
+  tau_final=vector(length=K)
+  z_final=matrix(NA,nrow=C,ncol=K)
+  for(i in 1:K)
+  {
+    data_final["new_mem_final"][data_final["mem_final"]==mean_row[i,1]]<-mean_row[i,2]
+    swapped_row=mean_row[i,1]
+    alpha_final[i,]=alpha[swapped_row,]
+    beta_final[i,]=beta[swapped_row,]
+    tau_final[i]=tau[swapped_row]
+    z_final[,i]=z_new[,swapped_row]
+  }
+  data_final<-data_final[,-(N*R+1)]
+  colnames(data_final)[(N*R+1)]<-"mem_final"
+  data_final$mem_final<-as.factor(data_final$mem_final)
+  cert_final=apply(z_final,1,max)
+  uc_final=1-cert_final
+
   #### Return data
-  return(list(cluster_count=cluster_count,llk=llk_iter,data=complete_data,alpha=alpha,beta=beta,tau=tau,z=z_new,uncertainty=uc))
+  #return(list(cluster_count=cluster_count,llk=llk_iter,data=complete_data,alpha=alpha,beta=beta,tau=tau,z=z_new,uncertainty=uc))
+  return(list(cluster_count=cluster_count,llk=llk_iter,data=data_final,
+              alpha=alpha_final,beta=beta_final,tau=tau_final,
+              z=z_final,uncertainty=uc_final))
 
 }
