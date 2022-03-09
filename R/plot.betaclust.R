@@ -34,12 +34,12 @@ plot.betaclust <- function(object,what="density",
           })
           p.text <- do.call(rbind, p.text)
           p.text$prop=p.text$n/(sum(p.text$n))
-          p.text$prop=round(p.text$prop,2)
+          p.text$prop=round(p.text$prop,3)
 
 
           plot_graph<-plot_graph + ggplot2::annotate('text', x = p.text$x,
                                                      y = p.text$y,
-                                                     label = sprintf('%f',
+                                                     label = sprintf('%.3f',
                                                                      p.text$prop),
                                                      vjust = 0)
 
