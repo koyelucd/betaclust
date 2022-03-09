@@ -68,7 +68,7 @@ plot.betaclust <- function(object,what="density",
           colours<-scales::seq_gradient_pal(low="#FFC20A",high="#0C7BDC",space = "Lab")(1:color_length/color_length)
 
           plot_graph<-ggplot2::ggplot(data_plot)+
-            ggplot2::geom_density(aes(x=beta_value,color=Patient_Sample))+
+            ggplot2::geom_density(aes(x=beta_value,color=Patient_Sample),size=1)+
             ggplot2::xlab("Beta Value")+
             ggplot2::ylab("Density")+
             ggplot2::scale_color_manual(values=colours)+
