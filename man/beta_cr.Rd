@@ -31,6 +31,3 @@ An initial clustering using K-means is performed to identify K^samples cluster. 
 starting values to the Expectation-Maximisation algorithm. A digamma approximation is used to obtain the maximised
 parameters in the M-step instead of the computationally inefficient numerical optimisation step.
 }
-\examples{
-a+b
-}

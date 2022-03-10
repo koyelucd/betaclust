@@ -117,7 +117,7 @@ plot.betaclust <- function(object,what="density",
           ic_df2<-ic_df[order(ic_df$IC_value),]
           plot_graph<-ggplot2::ggplot(data=ic_df,ggplot2::aes(x=ModelName,y=IC_value,group=1))+
             ggplot2::geom_line()+
-            ggplot2::ggtitle(paste0(wrapper_out2$information_criterion," Information Criterion Plot for optimal model selection"))+
+            ggplot2::ggtitle(paste0(object$information_criterion," Information Criterion Plot for optimal model selection"))+
             ggplot2::xlab("Model Name")+
             ggplot2::ylab("Information criterion value")
 

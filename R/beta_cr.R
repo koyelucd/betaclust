@@ -16,7 +16,7 @@
 #' parameters in the M-step instead of the computationally inefficient numerical optimisation step.
 #' @return The model returns the maximised parameters and the log-likelihood value for them. The complete data with predicted cluster
 #' membership and the uncertainty in the clustering solution is returned.
-#' @examples a+b
+
 
 
 beta_cr<-function(data,K=3,patients,samples,seed,register=NULL){
