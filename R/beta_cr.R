@@ -1,5 +1,6 @@
-#' C.R Model from the family of beta mixture models for DNA methylation data
+#' The C.R Model
 #' @export
+#' @description Beta mixture model for identifying differentially methylated regions between multiple DNA samples
 #' @param  X methylation values for CpG sites frpm R samples collected from N patients
 #' @param K number of methylation groups to be identified (default=3)
 #' @param patients number of patients in the study
@@ -9,6 +10,13 @@
 #' @importFrom foreach %dopar%
 #' @importFrom stats C
 #' @importFrom utils txtProgressBar
+#' @details
+#' An initial clustering using K-means is performed to identify K^samples cluster. These values are provided as
+#' starting values to the Expectation-Maximisation algorithm. A digamma approximation is used to obtain the maximised
+#' parameters in the M-step instead of the computationally inefficient numerical optimisation step.
+#' @return The model returns the maximised parameters and the log-likelihood value for them. The complete data with predicted cluster
+#' membership and the uncertainty in the clustering solution is returned.
+#' @examples a+b
 
 
 beta_cr<-function(data,K=3,patients,samples,seed,register=NULL){

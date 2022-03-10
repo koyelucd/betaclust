@@ -33,13 +33,12 @@ plot.betaclust <- function(object,what="density",
             df[which.max(df$scaled), ]
           })
           p.text <- do.call(rbind, p.text)
-          p.text$prop=p.text$n/(sum(p.text$n))
-          p.text$prop=round(p.text$prop,3)
+          p.text$prop=p.text$n(sum(p.text$n))
 
 
           plot_graph<-plot_graph + ggplot2::annotate('text', x = p.text$x,
                                                      y = p.text$y,
-                                                     label = sprintf('%.3f',
+                                                     label = sprintf('%d',
                                                                      p.text$prop),
                                                      vjust = 0)
 
@@ -68,7 +67,7 @@ plot.betaclust <- function(object,what="density",
           colours<-scales::seq_gradient_pal(low="#FFC20A",high="#0C7BDC",space = "Lab")(1:color_length/color_length)
 
           plot_graph<-ggplot2::ggplot(data_plot)+
-            ggplot2::geom_density(aes(x=beta_value,color=Patient_Sample),size=1)+
+            ggplot2::geom_density(aes(x=beta_value,color=Patient_Sample))+
             ggplot2::xlab("Beta Value")+
             ggplot2::ylab("Density")+
             ggplot2::scale_color_manual(values=colours)+

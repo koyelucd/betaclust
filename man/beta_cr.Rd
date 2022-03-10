@@ -2,7 +2,7 @@
 % Please edit documentation in R/beta_cr.R
 \name{beta_cr}
 \alias{beta_cr}
-\title{C.R Model from the family of beta mixture models for DNA methylation data}
+\title{The C.R Model}
 \usage{
 beta_cr(data, K = 3, patients, samples, seed, register = NULL)
 }
@@ -19,6 +19,18 @@ beta_cr(data, K = 3, patients, samples, seed, register = NULL)
 
 \item{X}{methylation values for CpG sites frpm R samples collected from N patients}
 }
+\value{
+The model returns the maximised parameters and the log-likelihood value for them. The complete data with predicted cluster
+membership and the uncertainty in the clustering solution is returned.
+}
 \description{
-C.R Model from the family of beta mixture models for DNA methylation data
+Beta mixture model for identifying differentially methylated regions between multiple DNA samples
+}
+\details{
+An initial clustering using K-means is performed to identify K^samples cluster. These values are provided as
+starting values to the Expectation-Maximisation algorithm. A digamma approximation is used to obtain the maximised
+parameters in the M-step instead of the computationally inefficient numerical optimisation step.
+}
+\examples{
+a+b
 }
