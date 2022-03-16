@@ -33,7 +33,7 @@ plot.betaclust <- function(object,what="density",
             df[which.max(df$scaled), ]
           })
           p.text <- do.call(rbind, p.text)
-          p.text$prop=p.text$n(sum(p.text$n))
+          p.text$prop=p.text$n/(sum(p.text$n))
 
 
           plot_graph<-plot_graph + ggplot2::annotate('text', x = p.text$x,
