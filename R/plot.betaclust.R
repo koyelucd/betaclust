@@ -38,7 +38,7 @@ plot.betaclust <- function(object,what="density",
 
           plot_graph<-plot_graph + ggplot2::annotate('text', x = p.text$x,
                                                      y = p.text$y,
-                                                     label = sprintf('%d',
+                                                     label = sprintf('%.3f',
                                                                      p.text$prop),
                                                      vjust = 0)
 
