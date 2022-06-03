@@ -2,7 +2,7 @@
 % Please edit documentation in R/summary.betaclust.R
 \name{summary.betaclust}
 \alias{summary.betaclust}
-\title{Calculating summary of the betaclust object}
+\title{Summary statistics of betaclust output}
 \usage{
 \method{summary}{betaclust}(object)
 }
@@ -10,8 +10,19 @@
 \item{x}{betaclust object}
 }
 \value{
-obj
+An object of class "summary.betaclust".
+The object returns the following list of values:
+\itemize{
+\item CpG_sites - The number of CpG sites analysed using the beta mixture models.
+\item patients - The number of patients analysed using the beta mixture models.
+\item samples - The numder of samples analysed using the beta mixture models.
+\item cluster_count - The number of groups, the data is clustered into.
+\item modelName - The optimal model selected.
+\item loglik - The log-likelihood value for the selected optimal model.
+\item Information_criterion - The information criterion used to select the optimal model.
+\item ic_output - This stores the information criterion value calculated for each model.
+\item classification - The total number of CpG sites identified in each cluster. }
 }
 \description{
-Calculating summary of the betaclust object
+Calculates and prints the summary statistics of the optimal model selected for printing.
 }

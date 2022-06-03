@@ -1,4 +1,5 @@
-#' BIC to compare the methods
+#' @title Bayesian Information Criterion
+#' @description The BIC value used to select the optimal model
 #' @export
 #' @param llk log-likelihood value
 #' @param C number of CpG sites
@@ -6,7 +7,7 @@
 #' @param patients number of patients
 #' @param samples no. of samples
 #' @param model_names mixture model (method=c("C..","CN.","C.R"))
-#' @return bic
+#' @return The BIC value for the selected model
 
 em_bic<-function(llk,C,K,patients=4,samples=1,model_names="C.."){
 
@@ -35,11 +36,11 @@ em_bic<-function(llk,C,K,patients=4,samples=1,model_names="C.."){
     }
 
     if(is.na(llk[i]))
-     {
+    {
       bic[i]=NA
-     }else{
-       bic[i]= -(2*llk[i])+(num_par * log(C))
-     }
+    }else{
+      bic[i]= -(2*llk[i])+(num_par * log(C))
+    }
   }
 
   return(bic)

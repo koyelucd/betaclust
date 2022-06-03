@@ -1,13 +1,22 @@
-#' Calculating summary of the betaclust object
+#' @title Summary statistics of betaclust output
+#' @description Calculates and prints the summary statistics of the optimal model selected for printing.
 #' @export
 #' @param x betaclust object
-#' @return obj
+#' @return An object of class "summary.betaclust".
+#' The object returns the following list of values:
+#' \itemize{
+#' \item CpG_sites - The number of CpG sites analysed using the beta mixture models.
+#' \item patients - The number of patients analysed using the beta mixture models.
+#' \item samples - The numder of samples analysed using the beta mixture models.
+#' \item cluster_count - The number of groups, the data is clustered into.
+#' \item modelName - The optimal model selected.
+#' \item loglik - The log-likelihood value for the selected optimal model.
+#' \item Information_criterion - The information criterion used to select the optimal model.
+#' \item ic_output - This stores the information criterion value calculated for each model.
+#' \item classification - The total number of CpG sites identified in each cluster. }
 
 summary.betaclust<-function(object)
 {
-  #K<-object$K
-  #C=nrow(object$best_model$data)
-  #d=ncol(object$best_model$data)-1
   title <- paste("Multivariate Beta mixture model fitted by EM algorithm")
   ic_value=min(object$ic_output)
   clust_count=length(object$best_model$cluster_count)

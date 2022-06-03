@@ -1,9 +1,32 @@
-#' C.. Model from the family of beta mixture models for DNA methylation data
+#' @title The C.. model
+#' @description C.. Model from the family of beta mixture models for DNA methylation data.
+#'              This model analyses a single DNA sample collected from N patients to cluster the
+#'              CpG sites into K groups. By default K=3 (hypomethylation, hemimethylation and hypermethylation).
 #' @export
 #' @param  X methylation values for CpG sites frpm R samples collected from N patients
 #' @param K number of methylation groups to be identified (default=3)
 #' @param seed seed for reproducible work
 #' @param register setting for parallelization
+#'
+#' @return A list of clustering solution results.
+#' \itemize{
+#'    \item cluster_count - The total number of CpG sites identified in each cluster.
+#'    \item llk - The vector containing log-likelihood values calculated for each step of parameter estimation.
+#'    \item data - This contains the methylation dataset along with the cluster label as determined by the mixture model.
+#'    \item alpha - This contains the shape parameter 1 for the beta mixtures for K^R groups.
+#'    \item beta - This contains the shape parameter 2 for the beta mixtures for K^R groups.
+#'    \item tau - The proportion of CpG sites in each cluster.
+#'    \item z - The matrix contains the probability calculated for each CpG site belonging to the K^R clusters.
+#'    \item uncertainty - The uncertainty of a CpG site belonging to the identified cluster.
+#'    }
+#'
+#' @examples
+#' \dontrun{
+#' data(pca.methylation.data)
+#' my.seed=190
+#' K=3
+#' data_output=beta_c(pca.methylation.data[,2:5],K,seed=my.seed)
+#' }
 #' @importFrom foreach %dopar%
 #' @importFrom stats C
 #' @importFrom utils txtProgressBar
@@ -128,7 +151,7 @@ beta_c<-function(data,K=3,seed,register=NULL){
 
     ## parallelization of E-step
     z = foreach::foreach(k = 1:K, .combine=cbind) %dopar%
-     { z_estimation(x,alpha[k],beta[k],tau[k],N)}
+      { z_estimation(x,alpha[k],beta[k],tau[k],N)}
 
     z <- sweep(z, 1, STATS = rowSums(z), FUN = "/")
 

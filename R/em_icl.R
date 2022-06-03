@@ -1,4 +1,7 @@
-#' ICL to compare the methods
+#' @title Integrated Complete-data Likelihood (ICL) Criterion
+#' @description The ICL value used to select the optimal model.
+#' This criterion penalises the BIC by including the entropy term favouring the
+#' well separated clusters.
 #' @export
 #' @param llk log-likelihood value
 #' @param C number of CpG sites
@@ -7,7 +10,7 @@
 #' @param samples no. of samples
 #' @param model_names mixture model (method=c("C..","CN.","C.R"))
 #' @param z z matrix for each output
-#' @return icl
+#' @return The ICL value for the selected model
 
 em_icl<-function(llk,C,K,patients=4,samples=1,model_names="C..",z){
 
@@ -28,11 +31,11 @@ em_icl<-function(llk,C,K,patients=4,samples=1,model_names="C..",z){
 
 
     if(is.na(llk[i]))
-     {
+    {
       icl[i]=NA
-     }else{
-       icl[i]=bic[i] + 2*sum(D * ifelse(z_i > 0, log(z_i), 0))
-     }
+    }else{
+      icl[i]=bic[i] + 2*sum(D * ifelse(z_i > 0, log(z_i), 0))
+    }
   }
 
   return(icl)

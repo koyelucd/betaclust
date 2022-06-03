@@ -1,21 +1,41 @@
-#' The C.R Model
+#' @title The C.R Model
 #' @export
-#' @description Beta mixture model for identifying differentially methylated regions between multiple DNA samples
+#' @description Beta mixture model for identifying differentially methylated CpG sites between R DNA samples collected from N patients.
 #' @param  X methylation values for CpG sites frpm R samples collected from N patients
 #' @param K number of methylation groups to be identified (default=3)
 #' @param patients number of patients in the study
 #' @param samples number of samples collected from each patient for study
 #' @param seed seed for reproducible work
 #' @param register setting for parallelization
-#' @importFrom foreach %dopar%
-#' @importFrom stats C
-#' @importFrom utils txtProgressBar
 #' @details
 #' An initial clustering using K-means is performed to identify K^samples cluster. These values are provided as
 #' starting values to the Expectation-Maximisation algorithm. A digamma approximation is used to obtain the maximised
 #' parameters in the M-step instead of the computationally inefficient numerical optimisation step.
-#' @return The model returns the maximised parameters and the log-likelihood value for them. The complete data with predicted cluster
-#' membership and the uncertainty in the clustering solution is returned.
+#' @return A list of clustering solution results.
+#' \itemize{
+#'    \item cluster_count - The total number of CpG sites identified in each cluster.
+#'    \item llk - The vector containing log-likelihood values calculated for each step of parameter estimation.
+#'    \item data - This contains the methylation dataset along with the cluster label as determined by the mixture model.
+#'    \item alpha - This contains the shape parameter 1 for the beta mixtures for K^R groups.
+#'    \item beta - This contains the shape parameter 2 for the beta mixtures for K^R groups.
+#'    \item tau - The proportion of CpG sites in each cluster.
+#'    \item z - The matrix contains the probability calculated for each CpG site belonging to the K^R clusters.
+#'    \item uncertainty - The uncertainty of a CpG site belonging to the identified cluster.
+#'    }
+#'
+#' @examples
+#' \dontrun{
+#' data(pca.methylation.data)
+#' my.seed=190
+#' K=3
+#' patients=4
+#' samples=2
+#' data_output=beta_cr(pca.methylation.data[,2:5],K,patients,samples,seed=my.seed)
+#' }
+#' @importFrom foreach %dopar%
+#' @importFrom stats C
+#' @importFrom utils txtProgressBar
+
 
 
 

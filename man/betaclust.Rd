@@ -32,6 +32,41 @@ betaclust(
 
 \item{X}{methylation values for CpG sites frpm R samples collected from N patients}
 }
+\value{
+modelling returns an object of "betaclust" class.
+The class object contains following values.
+\itemize{
+\item Information_criterion - The information criterion used to select the optimal model.
+\item ic_output - This stores the information criterion value calculated for each model.
+\item optimal_model - The model selected as optimal.
+\item function_call - The parameters passed as arguments to the function betaclust.
+\item CpG_sites - The number of CpG sites analysed using the beta mixture models.
+\item patients - The number of patients analysed using the beta mixture models.
+\item samples - The numder of samples analysed using the beta mixture models.
+\item best_model - This contains the final results for the optimal model selected. Thus this contains the following values:
+   \itemize{
+   \item cluster_count - The total number of CpG sites identified in each cluster.
+   \item llk - The vector containing log-likelihood values calculated for each step of parameter estimation.
+   \item data - This contains the methylation dataset along with the cluster label as determined by the mixture model.
+   \item alpha - This contains the shape parameter 1 for the beta mixtures for K^R groups.
+   \item beta - This contains the shape parameter 2 for the beta mixtures for K^R groups.
+   \item tau - The proportion of CpG sites in each cluster.
+   \item z - The matrix contains the probability calculated for each CpG site belonging to the K^R clusters.
+   \item uncertainty - The uncertainty of a CpG site belonging to the identified cluster.
+   }
+}
+}
 \description{
 A family of Model based clustering techniques to identify the methylation profiles of the beta valued DNA methylation data
+}
+\examples{
+\dontrun{
+data(pca.methylation.data)
+my.seed=190
+K=3
+patients=4
+samples=2
+data_output=betaclust(pca.methylation.data[,2:9],K,patients,samples,
+            model_names=c("C..","CN.","C.R"),model_selection="BIC",seed=my.seed)
+}
 }

@@ -1,6 +1,4 @@
-#' Print summary of betaclust output
-#' @export
-#' @param x summary of betaclust object
+#' @keywords  summary of betaclust object
 
 print.summary.betaclust <- function(x, digits = getOption("digits"), ...)
 {

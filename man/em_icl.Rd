@@ -2,7 +2,7 @@
 % Please edit documentation in R/em_icl.R
 \name{em_icl}
 \alias{em_icl}
-\title{ICL to compare the methods}
+\title{Integrated Complete-data Likelihood (ICL) Criterion}
 \usage{
 em_icl(llk, C, K, patients = 4, samples = 1, model_names = "C..", z)
 }
@@ -22,8 +22,10 @@ em_icl(llk, C, K, patients = 4, samples = 1, model_names = "C..", z)
 \item{z}{z matrix for each output}
 }
 \value{
-icl
+The ICL value for the selected model
 }
 \description{
-ICL to compare the methods
+The ICL value used to select the optimal model.
+This criterion penalises the BIC by including the entropy term favouring the
+well separated clusters.
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.betaclust.R
 \name{plot.betaclust}
 \alias{plot.betaclust}
-\title{Plots for betaclust object}
+\title{Plots for visualizing the betaclust class object}
 \usage{
 \method{plot}{betaclust}(object, what = "density", plot_type = "ggplot", scale_param = "free_y")
 }
@@ -13,8 +13,12 @@
 
 \item{plot_type}{The plot type to be displayed (default="ggplot")(plot_type="ggplot" or"plotly")}
 
-\item{scale_param}{The axis that needs to be fixed or not for facet plot (default="free_y") (scales=c("free_y","free_x","free"))}
+\item{scale_param}{The axis that needs to be fixed or not for facet plot
+(default="free_y") (scales=c("free_y","free_x","free"))}
 }
 \description{
-Plots for betaclust object
+The density estimates of the clustering solution of the optimal model can be
+plotted. Apart from static plots interactive plots can also be plotted using the
+parameter plot_type = "plotly". The uncertainty in the clustering soluting can be plotted using what="uncertainty".
+The information criterion values for all models can be plotted using what="InformationCriterion" for selecting the optimal model.
 }

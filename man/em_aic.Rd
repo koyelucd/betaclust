@@ -2,7 +2,7 @@
 % Please edit documentation in R/em_aic.R
 \name{em_aic}
 \alias{em_aic}
-\title{AIC to compare the methods}
+\title{Akaike Information Criterion}
 \usage{
 em_aic(llk, C, K, patients = 4, samples = 1, model_names = "C..")
 }
@@ -20,8 +20,8 @@ em_aic(llk, C, K, patients = 4, samples = 1, model_names = "C..")
 \item{model_names}{mixture model (method=c("C..","CN.","C.R"))}
 }
 \value{
-aic
+The AIC value for the selected model
 }
 \description{
-AIC to compare the methods
+The AIC value used to select the optimal model
 }

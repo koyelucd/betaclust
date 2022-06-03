@@ -2,16 +2,20 @@
 % Please edit documentation in R/ecdf.betaclust.R
 \name{ecdf.betaclust}
 \alias{ecdf.betaclust}
-\title{Empirical Cumulative Distribution Function plot for betaclust object}
+\title{The empirical cumulative distribution function}
 \usage{
 ecdf.betaclust(x, samples = 2, sample_name = c("Sample 1", "Sample 2"))
 }
 \arguments{
-\item{x}{Methylation values of Identified Differentially methylated regions related to a gene. Group each sample together in the dataframe such that the columns are ordered as --> Sample1_P1, Sample1_P2, Sample2_P1, Sample2_P2}
+\item{x}{Methylation values of Identified Differentially methylated regions related to a gene.
+Group each sample together in the dataframe such that the columns are ordered as --> Sample1_P1, Sample1_P2, Sample2_P1, Sample2_P2}
 
 \item{samples}{number of tissue samples from where DNA methylation data is collected (default samples=2)}
 
 \item{sample_name}{The order in which the samples are grouped in the dataframe (default = c("Sample 1","Sample 2"))}
+}
+\value{
+The ecdf plot for the selected CpG sites for all patients and samples.
 }
 \description{
 Empirical Cumulative Distribution Function plot for betaclust object

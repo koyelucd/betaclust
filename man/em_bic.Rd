@@ -2,7 +2,7 @@
 % Please edit documentation in R/em_bic.R
 \name{em_bic}
 \alias{em_bic}
-\title{BIC to compare the methods}
+\title{Bayesian Information Criterion}
 \usage{
 em_bic(llk, C, K, patients = 4, samples = 1, model_names = "C..")
 }
@@ -20,8 +20,8 @@ em_bic(llk, C, K, patients = 4, samples = 1, model_names = "C..")
 \item{model_names}{mixture model (method=c("C..","CN.","C.R"))}
 }
 \value{
-bic
+The BIC value for the selected model
 }
 \description{
-BIC to compare the methods
+The BIC value used to select the optimal model
 }
