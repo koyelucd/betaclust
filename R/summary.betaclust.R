@@ -21,7 +21,9 @@ summary.betaclust<-function(object)
   ic_value=min(object$ic_output)
   clust_count=length(object$best_model$cluster_count)
   loglik=object$best_model$llk[length(object$best_model$llk)]
-  classification<-as.factor(object$best_model$data[,ncol(object$best_model$data)])
+  #classification<-as.factor(object$best_model$data[,ncol(object$best_model$data)])
+  clustering<-as.factor(object$best_model$data[,ncol(object$best_model$data)])
+  classification<-table(clustering)
   obj <- list(title = title,
               CpG_sites=object$CpG_sites,
               patients=object$patients,
