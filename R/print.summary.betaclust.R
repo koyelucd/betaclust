@@ -29,7 +29,8 @@ print.summary.betaclust <- function(x, digits = getOption("digits"), ...)
   print(tab)
   #
   cat("\nClustering table:")
-  print(table(x$classification))
+  #print(table(x$classification))
+  print(x$classification)
   #
   invisible(x)
 }
