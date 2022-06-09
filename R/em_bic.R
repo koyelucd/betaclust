@@ -1,13 +1,16 @@
 #' @title Bayesian Information Criterion
-#' @description The BIC value used to select the optimal model
+#' @description The BIC value used to select the optimal model.
+#' @details Computes the BIC for the beta mixture models given the loglikelihood, the dimension of the data, and the mixture model names.
 #' @export
+#' @seealso \code{\link{em_aic}}
+#' @seealso  \code{\link{em_icl}}
 #' @param llk log-likelihood value
 #' @param C number of CpG sites
 #' @param K number of clusters
 #' @param patients number of patients
 #' @param samples no. of samples
 #' @param model_names mixture model (method=c("C..","CN.","C.R"))
-#' @return The BIC value for the selected model
+#' @return The BIC value for the selected model.
 
 em_bic<-function(llk,C,K,patients=4,samples=1,model_names="C.."){
 

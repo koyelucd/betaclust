@@ -2,7 +2,7 @@
 % Please edit documentation in R/beta_cr.R
 \name{beta_cr}
 \alias{beta_cr}
-\title{The C.R Model}
+\title{The C. R Model}
 \usage{
 beta_cr(data, K = 3, patients, samples, seed, register = NULL)
 }
@@ -25,10 +25,10 @@ A list of clustering solution results.
    \item cluster_count - The total number of CpG sites identified in each cluster.
    \item llk - The vector containing log-likelihood values calculated for each step of parameter estimation.
    \item data - This contains the methylation dataset along with the cluster label as determined by the mixture model.
-   \item alpha - This contains the shape parameter 1 for the beta mixtures for K^R groups.
-   \item beta - This contains the shape parameter 2 for the beta mixtures for K^R groups.
+   \item alpha - This contains the shape parameter 1 for the beta mixtures for \eqn{K^R} groups.
+   \item beta - This contains the shape parameter 2 for the beta mixtures for \eqn{K^R} groups.
    \item tau - The proportion of CpG sites in each cluster.
-   \item z - The matrix contains the probability calculated for each CpG site belonging to the K^R clusters.
+   \item z - The matrix contains the probability calculated for each CpG site belonging to the \eqn{K^R} clusters.
    \item uncertainty - The uncertainty of a CpG site belonging to the identified cluster.
    }
 }
@@ -36,7 +36,11 @@ A list of clustering solution results.
 Beta mixture model for identifying differentially methylated CpG sites between R DNA samples collected from N patients.
 }
 \details{
-An initial clustering using K-means is performed to identify K^samples cluster. These values are provided as
+The C. R model allows identification of the differentially methylated CpG sites between the R DNA samples collected from each of the N patients.
+The model attempts to identify \eqn{K = M^R} clusters identifying each possible combination of the M = 3 methylation profiles for R samples.
+The parameters vary for each sample type but are constrained to be equal for each patient.
+
+An initial clustering using K-means is performed to identify \eqn{K^R} cluster. These values are provided as
 starting values to the Expectation-Maximisation algorithm. A digamma approximation is used to obtain the maximised
 parameters in the M-step instead of the computationally inefficient numerical optimisation step.
 }
@@ -49,4 +53,7 @@ patients=4
 samples=2
 data_output=beta_cr(pca.methylation.data[,2:5],K,patients,samples,seed=my.seed)
 }
+}
+\seealso{
+\code{\link{betaclust}}
 }

@@ -20,8 +20,16 @@ em_aic(llk, C, K, patients = 4, samples = 1, model_names = "C..")
 \item{model_names}{mixture model (method=c("C..","CN.","C.R"))}
 }
 \value{
-The AIC value for the selected model
+The AIC value for the selected model.
 }
 \description{
-The AIC value used to select the optimal model
+The AIC value used to select the optimal model.
+}
+\details{
+Computes the AIC for the beta mixture models given the loglikelihood, the dimension of the data, and the mixture model names.
+}
+\seealso{
+\code{\link{em_bic}}
+
+\code{\link{em_icl}}
 }

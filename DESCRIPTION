@@ -6,11 +6,7 @@ Author: Koyel Majumdar [aut] <koyel.majumdar@ucdconnect.ie>,
   Isobel Claire Gormley [aut] <claire.gormley@ucd.ie>,
   Thomas Brendan Murphy [aut] <brendan.murphy@ucd.ie>
 Maintainer: Koyel Majumdar <koyel.majumdar@ucdconnect.ie>
-Description: A family of novel beta mixture models is proposed based on model-based
-  clustering approach to identify the different methylation profiles and the DMRs 
-  between different samples by modelling the samples together in a mixture model. 
-  The code has been optimized by using parallel programming throughout and 
-  digamma function approximation at M-step which has reduced run-time considerable. 
+Description: A family of novel beta mixture models (BMMs) is proposed to appositely model the innate beta valued data, objectively identify methylation state thresholds and identify the differentially methylated CpG (DMC) sites using a model-based clustering approach. The family of BMMs employs different parameter constraints applicable to different study settings. Parameter estimation proceeds via the EM algorithm, with a novel approximation during the M-step providing tractability and ensuring computational feasibility.
 License: GPL-3
 Depends: R (>= 3.5.0)
 Imports: foreach, doParallel, stats, utils, ggplot2, plotly

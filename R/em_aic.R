@@ -1,13 +1,16 @@
 #' @title Akaike Information Criterion
-#' @description The AIC value used to select the optimal model
+#' @description The AIC value used to select the optimal model.
+#' @details Computes the AIC for the beta mixture models given the loglikelihood, the dimension of the data, and the mixture model names.
 #' @export
+#' @seealso \code{\link{em_bic}}
+#' @seealso \code{\link{em_icl}}
 #' @param llk log-likelihood value
 #' @param C number of CpG sites
 #' @param K number of clusters
 #' @param patients number of patients
 #' @param samples no. of samples
 #' @param model_names mixture model (method=c("C..","CN.","C.R"))
-#' @return The AIC value for the selected model
+#' @return The AIC value for the selected model.
 
 em_aic<-function(llk,C,K,patients=4,samples=1,model_names="C.."){
 

@@ -1,8 +1,12 @@
 #' @title Integrated Complete-data Likelihood (ICL) Criterion
 #' @description The ICL value used to select the optimal model.
-#' This criterion penalises the BIC by including the entropy term favouring the
+#'
+#' @details Computes the ICL for the beta mixture models given the loglikelihood,
+#' the dimension of the data, and the mixture model names. This criterion penalises the BIC by including the entropy term favouring the
 #' well separated clusters.
 #' @export
+#' @seealso \code{\link{em_aic}}
+#' @seealso  \code{\link{em_bic}}
 #' @param llk log-likelihood value
 #' @param C number of CpG sites
 #' @param K number of clusters
@@ -10,7 +14,7 @@
 #' @param samples no. of samples
 #' @param model_names mixture model (method=c("C..","CN.","C.R"))
 #' @param z z matrix for each output
-#' @return The ICL value for the selected model
+#' @return The ICL value for the selected model.
 
 em_icl<-function(llk,C,K,patients=4,samples=1,model_names="C..",z){
 

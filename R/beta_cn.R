@@ -1,8 +1,16 @@
 #' @title The CN. model
-#' @description  CN. Model from the family of beta mixture models for DNA methylation data.
-#'              This model analyses a single DNA sample collected from N patients to cluster the
-#'              CpG sites into K groups. By default K=3 (hypomethylation, hemimethylation and hypermethylation).
+#' @description The CN. model from the family of beta mixture models for DNA methylation data.
+#'              This model analyses a single DNA sample and identify the thresholds for the different methylation profiles.
+#'
 #' @export
+#'
+#' @details This model clusters each of the C CpG sites into one of K = M methylation states, based on data from N patients where R = 1.
+#' The default value for M = 3 as a CpG site can be either hypomethylated, hemimethylated or hypermethylated.
+#' The CN. model differs from the C.. model as it is less parsimonious, allowing cluster and patient-specific shape parameters.
+#'
+#' @seealso \code{\link{beta_c}}
+#' @seealso \code{\link{betaclust}}
+#'
 #' @param  X methylation values for CpG sites frpm R samples collected from N patients
 #' @param K number of methylation groups to be identified (default=3)
 #' @param seed seed for reproducible work
@@ -13,10 +21,10 @@
 #'    \item cluster_count - The total number of CpG sites identified in each cluster.
 #'    \item llk - The vector containing log-likelihood values calculated for each step of parameter estimation.
 #'    \item data - This contains the methylation dataset along with the cluster label as determined by the mixture model.
-#'    \item alpha - This contains the shape parameter 1 for the beta mixtures for K^R groups.
-#'    \item beta - This contains the shape parameter 2 for the beta mixtures for K^R groups.
+#'    \item alpha - This contains the shape parameter 1 for the beta mixtures for \eqn{K^R} groups.
+#'    \item beta - This contains the shape parameter 2 for the beta mixtures for \eqn{K^R} groups.
 #'    \item tau - The proportion of CpG sites in each cluster.
-#'    \item z - The matrix contains the probability calculated for each CpG site belonging to the K^R clusters.
+#'    \item z - The matrix contains the probability calculated for each CpG site belonging to the \eqn{K^R} clusters.
 #'    \item uncertainty - The uncertainty of a CpG site belonging to the identified cluster.
 #'    }
 #'

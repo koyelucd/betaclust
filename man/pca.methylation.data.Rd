@@ -24,4 +24,10 @@ data(pca.methylation.data)
 \description{
 The dataset contains pre-processed beta methylation values of R=2 samples which are collected from N=4 patients suffering from prostate cancer disease.
 }
+\details{
+The raw methylation array data was first quality controlled and preprocessed using RnBeads package. The array data was then normalized and and probes located outside of CpG sites and on the sex chromosome were filtered out. The CpG sites with missing values were removed from the resulting dataset.
+}
+\seealso{
+\code{\link{legacy.data}}
+}
 \keyword{datasets}

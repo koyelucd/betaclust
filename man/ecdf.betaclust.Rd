@@ -15,8 +15,17 @@ Group each sample together in the dataframe such that the columns are ordered as
 \item{sample_name}{The order in which the samples are grouped in the dataframe (default = c("Sample 1","Sample 2"))}
 }
 \value{
-The ecdf plot for the selected CpG sites for all patients and samples.
+The ECDF plot for the selected CpG sites for all patients and samples.
 }
 \description{
-Empirical Cumulative Distribution Function plot for betaclust object
+Empirical Cumulative Distribution Function (ECDF) plot for betaclust object
+}
+\details{
+This function plots the ECDF graphs of the differentially methylated CpG sites identified using the C.R model for all patient samples.
+The graph can help visualise the methylation state changes between the different patient samples.
+}
+\seealso{
+\code{\link{betaclust}}
+
+\code{\link{beta_cr}}
 }

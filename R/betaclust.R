@@ -1,6 +1,19 @@
 #' @title The betaclust wrapper function
 #' @export
-#' @description A family of Model based clustering techniques to identify the methylation profiles of the beta valued DNA methylation data
+#' @description A family of model based clustering techniques to identify the methylation profiles of the beta valued DNA methylation data
+#'
+#' @details This is a wrapper function which can be used to run all three models (C.., CN., C.R) together.
+#' The C.. and CN. models are used to analyse a single DNA sample and cluster the CpG sites into the 3 methylation profiles (hypomethylation, hemimethylation, hypermethylation).
+#' The thresholds can be objectively identified from the clustering solution. The C. R model is used to analyse R samples to
+#' the differentially methylated CpG sites between R DNA samples.
+#'
+#' @seealso \code{\link{beta_c}}
+#' @seealso \code{\link{beta_cn}}
+#' @seealso \code{\link{beta_cr}}
+#' @seealso \code{\link{pca.methylation.data}}
+#' @seealso \code{\link{plot.betaclust}}
+#' @seealso \code{\link{summary.betaclust}}
+#'
 #' @param X methylation values for CpG sites frpm R samples collected from N patients
 #' @param K number of methylation groups to be identified (default=3)
 #' @param patients number of patients in the study
@@ -10,8 +23,8 @@
 #' @param seed seed for reproducible work
 #' @param register setting for parallelization
 #'
-#' @return modelling returns an object of "betaclust" class.
-#' The class object contains following values.
+#' @return The function returns an object of "betaclust" class.
+#' The class object contains following values:
 #' \itemize{
 #' \item Information_criterion - The information criterion used to select the optimal model.
 #' \item ic_output - This stores the information criterion value calculated for each model.
@@ -25,10 +38,10 @@
 #'    \item cluster_count - The total number of CpG sites identified in each cluster.
 #'    \item llk - The vector containing log-likelihood values calculated for each step of parameter estimation.
 #'    \item data - This contains the methylation dataset along with the cluster label as determined by the mixture model.
-#'    \item alpha - This contains the shape parameter 1 for the beta mixtures for K^R groups.
-#'    \item beta - This contains the shape parameter 2 for the beta mixtures for K^R groups.
+#'    \item alpha - This contains the shape parameter 1 for the beta mixtures for \eqn{K^R} groups.
+#'    \item beta - This contains the shape parameter 2 for the beta mixtures for \eqn{K^R} groups.
 #'    \item tau - The proportion of CpG sites in each cluster.
-#'    \item z - The matrix contains the probability calculated for each CpG site belonging to the K^R clusters.
+#'    \item z - The matrix contains the probability calculated for each CpG site belonging to the \eqn{K^R} clusters.
 #'    \item uncertainty - The uncertainty of a CpG site belonging to the identified cluster.
 #'    }
 #' }
@@ -43,9 +56,16 @@
 #' data_output=betaclust(pca.methylation.data[,2:9],K,patients,samples,
 #'             model_names=c("C..","CN.","C.R"),model_selection="BIC",seed=my.seed)
 #' }
+#'
+#'
 #' @importFrom foreach %dopar%
 #' @importFrom stats C
 #' @importFrom utils txtProgressBar
+#' @references {Silva, R., Moran, B., Russell, N.M., Fahey, C., Vlajnic, T., Manecksha, R.P., Finn, S.P., Brennan, D.J., Gallagher, W.M., Perry, A.S.: Evaluating liquid biopsies for methylomic profiling of prostate cancer. Epigenetics 15(6-7), 715-727 (2020). doi:10.1080/15592294.2020.1712876.}
+#' @references {Fraley, C., Raftery, A.E.: How many clusters? which clustering method? answers via model-based cluster analysis. The computer journal 41, 578-588 (1998). doi: 10.1093/comjnl/41.8.578.}
+#' @references {Dempster, A., Laird, N., Rubin, D.: Maximum likelihood from incomplete data via the em algorithm. Journal of the royal statistical society 39(1), 1-38 (1977). doi:10.1111/j.2517-6161.1977.tb01600.x.}
+#' @references {Diamond, H.G., Straub, A.: Bounds for the logarithm of the euler gamma function and its derivatives. Journal of mathematical analysis and applications 433(2), 1072-1083 (2016).doi:10.1016/j.jmaa.2015.08.034.}
+
 
 betaclust<-function(data,K=3,patients,samples,model_names="C..",model_selection="BIC",seed,register=NULL){
 

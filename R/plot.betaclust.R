@@ -1,14 +1,15 @@
 #' @title Plots for visualizing the betaclust class object
-#' @description The density estimates of the clustering solution of the optimal model can be
-#' plotted. Apart from static plots interactive plots can also be plotted using the
+#' @description This function helps visualise the clustering solution by plotting the density estimates, the uncertainty and the information criterion.
+#' @details The density estimates of the clustering solution of the optimal model can be
+#' plotted by passing the parameter what="density" in the function. Apart from static plots interactive plots can also be plotted using the
 #' parameter plot_type = "plotly". The uncertainty in the clustering soluting can be plotted using what="uncertainty".
 #' The information criterion values for all models can be plotted using what="InformationCriterion" for selecting the optimal model.
 #' @export
+#' @seealso \code{\link{betaclust}}
 #' @param object betaclust object
 #' @param what The different plots that can be obtained from the object (default="density") (what=c("density","uncertainty","InformationCriterion"))
 #' @param plot_type The plot type to be displayed (default="ggplot")(plot_type="ggplot" or"plotly")
-#' @param scale_param The axis that needs to be fixed or not for facet plot
-#'                    (default="free_y") (scales=c("free_y","free_x","free"))
+#' @param scale_param The axis that needs to be fixed or not for facet plot (scales=c("free_y","free_x","free"), default is "free_y")
 #' @importFrom ggplot2 ggplot aes
 #' @importFrom  plotly ggplotly
 

@@ -20,8 +20,16 @@ em_bic(llk, C, K, patients = 4, samples = 1, model_names = "C..")
 \item{model_names}{mixture model (method=c("C..","CN.","C.R"))}
 }
 \value{
-The BIC value for the selected model
+The BIC value for the selected model.
 }
 \description{
-The BIC value used to select the optimal model
+The BIC value used to select the optimal model.
+}
+\details{
+Computes the BIC for the beta mixture models given the loglikelihood, the dimension of the data, and the mixture model names.
+}
+\seealso{
+\code{\link{em_aic}}
+
+\code{\link{em_icl}}
 }

@@ -1,5 +1,5 @@
-#' @title Summary statistics of betaclust output
-#' @description Calculates and prints the summary statistics of the optimal model selected for printing.
+#' @title Summarizing the Beta Mixture Model Fits
+#' @description Summary method for class "betaclust" object containing the results of the optimal model selected.
 #' @export
 #' @param x betaclust object
 #' @return An object of class "summary.betaclust".
@@ -14,6 +14,12 @@
 #' \item Information_criterion - The information criterion used to select the optimal model.
 #' \item ic_output - This stores the information criterion value calculated for each model.
 #' \item classification - The total number of CpG sites identified in each cluster. }
+#' @examples
+#' \dontrun{
+#' data_output=betaclust(pca.methylation.data[,2:9],K,patients,samples,
+#'             model_names=c("C..","CN.","C.R"),model_selection="BIC",seed=my.seed)
+#' summary(data_output)}
+#' @seealso \code{\link{betaclust}}
 
 summary.betaclust<-function(object)
 {

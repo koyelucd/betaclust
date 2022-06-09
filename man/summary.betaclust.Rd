@@ -2,7 +2,7 @@
 % Please edit documentation in R/summary.betaclust.R
 \name{summary.betaclust}
 \alias{summary.betaclust}
-\title{Summary statistics of betaclust output}
+\title{Summarizing the Beta Mixture Model Fits}
 \usage{
 \method{summary}{betaclust}(object)
 }
@@ -24,5 +24,14 @@ The object returns the following list of values:
 \item classification - The total number of CpG sites identified in each cluster. }
 }
 \description{
-Calculates and prints the summary statistics of the optimal model selected for printing.
+Summary method for class "betaclust" object containing the results of the optimal model selected.
+}
+\examples{
+\dontrun{
+data_output=betaclust(pca.methylation.data[,2:9],K,patients,samples,
+            model_names=c("C..","CN.","C.R"),model_selection="BIC",seed=my.seed)
+summary(data_output)}
+}
+\seealso{
+\code{\link{betaclust}}
 }

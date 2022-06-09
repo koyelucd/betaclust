@@ -22,10 +22,18 @@ em_icl(llk, C, K, patients = 4, samples = 1, model_names = "C..", z)
 \item{z}{z matrix for each output}
 }
 \value{
-The ICL value for the selected model
+The ICL value for the selected model.
 }
 \description{
 The ICL value used to select the optimal model.
-This criterion penalises the BIC by including the entropy term favouring the
+}
+\details{
+Computes the ICL for the beta mixture models given the loglikelihood,
+the dimension of the data, and the mixture model names. This criterion penalises the BIC by including the entropy term favouring the
 well separated clusters.
+}
+\seealso{
+\code{\link{em_aic}}
+
+\code{\link{em_bic}}
 }

@@ -22,4 +22,7 @@ data(legacy.data)
 \description{
 The dataset contains the manifest data from the Illumina MethylationEPIC beadchip array
 }
+\seealso{
+\code{\link{pca.methylation.data}}
+}
 \keyword{datasets}

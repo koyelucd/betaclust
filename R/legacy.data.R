@@ -2,6 +2,7 @@
 #'
 #' The dataset contains the manifest data from the Illumina MethylationEPIC beadchip array
 #'
+#' @seealso \code{\link{pca.methylation.data}}
 #' @format A data frame with 867525 rows and 6 columns.
 #' \describe{
 #'   \item{IlmnID}{This contains the Unique identifier from the Illumina CG database. (The probe ID).}
