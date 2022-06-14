@@ -2,47 +2,44 @@
 % Please edit documentation in R/beta_cr.R
 \name{beta_cr}
 \alias{beta_cr}
-\title{The C. R Model}
+\title{The C.R Model}
 \usage{
 beta_cr(data, K = 3, patients, samples, seed, register = NULL)
 }
 \arguments{
-\item{K}{number of methylation groups to be identified (default=3)}
+\item{data}{Methylation values for \eqn{C} CpG sites from \eqn{R} samples collected from \eqn{N} patients.}
 
-\item{patients}{number of patients in the study}
+\item{K}{Number of methylation profiles to be identified.}
 
-\item{samples}{number of samples collected from each patient for study}
+\item{patients}{Number of patients in the study.}
 
-\item{seed}{seed for reproducible work}
+\item{samples}{Number of samples collected from each patient for study.}
 
-\item{register}{setting for parallelization}
+\item{seed}{Seed to allow for reproducibility.}
 
-\item{X}{methylation values for CpG sites frpm R samples collected from N patients}
+\item{register}{Setting for registering the parallel backend with the "foreach" package. To start parallel execution of R code on machine with multiple cores, "NULL" value needs to be assigned to this parameter.}
 }
 \value{
-A list of clustering solution results.
+A list containing:
 \itemize{
-   \item cluster_count - The total number of CpG sites identified in each cluster.
-   \item llk - The vector containing log-likelihood values calculated for each step of parameter estimation.
-   \item data - This contains the methylation dataset along with the cluster label as determined by the mixture model.
-   \item alpha - This contains the shape parameter 1 for the beta mixtures for \eqn{K^R} groups.
-   \item beta - This contains the shape parameter 2 for the beta mixtures for \eqn{K^R} groups.
-   \item tau - The proportion of CpG sites in each cluster.
-   \item z - The matrix contains the probability calculated for each CpG site belonging to the \eqn{K^R} clusters.
-   \item uncertainty - The uncertainty of a CpG site belonging to the identified cluster.
-   }
+   \item cluster_size - the total number of CpG sites identified in each cluster.
+   \item llk - a vector containing the log-likelihood value at each step of the EM algorithm.
+   \item data - this contains the methylation dataset along with the cluster label for each CpG site.
+   \item alpha - this contains the shape parameter 1 for the beta mixture model.
+   \item delta - this contains the shape parameter 2 for the beta mixture model.
+   \item tau - the proportion of CpG sites in each cluster.
+   \item z - a matrix containing the probability for each CpG site of belonging to each of the \eqn{K} clusters.
+   \item uncertainty - the uncertainty of each CpG site's clustering.    }
 }
 \description{
-Beta mixture model for identifying differentially methylated CpG sites between R DNA samples collected from N patients.
+A beta mixture model for identifying differentially methylated CpG sites between \eqn{R} DNA samples collected from \eqn{N} patients.
 }
 \details{
-The C. R model allows identification of the differentially methylated CpG sites between the R DNA samples collected from each of the N patients.
-The model attempts to identify \eqn{K = M^R} clusters identifying each possible combination of the M = 3 methylation profiles for R samples.
-The parameters vary for each sample type but are constrained to be equal for each patient.
-
-An initial clustering using K-means is performed to identify \eqn{K^R} cluster. These values are provided as
+The C.R model allows identification of the differentially methylated CpG sites between the \eqn{R} DNA samples collected from each of \eqn{N} patients.
+As each CpG site can belong to either of \eqn{M} methylation profiles, there can be \eqn{K=M^R} methylation profile changes between \eqn{R} DNA samples.
+The parameters vary for each DNA sample but are constrained to be equal for each patient. An initial clustering using K-means is performed to identify \eqn{K} clusters. The resulting clustering solution provided as
 starting values to the Expectation-Maximisation algorithm. A digamma approximation is used to obtain the maximised
-parameters in the M-step instead of the computationally inefficient numerical optimisation step.
+parameters in the M-step instead of a computationally inefficient numerical optimisation step.
 }
 \examples{
 \dontrun{

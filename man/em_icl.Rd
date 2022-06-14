@@ -7,29 +7,28 @@
 em_icl(llk, C, K, patients = 4, samples = 1, model_names = "C..", z)
 }
 \arguments{
-\item{llk}{log-likelihood value}
+\item{llk}{log-likelihood value.}
 
-\item{C}{number of CpG sites}
+\item{C}{number of CpG sites.}
 
-\item{K}{number of clusters}
+\item{K}{number of methylation profiles to be identified.}
 
-\item{patients}{number of patients}
+\item{patients}{number of patients in the study.}
 
-\item{samples}{no. of samples}
+\item{samples}{number of samples collected from each patient for study.}
 
-\item{model_names}{mixture model (method=c("C..","CN.","C.R"))}
+\item{z}{z matrix used for computing the complete-data log-likelihood function.}
 
-\item{z}{z matrix for each output}
+\item{model_name}{mixture model (method=c("C..","CN.","C.R")).}
 }
 \value{
 The ICL value for the selected model.
 }
 \description{
-The ICL value used to select the optimal model.
+Compute the ICL value for the optimal model.
 }
 \details{
-Computes the ICL for the beta mixture models given the loglikelihood,
-the dimension of the data, and the mixture model names. This criterion penalises the BIC by including the entropy term favouring the
+Computes the ICL for a specified model given the log-likelihood, the dimension of the data, and the model specification. This criterion penalises the BIC by including the entropy term favouring the
 well separated clusters.
 }
 \seealso{

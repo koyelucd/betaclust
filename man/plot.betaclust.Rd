@@ -7,22 +7,21 @@
 \method{plot}{betaclust}(object, what = "density", plot_type = "ggplot", scale_param = "free_y")
 }
 \arguments{
-\item{object}{betaclust object}
+\item{object}{A betaclust object.}
 
-\item{what}{The different plots that can be obtained from the object (default="density") (what=c("density","uncertainty","InformationCriterion"))}
+\item{what}{The different plots that can be obtained are either "density","uncertainty" and "InformationCriterion". (default="density").}
 
-\item{plot_type}{The plot type to be displayed (default="ggplot")(plot_type="ggplot" or"plotly")}
+\item{plot_type}{The plot type to be displayed are either "ggplot" or "plotly". (default="ggplot").}
 
-\item{scale_param}{The axis that needs to be fixed or not for facet plot (scales=c("free_y","free_x","free"), default is "free_y")}
+\item{scale_param}{The axis that needs to be fixed for density estimates plot for visualizing the C.R clustering solution are either "free_y","free_x" or "free". (default = "free_y")}
 }
 \description{
 This function helps visualise the clustering solution by plotting the density estimates, the uncertainty and the information criterion.
 }
 \details{
-The density estimates of the clustering solution of the optimal model can be
-plotted by passing the parameter what="density" in the function. Apart from static plots interactive plots can also be plotted using the
-parameter plot_type = "plotly". The uncertainty in the clustering soluting can be plotted using what="uncertainty".
-The information criterion values for all models can be plotted using what="InformationCriterion" for selecting the optimal model.
+The density estimates under the optimal clustering solution by specifying what="density" in the function. Interactive plots can also be produced using
+ plot_type = "plotly". The uncertainty in the clustering soluting can be plotted using what="uncertainty".
+The information criterion values for all models can be plotted using what="InformationCriterion".
 }
 \seealso{
 \code{\link{betaclust}}

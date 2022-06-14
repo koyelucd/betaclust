@@ -7,22 +7,22 @@
 ecdf.betaclust(x, samples = 2, sample_name = c("Sample 1", "Sample 2"))
 }
 \arguments{
-\item{x}{Methylation values of Identified Differentially methylated regions related to a gene.
-Group each sample together in the dataframe such that the columns are ordered as --> Sample1_P1, Sample1_P2, Sample2_P1, Sample2_P2}
+\item{x}{A dataframe containing methylation values of identified differentially methylated regions related to a gene.
+Group each sample together in the dataframe such that the columns are ordered as Sample1_Patient1, Sample1_Patient2, Sample2_Patient1, Sample2_Patient2.}
 
-\item{samples}{number of tissue samples from where DNA methylation data is collected (default samples=2)}
+\item{samples}{number of tissue samples from which DNA methylation data are collected (default samples = 2).}
 
-\item{sample_name}{The order in which the samples are grouped in the dataframe (default = c("Sample 1","Sample 2"))}
+\item{sample_name}{The order in which the samples are grouped in the dataframe x (default = c("Sample 1","Sample 2")).}
 }
 \value{
 The ECDF plot for the selected CpG sites for all patients and samples.
 }
 \description{
-Empirical Cumulative Distribution Function (ECDF) plot for betaclust object
+An empirical cumulative distribution function (ECDF) plot for a betaclust object
 }
 \details{
 This function plots the ECDF graphs of the differentially methylated CpG sites identified using the C.R model for all patient samples.
-The graph can help visualise the methylation state changes between the different patient samples.
+The graph visualises the methylation state changes between the different patient samples.
 }
 \seealso{
 \code{\link{betaclust}}

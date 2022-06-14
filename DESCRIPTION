@@ -1,12 +1,12 @@
 Package: betaclust
 Type: Package
-Title: Family of mixture models for beta valued DNA methylation data for Clustering and Density Estimation
+Title: A family of mixture models for clustering beta valued DNA methylation data
 Version: 1.0.0
 Author: Koyel Majumdar [aut] <koyel.majumdar@ucdconnect.ie>,
   Isobel Claire Gormley [aut] <claire.gormley@ucd.ie>,
   Thomas Brendan Murphy [aut] <brendan.murphy@ucd.ie>
 Maintainer: Koyel Majumdar <koyel.majumdar@ucdconnect.ie>
-Description: A family of novel beta mixture models (BMMs) is proposed to appositely model the innate beta valued data, objectively identify methylation state thresholds and identify the differentially methylated CpG (DMC) sites using a model-based clustering approach. The family of BMMs employs different parameter constraints applicable to different study settings. Parameter estimation proceeds via the EM algorithm, with a novel approximation during the M-step providing tractability and ensuring computational feasibility.
+Description: A family of novel beta mixture models (BMMs) to appositely model beta valued DNA methylation data, to objectively identify methylation state thresholds and to identify the differentially methylated CpG (DMC) sites using a model-based clustering approach. The family of BMMs employs different parameter constraints applicable to different study settings. Parameter estimation proceeds via the EM algorithm, with a novel approximation during the M-step providing tractability and ensuring computational feasibility.
 License: GPL-3
 Depends: R (>= 3.5.0)
 Imports: foreach, doParallel, stats, utils, ggplot2, plotly

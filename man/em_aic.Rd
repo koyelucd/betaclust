@@ -4,29 +4,29 @@
 \alias{em_aic}
 \title{Akaike Information Criterion}
 \usage{
-em_aic(llk, C, K, patients = 4, samples = 1, model_names = "C..")
+em_aic(llk, C, K, patients = 4, samples = 1, model_name = "C..")
 }
 \arguments{
-\item{llk}{log-likelihood value}
+\item{llk}{log-likelihood value.}
 
-\item{C}{number of CpG sites}
+\item{C}{number of CpG sites.}
 
-\item{K}{number of clusters}
+\item{K}{number of methylation profiles to be identified.}
 
-\item{patients}{number of patients}
+\item{patients}{number of patients in the study.}
 
-\item{samples}{no. of samples}
+\item{samples}{number of samples collected from each patient for study.}
 
-\item{model_names}{mixture model (method=c("C..","CN.","C.R"))}
+\item{model_name}{mixture model (method=c("C..","CN.","C.R")).}
 }
 \value{
 The AIC value for the selected model.
 }
 \description{
-The AIC value used to select the optimal model.
+Compute the AIC value for the optimal model.
 }
 \details{
-Computes the AIC for the beta mixture models given the loglikelihood, the dimension of the data, and the mixture model names.
+Computes the AIC for a specified model given the log-likelihood, the dimension of the data, and the model specification.
 }
 \seealso{
 \code{\link{em_bic}}

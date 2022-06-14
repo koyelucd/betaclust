@@ -16,54 +16,54 @@ betaclust(
 )
 }
 \arguments{
-\item{K}{number of methylation groups to be identified (default=3)}
+\item{data}{Methylation values for \eqn{C} CpG sites from \eqn{R} samples collected from \eqn{N} patients.}
 
-\item{patients}{number of patients in the study}
+\item{K}{Number of methylation profiles to be identified.}
 
-\item{samples}{number of samples collected from each patient for study}
+\item{patients}{Number of patients in the study.}
 
-\item{model_names}{mixture model to run (Models= c(C..,CN.,C.R), default=C..)}
+\item{samples}{Number of samples collected from each patient for study.}
 
-\item{model_selection}{optimal model selection based on information criterion. (Methods=AIC,BIC,ICL,default=BIC)}
+\item{model_names}{Models to run from the set of models, C.., CN. and C.R, default = C.. . See details.}
 
-\item{seed}{seed for reproducible work}
+\item{model_selection}{Information criterion used for model selection. Options are AIC/BIC/ICL/default=BIC.}
 
-\item{register}{setting for parallelization}
+\item{seed}{Seed to allow for reproducibility.}
 
-\item{X}{methylation values for CpG sites frpm R samples collected from N patients}
+\item{register}{Setting for registering the parallel backend with the "foreach" package. To start parallel execution of R code on machine with multiple cores, "NULL" value needs to be assigned to this parameter.}
 }
 \value{
-The function returns an object of "betaclust" class.
-The class object contains following values:
+The function returns an object of "betaclust" class which contains the following values:
 \itemize{
-\item Information_criterion - The information criterion used to select the optimal model.
-\item ic_output - This stores the information criterion value calculated for each model.
-\item optimal_model - The model selected as optimal.
-\item function_call - The parameters passed as arguments to the function betaclust.
-\item CpG_sites - The number of CpG sites analysed using the beta mixture models.
-\item patients - The number of patients analysed using the beta mixture models.
-\item samples - The numder of samples analysed using the beta mixture models.
-\item best_model - This contains the final results for the optimal model selected. Thus this contains the following values:
+\item Information_criterion - the information criterion used to select the optimal model.
+\item ic_output - this stores the information criterion value calculated for each model.
+\item optimal_model - the model selected as optimal.
+\item function_call - the parameters passed as arguments to the function betaclust.
+\item C - the number of CpG sites analysed using the beta mixture models.
+\item N - the number of patients analysed using the beta mixture models.
+\item R - the numder of samples analysed using the beta mixture models.
+\item optimal_model_results - this contains information from the optimal model. Specifically,
    \itemize{
-   \item cluster_count - The total number of CpG sites identified in each cluster.
-   \item llk - The vector containing log-likelihood values calculated for each step of parameter estimation.
-   \item data - This contains the methylation dataset along with the cluster label as determined by the mixture model.
-   \item alpha - This contains the shape parameter 1 for the beta mixtures for \eqn{K^R} groups.
-   \item beta - This contains the shape parameter 2 for the beta mixtures for \eqn{K^R} groups.
-   \item tau - The proportion of CpG sites in each cluster.
-   \item z - The matrix contains the probability calculated for each CpG site belonging to the \eqn{K^R} clusters.
-   \item uncertainty - The uncertainty of a CpG site belonging to the identified cluster.
+   \item cluster_size - the total number of CpG sites identified in each cluster.
+   \item llk - a vector containing the log-likelihood value at each step of the EM algorithm.
+   \item data - this contains the methylation dataset along with the cluster label for each CpG site.
+   \item alpha - this contains the shape parameter 1 for the beta mixture model.
+   \item delta - this contains the shape parameter 2 for the beta mixture model.
+   \item tau - the proportion of CpG sites in each cluster.
+   \item z - a matrix containing the probability for each CpG site of belonging to each of the \eqn{K} clusters.
+   \item uncertainty - the uncertainty of each CpG site's clustering.
    }
 }
 }
 \description{
-A family of model based clustering techniques to identify the methylation profiles of the beta valued DNA methylation data
+A family of model based clustering techniques to identify methylation profiles in beta valued DNA methylation data.
 }
 \details{
-This is a wrapper function which can be used to run all three models (C.., CN., C.R) together.
-The C.. and CN. models are used to analyse a single DNA sample and cluster the CpG sites into the 3 methylation profiles (hypomethylation, hemimethylation, hypermethylation).
-The thresholds can be objectively identified from the clustering solution. The C. R model is used to analyse R samples to
-the differentially methylated CpG sites between R DNA samples.
+This is a wrapper function which can be used to fit all three models (C.., CN., C.R) together.
+The C.. and CN. models are used to analyse a single DNA sample (\eqn{R = 1}) and cluster the \eqn{C} CpG sites into the \eqn{K} methylation profiles. As each CpG site can belong to either of the \eqn{M=3} methylation profiles (hypomethylation, hemimethylation and hypermethylation), the default value for \eqn{K=M=3}.
+The thresholds between methylation profiles can be objectively identified from the clustering solution.
+The C.R model is used to analyse \eqn{R} independent samples collected from \eqn{N} patients, where each sample contains \eqn{C} CpG sites, and cluster
+the dataset to identify the differentially methylated CpG sites between the \eqn{R} DNA samples.
 }
 \examples{
 \dontrun{
@@ -81,11 +81,7 @@ data_output=betaclust(pca.methylation.data[,2:9],K,patients,samples,
 \references{
 {Silva, R., Moran, B., Russell, N.M., Fahey, C., Vlajnic, T., Manecksha, R.P., Finn, S.P., Brennan, D.J., Gallagher, W.M., Perry, A.S.: Evaluating liquid biopsies for methylomic profiling of prostate cancer. Epigenetics 15(6-7), 715-727 (2020). doi:10.1080/15592294.2020.1712876.}
 
-{Fraley, C., Raftery, A.E.: How many clusters? which clustering method? answers via model-based cluster analysis. The computer journal 41, 578-588 (1998). doi: 10.1093/comjnl/41.8.578.}
-
-{Dempster, A., Laird, N., Rubin, D.: Maximum likelihood from incomplete data via the em algorithm. Journal of the royal statistical society 39(1), 1-38 (1977). doi:10.1111/j.2517-6161.1977.tb01600.x.}
-
-{Diamond, H.G., Straub, A.: Bounds for the logarithm of the euler gamma function and its derivatives. Journal of mathematical analysis and applications 433(2), 1072-1083 (2016).doi:10.1016/j.jmaa.2015.08.034.}
+{Majumdar, K., Silva, R., Perry, A.S., Watson, R.W., Murphy, T.B., Gormley, I.C.: betaclust: a family of mixture models for beta valued DNA methylation data.}
 }
 \seealso{
 \code{\link{beta_c}}

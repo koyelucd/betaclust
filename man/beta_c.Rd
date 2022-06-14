@@ -7,34 +7,33 @@
 beta_c(data, K = 3, seed, register = NULL)
 }
 \arguments{
-\item{K}{number of methylation groups to be identified (default=3)}
+\item{data}{Methylation values for \eqn{C} CpG sites from \eqn{R=1} samples collected from \eqn{N} patients.}
 
-\item{seed}{seed for reproducible work}
+\item{K}{Number of methylation profiles to be identified.}
 
-\item{register}{setting for parallelization}
+\item{seed}{Seed to allow for reproducibility.}
 
-\item{X}{methylation values for CpG sites frpm R samples collected from N patients}
+\item{register}{Setting for registering the parallel backend with the "foreach" package. To start parallel execution of R code on machine with multiple cores, "NULL" value needs to be assigned to this parameter.}
 }
 \value{
-A list of clustering solution results.
+A list containing:
 \itemize{
-   \item cluster_count - The total number of CpG sites identified in each cluster.
-   \item llk - The vector containing log-likelihood values calculated for each step of parameter estimation.
-   \item data - This contains the methylation dataset along with the cluster label as determined by the mixture model.
-   \item alpha - This contains the shape parameter 1 for the beta mixtures for \eqn{K^R} groups.
-   \item beta - This contains the shape parameter 2 for the beta mixtures for \eqn{K^R} groups.
-   \item tau - The proportion of CpG sites in each cluster.
-   \item z - The matrix contains the probability calculated for each CpG site belonging to the \eqn{K^R} clusters.
-   \item uncertainty - The uncertainty of a CpG site belonging to the identified cluster.
-   }
+   \item cluster_size - the total number of CpG sites identified in each cluster.
+   \item llk - a vector containing the log-likelihood value at each step of the EM algorithm.
+   \item data - this contains the methylation dataset along with the cluster label for each CpG site.
+   \item alpha - this contains the shape parameter 1 for the beta mixture model.
+   \item delta - this contains the shape parameter 2 for the beta mixture model.
+   \item tau - the proportion of CpG sites in each cluster.
+   \item z - a matrix containing the probability for each CpG site of belonging to each of the \eqn{K} clusters.
+   \item uncertainty - the uncertainty of each CpG site's clustering.    }
 }
 \description{
-The C.. model from the family of beta mixture models for DNA methylation data.
-             This model analyses a single DNA sample and identify the thresholds for the different methylation profiles.
+Fit the C.. model from the family of beta mixture models for DNA methylation data.
+             The C.. model analyses a single DNA sample and identifies the thresholds for the different methylation profiles.
 }
 \details{
-This model clusters each of the C CpG sites into one of K = M methylation states, based on data from N patients where R = 1.
-The default value for M = 3 as a CpG site can be either hypomethylated, hemimethylated or hypermethylated.
+This model clusters each of the \eqn{C} CpG sites into one of \eqn{K} methylation profiles, based on data from \eqn{N} patients for one DNA sample (i.e. \eqn{R=1}).
+As each CpG site can belong to either of the \eqn{M=3} methylation profiles (hypomethylated, hemimethylated or hypermethylated), the default value of \eqn{K=M=3}.
 Under the C.. model the shape parameters of each cluster are constrained to be equal for each patient.
 }
 \examples{

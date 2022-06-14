@@ -2,21 +2,20 @@
 % Please edit documentation in R/summary.betaclust.R
 \name{summary.betaclust}
 \alias{summary.betaclust}
-\title{Summarizing the Beta Mixture Model Fits}
+\title{Summarizing the beta mixture model fits}
 \usage{
 \method{summary}{betaclust}(object)
 }
 \arguments{
-\item{x}{betaclust object}
+\item{object}{A betaclust object.}
 }
 \value{
-An object of class "summary.betaclust".
-The object returns the following list of values:
+An object of class "summary.betaclust which contains the following list of values:
 \itemize{
-\item CpG_sites - The number of CpG sites analysed using the beta mixture models.
-\item patients - The number of patients analysed using the beta mixture models.
-\item samples - The numder of samples analysed using the beta mixture models.
-\item cluster_count - The number of groups, the data is clustered into.
+\item C - the number of CpG sites analysed using the beta mixture models.
+\item N - the number of patients analysed using the beta mixture models.
+\item R - the numder of samples analysed using the beta mixture models.
+\item K - the number of methylation profiles identified.
 \item modelName - The optimal model selected.
 \item loglik - The log-likelihood value for the selected optimal model.
 \item Information_criterion - The information criterion used to select the optimal model.
@@ -24,7 +23,7 @@ The object returns the following list of values:
 \item classification - The total number of CpG sites identified in each cluster. }
 }
 \description{
-Summary method for class "betaclust" object containing the results of the optimal model selected.
+Summary method for a "betaclust" object containing the results under the optimal model selected.
 }
 \examples{
 \dontrun{
