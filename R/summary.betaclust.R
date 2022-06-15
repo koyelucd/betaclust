@@ -41,6 +41,6 @@ summary.betaclust<-function(object)
               classification=classification)
   class(obj) <- "summary.betaclust"
   print(obj)
-  return(obj)
+  invisible(obj)
 }
 
