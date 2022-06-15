@@ -32,9 +32,8 @@ print.summary.betaclust <- function(x, digits = getOption("digits"), ...)
   #print(table(x$classification))
   print(x$classification)
 
-  cat("\n")
   cat("\nProportion of data in each cluster:")
-  print(x$prop_data)
+  cat(x$prop_data)
   #
   invisible(x)
 }
