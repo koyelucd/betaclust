@@ -17,6 +17,12 @@ plot.betaclust <- function(object,what="density",
                            plot_type="ggplot",title=NULL,scale_param="free_y")
 {
 
+  if(is.null(title))
+    {
+      txt=""
+    }else{
+      txt=title
+    }
 
   if(what == "density")
   {
@@ -24,12 +30,7 @@ plot.betaclust <- function(object,what="density",
     data_ggplot<-as.data.frame(data)
     data_ggplot$mem_final<-as.factor(data_ggplot$mem_final)
     colnames(data_ggplot)[length(data_ggplot)]<-"Cluster"
-    if(is.null(title))
-    {
-      txt=""
-    }else{
-      txt=title
-    }
+    
     if(object$optimal_model == "C.." || object$optimal_model == "CN.")
     {
       plot_graph<-ggplot2::ggplot(data_ggplot,ggplot2::aes(x=data_ggplot[,1], fill=Cluster))+
