@@ -10,13 +10,13 @@ print.summary.betaclust <- function(x, digits = getOption("digits"), ...)
   cat(txt)
   #
   cat("\n")
-  if(x$cluster_count == 0)
+  if(x$K == 0)
   {
     cat("betaclust model with only a noise component:")
   } else
   {
     cat(paste0("betaclust ", x$modelName, " model with ",
-               x$cluster_count, ifelse(x$cluster_count > 1, " components", " component"),
+               x$K, ifelse(x$K > 1, " components", " component"),
                ":"))
   }
   cat("\n")
@@ -24,7 +24,7 @@ print.summary.betaclust <- function(x, digits = getOption("digits"), ...)
 
 
   tab <- data.frame("log-likelihood" = x$loglik,  "Information-criterion"=x$information_criterion,"IC-value" = x$ic_output,
-                    "CpG-sites" = x$CpG_sites, "Patients" = x$patients, "Samples" = x$samples,
+                    "CpG-sites" = x$C, "Patients" = x$N, "Samples" = x$R,
                     row.names = "", check.names = FALSE)
   print(tab)
   #

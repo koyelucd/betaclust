@@ -1,33 +1,32 @@
-#' @title The C. R Model
+#' @title The C.R Model
 #' @export
-#' @description Beta mixture model for identifying differentially methylated CpG sites between R DNA samples collected from N patients.
-#' @details The C. R model allows identification of the differentially methylated CpG sites between the R DNA samples collected from each of the N patients.
-#' The model attempts to identify \eqn{K = M^R} clusters identifying each possible combination of the M = 3 methylation profiles for R samples.
-#' The parameters vary for each sample type but are constrained to be equal for each patient.
+#' @description A beta mixture model for identifying differentially methylated CpG sites between \eqn{R} DNA samples collected from \eqn{N} patients.
 #'
 #' @seealso \code{\link{betaclust}}
 #'
-#' @param  X methylation values for CpG sites frpm R samples collected from N patients
-#' @param K number of methylation groups to be identified (default=3)
-#' @param patients number of patients in the study
-#' @param samples number of samples collected from each patient for study
-#' @param seed seed for reproducible work
-#' @param register setting for parallelization
+#' @param data Methylation values for \eqn{C} CpG sites from \eqn{R} samples collected from \eqn{N} patients.
+#' @param K Number of methylation profiles to be identified.
+#' @param patients Number of patients in the study.
+#' @param samples Number of samples collected from each patient for study.
+#' @param seed Seed to allow for reproducibility.
+#' @param register Setting for registering the parallel backend with the "foreach" package. To start parallel execution of R code on machine with multiple cores, "NULL" value needs to be assigned to this parameter.
+#'
 #' @details
-#' An initial clustering using K-means is performed to identify \eqn{K^R} cluster. These values are provided as
+#' The C.R model allows identification of the differentially methylated CpG sites between the \eqn{R} DNA samples collected from each of \eqn{N} patients.
+#' As each CpG site can belong to either of \eqn{M} methylation profiles, there can be \eqn{K=M^R} methylation profile changes between \eqn{R} DNA samples.
+#' The parameters vary for each DNA sample but are constrained to be equal for each patient. An initial clustering using K-means is performed to identify \eqn{K} clusters. The resulting clustering solution provided as
 #' starting values to the Expectation-Maximisation algorithm. A digamma approximation is used to obtain the maximised
-#' parameters in the M-step instead of the computationally inefficient numerical optimisation step.
-#' @return A list of clustering solution results.
+#' parameters in the M-step instead of a computationally inefficient numerical optimisation step.
+#' @return A list containing:
 #' \itemize{
-#'    \item cluster_count - The total number of CpG sites identified in each cluster.
-#'    \item llk - The vector containing log-likelihood values calculated for each step of parameter estimation.
-#'    \item data - This contains the methylation dataset along with the cluster label as determined by the mixture model.
-#'    \item alpha - This contains the shape parameter 1 for the beta mixtures for \eqn{K^R} groups.
-#'    \item beta - This contains the shape parameter 2 for the beta mixtures for \eqn{K^R} groups.
-#'    \item tau - The proportion of CpG sites in each cluster.
-#'    \item z - The matrix contains the probability calculated for each CpG site belonging to the \eqn{K^R} clusters.
-#'    \item uncertainty - The uncertainty of a CpG site belonging to the identified cluster.
-#'    }
+#'    \item cluster_size - the total number of CpG sites identified in each cluster.
+#'    \item llk - a vector containing the log-likelihood value at each step of the EM algorithm.
+#'    \item data - this contains the methylation dataset along with the cluster label for each CpG site.
+#'    \item alpha - this contains the shape parameter 1 for the beta mixture model.
+#'    \item delta - this contains the shape parameter 2 for the beta mixture model.
+#'    \item tau - the proportion of CpG sites in each cluster.
+#'    \item z - a matrix containing the probability for each CpG site of belonging to each of the \eqn{K} clusters.
+#'    \item uncertainty - the uncertainty of each CpG site's clustering.    }
 #'
 #' @examples
 #' \dontrun{
@@ -93,11 +92,11 @@ beta_cr<-function(data,K=3,patients,samples,seed,register=NULL){
   mu=matrix(NA,ncol=R,nrow = K)
   sigma=matrix(NA,ncol=R,nrow = K)
   alpha=matrix(NA,ncol=R,nrow = K)
-  beta=matrix(NA,ncol=R,nrow = K)
+  delta=matrix(NA,ncol=R,nrow = K)
   term=matrix(NA,ncol=R,nrow = K)
   tau=vector(length=K)
   alpha_new=matrix(NA,ncol=R,nrow = K)
-  beta_new=matrix(NA,ncol=R,nrow = K)
+  delta_new=matrix(NA,ncol=R,nrow = K)
   tau_new=vector(length=K)
 
 
@@ -110,7 +109,7 @@ beta_cr<-function(data,K=3,patients,samples,seed,register=NULL){
     sigma=vector()
     term=vector()
     al=vector()
-    be=vector()
+    de=vector()
     tau=vector()
     for(r in 1:R)
     {
@@ -122,14 +121,14 @@ beta_cr<-function(data,K=3,patients,samples,seed,register=NULL){
       {
         al[r]=2
       }
-      be[r]=(1-mu[r])*term[r]
-      if(be[r]<1)
+      de[r]=(1-mu[r])*term[r]
+      if(de[r]<1)
       {
-        be[r]=2
+        de[r]=2
       }
       tau <- length(mem)/C
     }
-    return(list(al=al,be=be,tau=tau))
+    return(list(al=al,de=de,tau=tau))
   }
 
   ## parallelization of starting value calculation
@@ -142,7 +141,7 @@ beta_cr<-function(data,K=3,patients,samples,seed,register=NULL){
   tau_len=len_theta+1
   end=length(ini_theta)
   alpha=matrix(unlist(ini_theta[1:K]),nrow=K,ncol=R,byrow=T)
-  beta=matrix(unlist(ini_theta[mid:len_theta]),nrow=K,ncol=R,byrow=T)
+  delta=matrix(unlist(ini_theta[mid:len_theta]),nrow=K,ncol=R,byrow=T)
   tau=unlist(ini_theta[tau_len:end])
 
 
@@ -162,13 +161,13 @@ beta_cr<-function(data,K=3,patients,samples,seed,register=NULL){
   {
     #E-step
 
-    z_estimation = function(x,al,be,p,R,N)
+    z_estimation = function(x,al,de,p,R,N)
     {
       l3=1
       for(r in 1:R) ##no. of samples
       {
 
-        l3=l3*stats::dbeta(x[,(((r-1)*N)+1):(((r-1)*N)+N)],al[r],be[r])
+        l3=l3*stats::dbeta(x[,(((r-1)*N)+1):(((r-1)*N)+N)],al[r],de[r])
       }
 
       l4=apply(l3,1,prod)
@@ -177,7 +176,7 @@ beta_cr<-function(data,K=3,patients,samples,seed,register=NULL){
 
     ## parallelization of E-step
     z = foreach::foreach(k = 1:K, .combine=cbind) %dopar%
-      z_estimation(x,alpha[k,],beta[k,],tau[k],R,N)
+      z_estimation(x,alpha[k,],delta[k,],tau[k],R,N)
 
     z <- sweep(z, 1, STATS = rowSums(z), FUN = "/")
 
@@ -188,7 +187,7 @@ beta_cr<-function(data,K=3,patients,samples,seed,register=NULL){
       y11=vector()
       y22=vector()
       al_new=vector()
-      be_new=vector()
+      de_new=vector()
       for(r in 1:R)
       {
         y11[r]=(sum(z1*rowSums(log(x[,(((r-1)*N)+1):(((r-1)*N)+N)]))))/(N*sum(z1))
@@ -196,9 +195,9 @@ beta_cr<-function(data,K=3,patients,samples,seed,register=NULL){
         term=0
         term=((exp(-y11[r])-1)*(exp(-y22[r])-1))-1
         al_new[r]=0.5+(0.5*exp(-y22[r])/term)
-        be_new[r]= (0.5*exp(-y22[r])*(exp(-y11[r])-1))/term
+        de_new[r]= (0.5*exp(-y22[r])*(exp(-y11[r])-1))/term
       }
-      return(list(al_new=al_new,be_new=be_new))
+      return(list(al_new=al_new,de_new=de_new))
     }
 
     ## parallelization of M-step
@@ -209,13 +208,13 @@ beta_cr<-function(data,K=3,patients,samples,seed,register=NULL){
     mid=K+1
     len_theta=K*2
     alpha_new=matrix(unlist(theta[1:K]),nrow=K,ncol=R,byrow=T)
-    beta_new=matrix(unlist(theta[mid:len_theta]),nrow=K,ncol=R,byrow=T)
+    delta_new=matrix(unlist(theta[mid:len_theta]),nrow=K,ncol=R,byrow=T)
 
 
-    ### Update z using new alpha and beta
+    ### Update z using new alpha and delta
 
     z_new = foreach::foreach(k = 1:K, .combine=cbind) %dopar%
-      z_estimation(x,alpha_new[k,],beta_new[k,],tau[k],R,N)
+      z_estimation(x,alpha_new[k,],delta_new[k,],tau[k],R,N)
 
     z.total=rowSums(z_new)
     z_new <- sweep(z_new, 1, STATS = z.total, FUN = "/")
@@ -223,7 +222,7 @@ beta_cr<-function(data,K=3,patients,samples,seed,register=NULL){
     tau_new=s/C
 
     alpha=alpha_new
-    beta=beta_new
+    delta=delta_new
     tau=tau_new
 
     l1=sum(log(z.total))
@@ -251,9 +250,9 @@ beta_cr<-function(data,K=3,patients,samples,seed,register=NULL){
   parallel::stopCluster(cl=my.cluster)
 
   #### Sorting the clusters as per interest
-  mean_beta=as.data.frame(alpha/(alpha+beta))
-  mean_beta$diff<-abs(mean_beta$V1-mean_beta$V2)
-  mean_sorted<-mean_beta[order(mean_beta$diff,decreasing = T),]
+  mean_delta=as.data.frame(alpha/(alpha+delta))
+  mean_delta$diff<-abs(mean_delta$V1-mean_delta$V2)
+  mean_sorted<-mean_delta[order(mean_delta$diff,decreasing = T),]
   mean_row<-row.names(mean_sorted)
   data_final=as.data.frame(complete_data)
   data_final$mem_final<-as.numeric(data_final$mem_final)
@@ -261,7 +260,7 @@ beta_cr<-function(data,K=3,patients,samples,seed,register=NULL){
   mean_row<-as.numeric(mean_row)
   mean_row<-cbind(mean_row,seq(1,K,by=1))
   alpha_final=matrix(NA,nrow=K,ncol=R)
-  beta_final=matrix(NA,nrow=K,ncol=R)
+  delta_final=matrix(NA,nrow=K,ncol=R)
   tau_final=vector(length=K)
   z_final=matrix(NA,nrow=C,ncol=K)
   for(i in 1:K)
@@ -269,7 +268,7 @@ beta_cr<-function(data,K=3,patients,samples,seed,register=NULL){
     data_final["new_mem_final"][data_final["mem_final"]==mean_row[i,1]]<-mean_row[i,2]
     swapped_row=mean_row[i,1]
     alpha_final[i,]=alpha[swapped_row,]
-    beta_final[i,]=beta[swapped_row,]
+    delta_final[i,]=delta[swapped_row,]
     tau_final[i]=tau[swapped_row]
     z_final[,i]=z_new[,swapped_row]
   }
@@ -280,9 +279,9 @@ beta_cr<-function(data,K=3,patients,samples,seed,register=NULL){
   uc_final=1-cert_final
 
   #### Return data
-  #return(list(cluster_count=cluster_count,llk=llk_iter,data=complete_data,alpha=alpha,beta=beta,tau=tau,z=z_new,uncertainty=uc))
-  return(list(cluster_count=cluster_count,llk=llk_iter,data=data_final,
-              alpha=alpha_final,beta=beta_final,tau=tau_final,
+  #return(list(cluster_count=cluster_count,llk=llk_iter,data=complete_data,alpha=alpha,delta=delta,tau=tau,z=z_new,uncertainty=uc))
+  return(list(cluster_size=cluster_count,llk=llk_iter,data=data_final,
+              alpha=alpha_final,delta=delta_final,tau=tau_final,
               z=z_final,uncertainty=uc_final))
 
 }

@@ -1,32 +1,32 @@
 #' @title The C.. model
-#' @description The C.. model from the family of beta mixture models for DNA methylation data.
-#'              This model analyses a single DNA sample and identify the thresholds for the different methylation profiles.
+#' @description Fit the C.. model from the family of beta mixture models for DNA methylation data.
+#'              The C.. model analyses a single DNA sample and identifies the thresholds for the different methylation profiles.
 #'
 #' @export
 #'
-#' @details This model clusters each of the C CpG sites into one of K = M methylation states, based on data from N patients where R = 1.
-#' The default value for M = 3 as a CpG site can be either hypomethylated, hemimethylated or hypermethylated.
+#' @details This model clusters each of the \eqn{C} CpG sites into one of \eqn{K} methylation profiles, based on data from \eqn{N} patients for one DNA sample (i.e. \eqn{R=1}).
+#' As each CpG site can belong to either of the \eqn{M=3} methylation profiles (hypomethylated, hemimethylated or hypermethylated), the default value of \eqn{K=M=3}.
 #' Under the C.. model the shape parameters of each cluster are constrained to be equal for each patient.
 #'
 #' @seealso \code{\link{beta_cn}}
 #' @seealso \code{\link{betaclust}}
 #'
-#' @param  X methylation values for CpG sites frpm R samples collected from N patients
-#' @param K number of methylation groups to be identified (default=3)
-#' @param seed seed for reproducible work
-#' @param register setting for parallelization
+#' @param data Methylation values for \eqn{C} CpG sites from \eqn{R=1} samples collected from \eqn{N} patients.
+#' @param K Number of methylation profiles to be identified.
+#' @param seed Seed to allow for reproducibility.
+#' @param register Setting for registering the parallel backend with the "foreach" package. To start parallel execution of R code on machine with multiple cores, "NULL" value needs to be assigned to this parameter.
 #'
-#' @return A list of clustering solution results.
+#'
+#' @return A list containing:
 #' \itemize{
-#'    \item cluster_count - The total number of CpG sites identified in each cluster.
-#'    \item llk - The vector containing log-likelihood values calculated for each step of parameter estimation.
-#'    \item data - This contains the methylation dataset along with the cluster label as determined by the mixture model.
-#'    \item alpha - This contains the shape parameter 1 for the beta mixtures for \eqn{K^R} groups.
-#'    \item beta - This contains the shape parameter 2 for the beta mixtures for \eqn{K^R} groups.
-#'    \item tau - The proportion of CpG sites in each cluster.
-#'    \item z - The matrix contains the probability calculated for each CpG site belonging to the \eqn{K^R} clusters.
-#'    \item uncertainty - The uncertainty of a CpG site belonging to the identified cluster.
-#'    }
+#'    \item cluster_size - the total number of CpG sites identified in each cluster.
+#'    \item llk - a vector containing the log-likelihood value at each step of the EM algorithm.
+#'    \item data - this contains the methylation dataset along with the cluster label for each CpG site.
+#'    \item alpha - this contains the shape parameter 1 for the beta mixture model.
+#'    \item delta - this contains the shape parameter 2 for the beta mixture model.
+#'    \item tau - the proportion of CpG sites in each cluster.
+#'    \item z - a matrix containing the probability for each CpG site of belonging to each of the \eqn{K} clusters.
+#'    \item uncertainty - the uncertainty of each CpG site's clustering.    }
 #'
 #' @examples
 #' \dontrun{
@@ -81,9 +81,9 @@ beta_c<-function(data,K=3,seed,register=NULL){
   mu_new=vector("numeric",K)
   sigma_sq=vector("numeric",K)
   alpha=vector("numeric",K)
-  beta=vector("numeric",K)
+  delta=vector("numeric",K)
   alpha_new=vector("numeric",K)
-  beta_new=vector("numeric",K)
+  delta_new=vector("numeric",K)
   term=vector("numeric",K)
   term_new=vector("numeric",K)
   tau=vector(length=K)
@@ -99,7 +99,7 @@ beta_c<-function(data,K=3,seed,register=NULL){
     sigma=vector()
     term=vector()
     al=vector()
-    be=vector()
+    de=vector()
     pi=vector()
     mu<-mean(data)
     sigma <- stats::sd(data)
@@ -109,13 +109,13 @@ beta_c<-function(data,K=3,seed,register=NULL){
     {
       al=2
     }
-    be=(1-mu)*term
-    if(be<=1)
+    de=(1-mu)*term
+    if(de<=1)
     {
-      be=2
+      de=2
     }
     pi <- length(mem)/C
-    return(list(al=al,be=be,tau=pi))
+    return(list(al=al,de=de,tau=pi))
   }
 
   ## parallelization of starting value calculation
@@ -128,7 +128,7 @@ beta_c<-function(data,K=3,seed,register=NULL){
   tau_len=len_theta+1
   end=length(ini_theta)
   alpha=unlist(ini_theta[1:K])
-  beta=unlist(ini_theta[mid:len_theta])
+  delta=unlist(ini_theta[mid:len_theta])
   tau=unlist(ini_theta[tau_len:end])
 
 
@@ -144,14 +144,14 @@ beta_c<-function(data,K=3,seed,register=NULL){
   while(flag)
   {
     ## E-step
-    z_estimation = function(x,al,be,pi,N)
+    z_estimation = function(x,al,de,pi,N)
     {
 
       l3=1
       for(n in 1:N) ##no. of samples
       {
 
-        l3=l3*stats::dbeta(x[,n],al,be)
+        l3=l3*stats::dbeta(x[,n],al,de)
       }
 
       return(pi*l3)
@@ -159,7 +159,7 @@ beta_c<-function(data,K=3,seed,register=NULL){
 
     ## parallelization of E-step
     z = foreach::foreach(k = 1:K, .combine=cbind) %dopar%
-      { z_estimation(x,alpha[k],beta[k],tau[k],N)}
+      { z_estimation(x,alpha[k],delta[k],tau[k],N)}
 
     z <- sweep(z, 1, STATS = rowSums(z), FUN = "/")
 
@@ -170,14 +170,14 @@ beta_c<-function(data,K=3,seed,register=NULL){
       y11=0
       y22=0
       al_new=0
-      be_new=0
+      de_new=0
       y11=(sum(z1*rowSums(log(x))))/(N*sum(z1))
       y22=(sum(z1*rowSums(log(1-x))))/(N*sum(z1))
       term=0
       term=((exp(-y11)-1)*(exp(-y22)-1))-1
       al_new=0.5+(0.5*exp(-y22)/term)
-      be_new= (0.5*exp(-y22)*(exp(-y11)-1))/term
-      return(list(al_new=al_new,be_new=be_new))
+      de_new= (0.5*exp(-y22)*(exp(-y11)-1))/term
+      return(list(al_new=al_new,de_new=de_new))
     }
 
 
@@ -189,13 +189,13 @@ beta_c<-function(data,K=3,seed,register=NULL){
     mid=K+1
     len_theta=K*2
     alpha_new=unlist(theta[1:K])
-    beta_new=unlist(theta[mid:len_theta])
+    delta_new=unlist(theta[mid:len_theta])
 
 
-    ### Update z using new alpha and beta
+    ### Update z using new alpha and delta
 
     z_new = foreach::foreach(k = 1:K, .combine=cbind) %dopar%
-      {z_estimation(x,alpha_new[k],beta_new[k],tau[k],N)}
+      {z_estimation(x,alpha_new[k],delta_new[k],tau[k],N)}
 
 
     z.total=rowSums(z_new)
@@ -204,7 +204,7 @@ beta_c<-function(data,K=3,seed,register=NULL){
     tau_new=s/C
 
     alpha=alpha_new
-    beta=beta_new
+    delta=delta_new
     tau=tau_new
 
     l1=sum(log(z.total))
@@ -233,6 +233,6 @@ beta_c<-function(data,K=3,seed,register=NULL){
   parallel::stopCluster(cl=my.cluster)
 
   #### Return data
-  return(list(cluster_count=cluster_count,data=complete_data,alpha=alpha,beta=beta,tau=tau,z=z_new,uncertainty=uc,llk=llk_iter))
+  return(list(cluster_size=cluster_count,data=complete_data,alpha=alpha,delta=delta,tau=tau,z=z_new,uncertainty=uc,llk=llk_iter))
 
 }

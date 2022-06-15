@@ -1,15 +1,14 @@
 #' @title Plots for visualizing the betaclust class object
 #' @description This function helps visualise the clustering solution by plotting the density estimates, the uncertainty and the information criterion.
-#' @details The density estimates of the clustering solution of the optimal model can be
-#' plotted by passing the parameter what="density" in the function. Apart from static plots interactive plots can also be plotted using the
-#' parameter plot_type = "plotly". The uncertainty in the clustering soluting can be plotted using what="uncertainty".
-#' The information criterion values for all models can be plotted using what="InformationCriterion" for selecting the optimal model.
+#' @details The density estimates under the optimal clustering solution by specifying what="density" in the function. Interactive plots can also be produced using
+#'  plot_type = "plotly". The uncertainty in the clustering soluting can be plotted using what="uncertainty".
+#' The information criterion values for all models can be plotted using what="InformationCriterion".
 #' @export
 #' @seealso \code{\link{betaclust}}
-#' @param object betaclust object
-#' @param what The different plots that can be obtained from the object (default="density") (what=c("density","uncertainty","InformationCriterion"))
-#' @param plot_type The plot type to be displayed (default="ggplot")(plot_type="ggplot" or"plotly")
-#' @param scale_param The axis that needs to be fixed or not for facet plot (scales=c("free_y","free_x","free"), default is "free_y")
+#' @param object A betaclust object.
+#' @param what The different plots that can be obtained are either "density","uncertainty" and "InformationCriterion". (default="density").
+#' @param plot_type The plot type to be displayed are either "ggplot" or "plotly". (default="ggplot").
+#' @param scale_param The axis that needs to be fixed for density estimates plot for visualizing the C.R clustering solution are either "free_y","free_x" or "free". (default = "free_y")
 #' @importFrom ggplot2 ggplot aes
 #' @importFrom  plotly ggplotly
 
@@ -20,7 +19,7 @@ plot.betaclust <- function(object,what="density",
 
   if(what == "density")
   {
-    data<-object$best_model$data
+    data<-object$optimal_model_results$data
     data_ggplot<-as.data.frame(data)
     data_ggplot$mem_final<-as.factor(data_ggplot$mem_final)
     colnames(data_ggplot)[length(data_ggplot)]<-"Cluster"
@@ -84,7 +83,7 @@ plot.betaclust <- function(object,what="density",
                        axis.title.y = ggplot2::element_text(size=10)) +
         ggplot2::ggtitle("Density estimates for C.R clustering solution")
 
-      f_labels<-data.frame(Cluster=seq(1,length(object$best_model$cluster_count),by=1),label=as.vector(round(object$best_model$tau,3)))
+      f_labels<-data.frame(Cluster=seq(1,length(object$optimal_model_results$cluster_count),by=1),label=as.vector(round(object$optimal_model_results$tau,3)))
       plot_graph<-plot_graph+
         ggplot2::geom_text(x = 0.2, y = 1, ggplot2::aes(label = label), data = f_labels)
 
@@ -94,12 +93,12 @@ plot.betaclust <- function(object,what="density",
   }
   if(what == "uncertainty")
   {
-    unc_df<-cbind(object$best_model$uncertainty,object$best_model$data[,"mem_final"])
+    unc_df<-cbind(object$optimal_model_results$uncertainty,object$optimal_model_results$data[,"mem_final"])
     unc_df<-as.data.frame(unc_df)
     colnames(unc_df)<-c("Uncertainty","Cluster")
     unc_df$Cluster<-as.factor(unc_df$Cluster)
     unc_df_sorted<-unc_df[order(unc_df$Cluster),]
-    max_unc=1-1/(length(object$best_model$tau))
+    max_unc=1-1/(length(object$optimal_model_results$tau))
     plot_graph<-ggplot2::ggplot(unc_df_sorted, ggplot2::aes(x=Cluster, y=Uncertainty, color=Cluster)) +
       ggplot2::geom_boxplot()+ ggplot2::theme(legend.position = "none")+
       ggplot2::ggtitle("Boxplot for uncertainties in clustering solution")+
