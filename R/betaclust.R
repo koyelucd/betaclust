@@ -95,8 +95,8 @@ betaclust<-function(data,K=3,patients,samples,model_names="C..",model_selection=
         ## check if samples>1
         if(samples>1)
         {
-          warning("C.. method can run for a single sample and not multiple samples.
-                  Method is run for 1st sample only.", call. = FALSE)
+          warning("C.. model only considers a single sample and not multiple samples.
+                  Model is fitted to 1st sample only.", call. = FALSE)
         }
 
         call_data=X[,1:patients]
@@ -113,8 +113,8 @@ betaclust<-function(data,K=3,patients,samples,model_names="C..",model_selection=
       {
         ## check if samples>1
         if(samples>1)
-          warning("CN. method can run for a single sample and not multiple samples.
-                  Method is run for 1st sample only.", call. = FALSE)
+          warning("CN. model only considers a single sample and not multiple samples.
+                  Model is fitted to 1st sample only.", call. = FALSE)
         call_data<-X[,1:patients]
         cn_out<-beta_cn(call_data,K,seed,register)
         len_llk<-length(cn_out$llk)
@@ -128,7 +128,7 @@ betaclust<-function(data,K=3,patients,samples,model_names="C..",model_selection=
       {
         ## check if samples>1
         if(samples<=1){
-          warning("C.R can only run for multiple samples. Please pass DNA methylation values for more than 1 sample.", call. = FALSE)
+          warning("C.R considers only multiple samples. Please pass DNA methylation values for more than 1 sample.", call. = FALSE)
           llk<-c(llk,NA)
         }else {
           cr_out<-beta_cr(X,K,patients,samples,seed,register)
