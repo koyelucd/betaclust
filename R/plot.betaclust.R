@@ -8,12 +8,13 @@
 #' @param object A betaclust object.
 #' @param what The different plots that can be obtained are either "density","uncertainty" and "InformationCriterion". (default="density").
 #' @param plot_type The plot type to be displayed are either "ggplot" or "plotly". (default="ggplot").
+#' @param title The title that the user wants to display on the graph. If no title is to be displayed the default is NULL value.
 #' @param scale_param The axis that needs to be fixed for density estimates plot for visualizing the C.R clustering solution are either "free_y","free_x" or "free". (default = "free_y")
 #' @importFrom ggplot2 ggplot aes
 #' @importFrom  plotly ggplotly
 
 plot.betaclust <- function(object,what="density",
-                           plot_type="ggplot",scale_param="free_y")
+                           plot_type="ggplot",title=NULL,scale_param="free_y")
 {
 
 
@@ -23,12 +24,19 @@ plot.betaclust <- function(object,what="density",
     data_ggplot<-as.data.frame(data)
     data_ggplot$mem_final<-as.factor(data_ggplot$mem_final)
     colnames(data_ggplot)[length(data_ggplot)]<-"Cluster"
+    if(is.null(title))
+    {
+      txt=""
+    }else{
+      txt=title
+    }
     if(object$optimal_model == "C.." || object$optimal_model == "CN.")
     {
       plot_graph<-ggplot2::ggplot(data_ggplot,ggplot2::aes(x=data_ggplot[,1], fill=Cluster))+
         ggplot2::geom_density(alpha=0.6)+
         ggplot2::labs(x="Beta value", y="Density",
-                      title=paste0("Density estimates for ",object$optimal_model,"  clustering solution"),
+                      #title=paste0("Density estimates for ",object$optimal_model,"  clustering solution"),
+                      title=txt,
                       fill ="Cluster")
 
       p.data <- ggplot2::ggplot_build(plot_graph)$data[[1]]
@@ -81,7 +89,8 @@ plot.betaclust <- function(object,what="density",
         )+
         ggplot2::theme(axis.title.x = ggplot2::element_text(size=10),
                        axis.title.y = ggplot2::element_text(size=10)) +
-        ggplot2::ggtitle("Density estimates for C.R clustering solution")
+        ggplot2::ggtitle(txt)
+        #ggplot2::ggtitle("Density estimates for C.R clustering solution")
 
       f_labels<-data.frame(Cluster=seq(1,length(object$optimal_model_results$cluster_count),by=1),label=as.vector(round(object$optimal_model_results$tau,3)))
       plot_graph<-plot_graph+
@@ -101,7 +110,8 @@ plot.betaclust <- function(object,what="density",
     max_unc=1-1/(length(object$optimal_model_results$tau))
     plot_graph<-ggplot2::ggplot(unc_df_sorted, ggplot2::aes(x=Cluster, y=Uncertainty, color=Cluster)) +
       ggplot2::geom_boxplot()+ ggplot2::theme(legend.position = "none")+
-      ggplot2::ggtitle("Boxplot for uncertainties in clustering solution")+
+      ggplot2::ggtitle(txt)+
+      #ggplot2::ggtitle("Boxplot for uncertainties in clustering solution")+
       ggplot2::coord_cartesian(ylim = c(0, 1))+
       ggplot2::geom_hline(yintercept=max_unc)+
       ggplot2::annotate(geom="text", label="maximum uncertainty",
@@ -121,8 +131,10 @@ plot.betaclust <- function(object,what="density",
       colnames(ic_df)<-c("IC_value","ModelName")
       ic_df2<-ic_df[order(ic_df$IC_value),]
       plot_graph<-ggplot2::ggplot(data=ic_df,ggplot2::aes(x=ModelName,y=IC_value,group=1))+
-        ggplot2::geom_line()+
-        ggplot2::ggtitle(paste0(object$information_criterion," Information Criterion Plot for optimal model selection"))+
+        #ggplot2::geom_line()+
+        ggplot2::geom_bar()+
+        ggplot2::ggtitle(txt)+
+        #ggplot2::ggtitle(paste0(object$information_criterion," Information Criterion Plot for optimal model selection"))+
         ggplot2::xlab("Model Name")+
         ggplot2::ylab("Information criterion value")
 

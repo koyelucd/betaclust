@@ -4,7 +4,13 @@
 \alias{plot.betaclust}
 \title{Plots for visualizing the betaclust class object}
 \usage{
-\method{plot}{betaclust}(object, what = "density", plot_type = "ggplot", scale_param = "free_y")
+\method{plot}{betaclust}(
+  object,
+  what = "density",
+  plot_type = "ggplot",
+  title = NULL,
+  scale_param = "free_y"
+)
 }
 \arguments{
 \item{object}{A betaclust object.}
@@ -12,6 +18,8 @@
 \item{what}{The different plots that can be obtained are either "density","uncertainty" and "InformationCriterion". (default="density").}
 
 \item{plot_type}{The plot type to be displayed are either "ggplot" or "plotly". (default="ggplot").}
+
+\item{title}{The title that the user wants to display on the graph. If no title is to be displayed the default is NULL value.}
 
 \item{scale_param}{The axis that needs to be fixed for density estimates plot for visualizing the C.R clustering solution are either "free_y","free_x" or "free". (default = "free_y")}
 }
