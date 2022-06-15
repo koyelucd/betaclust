@@ -30,7 +30,7 @@ summary.betaclust<-function(object)
   #classification<-as.factor(object$optimal_model_results$data[,ncol(object$optimal_model_results$data)])
   #clustering<-as.factor(object$optimal_model_results$data[,ncol(object$optimal_model_results$data)])
   classification<-table(as.factor(object$optimal_model_results$data[,ncol(object$optimal_model_results$data)]))
-  prop_data<-as.numeric(object$optimal_model_results$cluster_size)/C
+  prop_data<-as.numeric(object$optimal_model_results$cluster_size)/object$C
   obj <- list(title = title,
               C=object$C,
               N=object$N,
