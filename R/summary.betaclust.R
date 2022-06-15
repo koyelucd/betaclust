@@ -27,8 +27,8 @@ summary.betaclust<-function(object)
   clust_count=length(object$optimal_model_results$cluster_size)
   loglik=object$optimal_model_results$llk[length(object$optimal_model_results$llk)]
   #classification<-as.factor(object$optimal_model_results$data[,ncol(object$optimal_model_results$data)])
-  clustering<-as.factor(object$optimal_model_results$data[,ncol(object$optimal_model_results$data)])
-  classification<-table(clustering)
+  #clustering<-as.factor(object$optimal_model_results$data[,ncol(object$optimal_model_results$data)])
+  classification<-table(as.factor(object$optimal_model_results$data[,ncol(object$optimal_model_results$data)]))
   obj <- list(title = title,
               C=object$C,
               N=object$N,
