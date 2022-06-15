@@ -26,7 +26,7 @@
 #'
 #' @return The function returns an object of "betaclust" class which contains the following values:
 #' \itemize{
-#' \item Information_criterion - the information criterion used to select the optimal model.
+#' \item information_criterion - the information criterion used to select the optimal model.
 #' \item ic_output - this stores the information criterion value calculated for each model.
 #' \item optimal_model - the model selected as optimal.
 #' \item function_call - the parameters passed as arguments to the function betaclust.

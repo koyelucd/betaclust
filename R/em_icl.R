@@ -15,14 +15,14 @@
 #' @param z z matrix used for computing the complete-data log-likelihood function.
 #' @return The ICL value for the selected model.
 
-em_icl<-function(llk,C,K,patients=4,samples=1,model_names="C..",z){
+em_icl<-function(llk,C,K,patients=4,samples=1,model_name="C..",z){
 
   R=samples
   N=patients
-  mod_len=length(model_names)
+  mod_len=length(model_name)
   icl=vector("numeric",mod_len)
 
-  bic<-em_bic(llk,C,K,model_names,patients,samples)
+  bic<-em_bic(llk,C,K,model_name,patients,samples)
   for(i in 1:mod_len)
   {
 

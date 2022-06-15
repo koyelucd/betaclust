@@ -8,11 +8,12 @@
 #' \item N - the number of patients analysed using the beta mixture models.
 #' \item R - the numder of samples analysed using the beta mixture models.
 #' \item K - the number of methylation profiles identified.
-#' \item modelName - The optimal model selected.
-#' \item loglik - The log-likelihood value for the selected optimal model.
-#' \item Information_criterion - The information criterion used to select the optimal model.
-#' \item ic_output - This stores the information criterion value calculated for each model.
-#' \item classification - The total number of CpG sites identified in each cluster. }
+#' \item modelName - the optimal model selected.
+#' \item loglik - the log-likelihood value for the selected optimal model.
+#' \item information_criterion - the information criterion used to select the optimal model.
+#' \item ic_output - this stores the information criterion value calculated for each model.
+#' \item classification - the total number of CpG sites identified in each cluster.
+#' \item prop_data - the proportion of CpG sites identified in each cluster}
 #' @examples
 #' \dontrun{
 #' data_output=betaclust(pca.methylation.data[,2:9],K,patients,samples,
@@ -29,6 +30,7 @@ summary.betaclust<-function(object)
   #classification<-as.factor(object$optimal_model_results$data[,ncol(object$optimal_model_results$data)])
   #clustering<-as.factor(object$optimal_model_results$data[,ncol(object$optimal_model_results$data)])
   classification<-table(as.factor(object$optimal_model_results$data[,ncol(object$optimal_model_results$data)]))
+  prop_data<-object$optimal_model_results$cluster_size/C
   obj <- list(title = title,
               C=object$C,
               N=object$N,
@@ -38,7 +40,8 @@ summary.betaclust<-function(object)
               loglik = loglik,
               information_criterion=object$information_criterion,
               ic_output=ic_value,
-              classification=classification)
+              classification=classification,
+              prop_data=prop_data)
   class(obj) <- "summary.betaclust"
   print(obj)
   invisible(obj)
