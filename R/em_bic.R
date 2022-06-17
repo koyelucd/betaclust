@@ -6,10 +6,10 @@
 #' @seealso  \code{\link{em_icl}}
 #' @param llk log-likelihood value.
 #' @param C number of CpG sites.
-#' @param K number of methylation profiles to be identified.
-#' @param patients number of patients in the study.
-#' @param samples number of samples collected from each patient for study.
-#' @param model_name mixture model (method=c("C..","CN.","C.R")).
+#' @param K number of methylation profiles identified.
+#' @param patients number of patients.
+#' @param samples number of DNA samples collected from each patient.
+#' @param model_name fitted mixture model (method=c("C..","CN.","C.R")).
 #' @return The BIC value for the selected model.
 
 em_bic<-function(llk,C,K,patients=4,samples=1,model_name="C.."){

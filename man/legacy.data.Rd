@@ -6,14 +6,14 @@
 \title{MethylationEPIC manifest data.}
 \format{
 A data frame with 867525 rows and 6 columns.
-\describe{
-  \item{IlmnID}{This contains the unique identifier from the Illumina CG database, i.e. the probe ID.}
-  \item{Genome_Build}{Genome build referenced by the Infinium MethylationEPIC manifest.}
-  \item{CHR}{Chromosome containing the CpG (Genome_Build = 37).}
-  \item{MAPINFO}{This contains the methylation values from benign prostate tissue collected from patient 3.}
-  \item{UCSC_RefGene_Name}{Target gene name(s), from the UCSC database.
+\itemize{
+  \item{IlmnID: the unique identifier from the Illumina CG database, i.e. the probe ID.}
+  \item{Genome_Build: the genome build referenced by the Infinium MethylationEPIC manifest.}
+  \item{CHR: the chromosome containing the CpG (Genome_Build = 37).}
+  \item{MAPINFO: the methylation values from benign prostate tissue collected from patient 3.}
+  \item{UCSC_RefGene_Name: the target gene name(s), from the UCSC database.
   Note: multiple listings of the same gene name indicate splice variants.}
-  \item{UCSC_CpG_Islands_Name}{Chromosomal coordinates of the CpG Island from UCSC.}
+  \item{UCSC_CpG_Islands_Name: the chromosomal coordinates of the CpG Island from UCSC.}
    }
 }
 \usage{

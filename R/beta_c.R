@@ -38,6 +38,8 @@
 #' @importFrom foreach %dopar%
 #' @importFrom stats C
 #' @importFrom utils txtProgressBar
+#' @references {Microsoft, Weston, S. (2022): foreach: Provides Foreach Looping Construct. R package version 1.5.2. https://CRAN.R-project.org/package=foreach.}
+
 
 beta_c<-function(data,K=3,seed,register=NULL){
 

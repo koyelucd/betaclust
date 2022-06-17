@@ -6,7 +6,7 @@
 #' The C.. and CN. models are used to analyse a single DNA sample (\eqn{R = 1}) and cluster the \eqn{C} CpG sites into the \eqn{K} methylation profiles. As each CpG site can belong to either of the \eqn{M=3} methylation profiles (hypomethylation, hemimethylation and hypermethylation), the default value for \eqn{K=M=3}.
 #' The thresholds between methylation profiles can be objectively identified from the clustering solution.
 #' The C.R model is used to analyse \eqn{R} independent samples collected from \eqn{N} patients, where each sample contains \eqn{C} CpG sites, and cluster
-#' the dataset to identify the differentially methylated CpG sites between the \eqn{R} DNA samples.
+#' the dataset into \eqn{K=M^R} clusters to identify the differentially methylated CpG sites between the \eqn{R} DNA samples.
 #'
 #' @seealso \code{\link{beta_c}}
 #' @seealso \code{\link{beta_cn}}
@@ -32,7 +32,7 @@
 #' \item function_call - the parameters passed as arguments to the function betaclust.
 #' \item C - the number of CpG sites analysed using the beta mixture models.
 #' \item N - the number of patients analysed using the beta mixture models.
-#' \item R - the numder of samples analysed using the beta mixture models.
+#' \item R - the number of samples analysed using the beta mixture models.
 #' \item optimal_model_results - this contains information from the optimal model. Specifically,
 #'    \itemize{
 #'    \item cluster_size - the total number of CpG sites identified in each cluster.
@@ -63,6 +63,7 @@
 #' @importFrom utils txtProgressBar
 #' @references {Silva, R., Moran, B., Russell, N.M., Fahey, C., Vlajnic, T., Manecksha, R.P., Finn, S.P., Brennan, D.J., Gallagher, W.M., Perry, A.S.: Evaluating liquid biopsies for methylomic profiling of prostate cancer. Epigenetics 15(6-7), 715-727 (2020). doi:10.1080/15592294.2020.1712876.}
 #' @references {Majumdar, K., Silva, R., Perry, A.S., Watson, R.W., Murphy, T.B., Gormley, I.C.: betaclust: a family of mixture models for beta valued DNA methylation data.}
+#' @references {Microsoft, Weston, S. (2022): foreach: Provides Foreach Looping Construct. R package version 1.5.2. https://CRAN.R-project.org/package=foreach.}
 
 
 betaclust<-function(data,K=3,patients,samples,model_names="C..",model_selection="BIC",seed,register=NULL){

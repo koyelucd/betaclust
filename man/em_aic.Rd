@@ -11,13 +11,13 @@ em_aic(llk, C, K, patients = 4, samples = 1, model_name = "C..")
 
 \item{C}{number of CpG sites.}
 
-\item{K}{number of methylation profiles to be identified.}
+\item{K}{number of methylation profiles identified.}
 
-\item{patients}{number of patients in the study.}
+\item{patients}{number of patients.}
 
-\item{samples}{number of samples collected from each patient for study.}
+\item{samples}{number of DNA samples collected from each patient.}
 
-\item{model_name}{mixture model (method=c("C..","CN.","C.R")).}
+\item{model_name}{fitted mixture model (method=c("C..","CN.","C.R")).}
 }
 \value{
 The AIC value for the selected model.

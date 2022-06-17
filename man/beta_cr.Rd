@@ -36,8 +36,8 @@ A beta mixture model for identifying differentially methylated CpG sites between
 }
 \details{
 The C.R model allows identification of the differentially methylated CpG sites between the \eqn{R} DNA samples collected from each of \eqn{N} patients.
-As each CpG site can belong to either of \eqn{M} methylation profiles, there can be \eqn{K=M^R} methylation profile changes between \eqn{R} DNA samples.
-The parameters vary for each DNA sample but are constrained to be equal for each patient. An initial clustering using K-means is performed to identify \eqn{K} clusters. The resulting clustering solution provided as
+As each CpG site in a DNA sample can belong to either of \eqn{M} methylation profiles, there can be \eqn{K=M^R} methylation profile changes between \eqn{R} DNA samples.
+The parameters vary for each DNA sample but are constrained to be equal for each patient. An initial clustering using K-means is performed to identify \eqn{K} clusters. The resulting clustering solution is provided as
 starting values to the Expectation-Maximisation algorithm. A digamma approximation is used to obtain the maximised
 parameters in the M-step instead of a computationally inefficient numerical optimisation step.
 }
@@ -50,6 +50,9 @@ patients=4
 samples=2
 data_output=beta_cr(pca.methylation.data[,2:5],K,patients,samples,seed=my.seed)
 }
+}
+\references{
+{Microsoft, Weston, S. (2022): foreach: Provides Foreach Looping Construct. R package version 1.5.2. https://CRAN.R-project.org/package=foreach.}
 }
 \seealso{
 \code{\link{betaclust}}

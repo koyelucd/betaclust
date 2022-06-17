@@ -6,16 +6,16 @@
 \title{DNA methylation dataset of patients suffering from prostate cancer disease.}
 \format{
 A data frame with 694820 rows and 9 columns. The data contains no missing values.
-\describe{
-  \item{IlmnID}{This contains the unique identifier from the Illumina CG database, i.e. the probe ID.}
-  \item{Patient_benign_1}{This contains the methylation values from benign prostate tissue collected from patient 1.}
-  \item{Patient_benign_2}{This contains the methylation values from benign prostate tissue collected from patient 2.}
-  \item{Patient_benign_3}{This contains the methylation values from benign prostate tissue collected from patient 3.}
-  \item{Patient_benign_4}{This contains the methylation values from benign prostate tissue collected from patient 4.}
-  \item{Patient_benign_1}{This contains the methylation values from tumor prostate tissue collected from patient 1.}
-  \item{Patient_benign_2}{This contains the methylation values from tumor prostate tissue collected from patient 2.}
-  \item{Patient_benign_3}{This contains the methylation values from tumor prostate tissue collected from patient 3.}
-  \item{Patient_benign_4}{This contains the methylation values from tumor prostate tissue collected from patient 4.}
+\itemize{
+  \item{IlmnID: the unique identifier from the Illumina CG database, i.e. the probe ID.}
+  \item{Patient_benign_1: the methylation values from benign prostate tissue collected from patient 1.}
+  \item{Patient_benign_2: the methylation values from benign prostate tissue collected from patient 2.}
+  \item{Patient_benign_3: the methylation values from benign prostate tissue collected from patient 3.}
+  \item{Patient_benign_4: the methylation values from benign prostate tissue collected from patient 4.}
+  \item{Patient_benign_1: the methylation values from tumor prostate tissue collected from patient 1.}
+  \item{Patient_benign_2: the methylation values from tumor prostate tissue collected from patient 2.}
+  \item{Patient_benign_3: the methylation values from tumor prostate tissue collected from patient 3.}
+  \item{Patient_benign_4: the methylation values from tumor prostate tissue collected from patient 4.}
    }
 }
 \usage{

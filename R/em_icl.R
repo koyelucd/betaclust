@@ -8,10 +8,10 @@
 #' @seealso  \code{\link{em_bic}}
 #' @param llk log-likelihood value.
 #' @param C number of CpG sites.
-#' @param K number of methylation profiles to be identified.
-#' @param patients number of patients in the study.
-#' @param samples number of samples collected from each patient for study.
-#' @param model_name mixture model (method=c("C..","CN.","C.R")).
+#' @param K number of methylation profiles identified.
+#' @param patients number of patients.
+#' @param samples number of DNA samples collected from each patient.
+#' @param model_name fitted mixture model (method=c("C..","CN.","C.R")).
 #' @param z z matrix used for computing the complete-data log-likelihood function.
 #' @return The ICL value for the selected model.
 

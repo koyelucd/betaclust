@@ -44,6 +44,9 @@ K=3
 data_output=beta_c(pca.methylation.data[,2:5],K,seed=my.seed)
 }
 }
+\references{
+{Microsoft, Weston, S. (2022): foreach: Provides Foreach Looping Construct. R package version 1.5.2. https://CRAN.R-project.org/package=foreach.}
+}
 \seealso{
 \code{\link{beta_cn}}
 
