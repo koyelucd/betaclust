@@ -241,7 +241,7 @@ beta_cr<-function(data,K=3,patients,samples,seed,register=NULL){
   complete_data<-matrix(NA,C,(N*R+1))
   mem_final<-apply(z_new, 1, which.max)
   complete_data<-cbind(x,mem_final)
-  cluster_count=table(mem_final)
+  #cluster_count=table(mem_final)
 
 
   ### uncertainty
@@ -278,6 +278,7 @@ beta_cr<-function(data,K=3,patients,samples,seed,register=NULL){
   data_final$mem_final<-as.factor(data_final$mem_final)
   cert_final=apply(z_final,1,max)
   uc_final=1-cert_final
+  cluster_count=table(data_final$mem_final)
 
   #### Return data
   #return(list(cluster_count=cluster_count,llk=llk_iter,data=complete_data,alpha=alpha,delta=delta,tau=tau,z=z_new,uncertainty=uc))
