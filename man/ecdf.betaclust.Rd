@@ -4,7 +4,12 @@
 \alias{ecdf.betaclust}
 \title{The empirical cumulative distribution function}
 \usage{
-ecdf.betaclust(x, samples = 2, sample_name = c("Sample 1", "Sample 2"))
+ecdf.betaclust(
+  x,
+  samples = 2,
+  sample_name = c("Sample 1", "Sample 2"),
+  title = NULL
+)
 }
 \arguments{
 \item{x}{A dataframe containing methylation values of identified differentially methylated regions related to a gene.
@@ -13,6 +18,8 @@ Group each sample together in the dataframe such that the columns are ordered as
 \item{samples}{number of tissue samples from which DNA methylation data are collected (default samples = 2).}
 
 \item{sample_name}{The order in which the samples are grouped in the dataframe x (default = c("Sample 1","Sample 2")).}
+
+\item{title}{The title that the user wants to display on the graph. If no title is to be displayed the default is "NULL" value.}
 }
 \value{
 The ECDF plot for the selected CpG sites for all patients and their DNA samples.

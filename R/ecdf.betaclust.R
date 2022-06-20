@@ -7,6 +7,7 @@
 #' Group each sample together in the dataframe such that the columns are ordered as Sample1_Patient1, Sample1_Patient2, Sample2_Patient1, Sample2_Patient2.
 #' @param samples number of tissue samples from which DNA methylation data are collected (default samples = 2).
 #' @param sample_name The order in which the samples are grouped in the dataframe x (default = c("Sample 1","Sample 2")).
+#' @param title The title that the user wants to display on the graph. If no title is to be displayed the default is "NULL" value.
 #' @return The ECDF plot for the selected CpG sites for all patients and their DNA samples.
 #'
 #' @seealso \code{\link{betaclust}}
@@ -14,8 +15,14 @@
 #' @importFrom ggplot2 ggplot aes
 #' @importFrom  plotly ggplotly
 
-ecdf.betaclust <- function(x, samples=2, sample_name = c("Sample 1","Sample 2")){
+ecdf.betaclust <- function(x, samples=2, sample_name = c("Sample 1","Sample 2"),title=NULL){
 
+  if(is.null(title))
+  {
+    txt=""
+  }else{
+    txt=title
+  }
   col_len<-ncol(x)
   row_len<-nrow(x)
   col_names<-colnames(x)
@@ -59,14 +66,16 @@ ecdf.betaclust <- function(x, samples=2, sample_name = c("Sample 1","Sample 2"))
     pecdf<-ggplot2::ggplot(data_plot, ggplot2::aes(beta_value, colour = Patient_Sample)) +
       ggplot2::stat_ecdf()+
       ggplot2::scale_color_manual(values=colours)+
-      ggplot2::ggtitle("Empirical Cumulative Distribution Function")+
+      ggplot2::ggtitle(txt)
+      #ggplot2::ggtitle("Empirical Cumulative Distribution Function")+
       ggplot2::xlab("Beta value")+
       ggplot2::ylab("F(Beta value)")
   }else{
     pecdf<-ggplot2::ggplot(data_plot, ggplot2::aes(beta_value, colour = Patient_Sample)) +
       ggplot2::stat_ecdf()+
       #ggplot2::scale_color_manual(values=colours)+
-      ggplot2::ggtitle("Empirical Cumulative Distribution Function")+
+      #ggplot2::ggtitle("Empirical Cumulative Distribution Function")+
+      ggplot2::ggtitle(txt)
       ggplot2::xlab("Beta value")+
       ggplot2::ylab("F(Beta value)")
   }
