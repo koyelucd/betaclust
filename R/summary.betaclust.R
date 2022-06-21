@@ -23,14 +23,14 @@
 
 summary.betaclust<-function(object)
 {
-  title <- paste("Multivariate Beta mixture model fitted by EM algorithm")
+  title <- paste("Multivariate beta mixture model fitted by EM algorithm")
   ic_value=min(object$ic_output)
   clust_count=length(object$optimal_model_results$cluster_size)
   loglik=object$optimal_model_results$llk[length(object$optimal_model_results$llk)]
   #classification<-as.factor(object$optimal_model_results$data[,ncol(object$optimal_model_results$data)])
   #clustering<-as.factor(object$optimal_model_results$data[,ncol(object$optimal_model_results$data)])
   classification<-table(as.factor(object$optimal_model_results$data[,ncol(object$optimal_model_results$data)]))
-  prop_data<-as.numeric(object$optimal_model_results$cluster_size)/object$C
+  prop_data<-round((as.numeric(object$optimal_model_results$cluster_size)/object$C),3)
   obj <- list(title = title,
               C=object$C,
               N=object$N,
