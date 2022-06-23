@@ -15,7 +15,7 @@ An object of class "summary.betaclust which contains the following list of value
 \item C - the number of CpG sites analysed using the beta mixture models.
 \item N - the number of patients analysed using the beta mixture models.
 \item R - the number of samples analysed using the beta mixture models.
-\item K - the number of methylation profiles identified.
+\item K - the number of methylation profiles identified in R DNA samples.
 \item modelName - the optimal model selected.
 \item loglik - the log-likelihood value for the selected optimal model.
 \item information_criterion - the information criterion used to select the optimal model.
@@ -28,7 +28,10 @@ Summary method for a "betaclust" object containing the results under the optimal
 }
 \examples{
 \dontrun{
-data_output=betaclust(pca.methylation.data[,2:9],K,patients,samples,
+M=3
+patients=4
+samples=2
+data_output=betaclust(pca.methylation.data[,2:9],M,patients,samples,
             model_names=c("C..","CN.","C.R"),model_selection="BIC",seed=my.seed)
 summary(data_output)}
 }

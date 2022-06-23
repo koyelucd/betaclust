@@ -4,14 +4,14 @@
 \alias{em_icl}
 \title{Integrated Complete-data Likelihood (ICL) Criterion}
 \usage{
-em_icl(llk, C, K, patients = 4, samples = 1, model_name = "C..", z)
+em_icl(llk, C, M, patients = 4, samples = 1, model_name = "C..", z)
 }
 \arguments{
 \item{llk}{log-likelihood value.}
 
 \item{C}{number of CpG sites.}
 
-\item{K}{number of methylation profiles identified.}
+\item{M}{number of methylation profiles identified.}
 
 \item{patients}{number of patients.}
 

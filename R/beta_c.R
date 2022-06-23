@@ -12,7 +12,7 @@
 #' @seealso \code{\link{betaclust}}
 #'
 #' @param data Methylation values for \eqn{C} CpG sites from \eqn{R=1} samples collected from \eqn{N} patients.
-#' @param K Number of methylation profiles to be identified.
+#' @param M Number of methylation profiles to be identified in a DNA sample.
 #' @param seed Seed to allow for reproducibility.
 #' @param register Setting for registering the parallel backend with the "foreach" package. To start parallel execution of R code on machine with multiple cores, "NULL" value needs to be assigned to this parameter.
 #'
@@ -32,8 +32,8 @@
 #' \dontrun{
 #' data(pca.methylation.data)
 #' my.seed=190
-#' K=3
-#' data_output=beta_c(pca.methylation.data[,2:5],K,seed=my.seed)
+#' M=3
+#' data_output=beta_c(pca.methylation.data[,2:5],M,seed=my.seed)
 #' }
 #' @importFrom foreach %dopar%
 #' @importFrom stats C
@@ -41,7 +41,7 @@
 #' @references {Microsoft, Weston, S. (2022): foreach: Provides Foreach Looping Construct. R package version 1.5.2. https://CRAN.R-project.org/package=foreach.}
 
 
-beta_c<-function(data,K=3,seed,register=NULL){
+beta_c<-function(data,M=3,seed,register=NULL){
 
   X=data
   ## set the seed for reproducible work
@@ -64,6 +64,7 @@ beta_c<-function(data,K=3,seed,register=NULL){
     stop("Missing values observed in dataset")
   }
 
+  K=M
   ## Initial clustering using k-means
   k_cluster<-stats::kmeans(X,K)
   mem <- k_cluster$cluster

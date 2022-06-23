@@ -4,12 +4,12 @@
 \alias{beta_cr}
 \title{The C.R Model}
 \usage{
-beta_cr(data, K = 3, patients, samples, seed, register = NULL)
+beta_cr(data, M = 3, patients, samples, seed, register = NULL)
 }
 \arguments{
 \item{data}{Methylation values for \eqn{C} CpG sites from \eqn{R} samples collected from \eqn{N} patients.}
 
-\item{K}{Number of methylation profiles to be identified.}
+\item{M}{Number of methylation profiles to be identified.}
 
 \item{patients}{Number of patients in the study.}
 
@@ -45,7 +45,7 @@ parameters in the M-step instead of a computationally inefficient numerical opti
 \dontrun{
 data(pca.methylation.data)
 my.seed=190
-K=3
+M=3
 patients=4
 samples=2
 data_output=beta_cr(pca.methylation.data[,2:5],K,patients,samples,seed=my.seed)

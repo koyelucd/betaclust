@@ -5,7 +5,7 @@
 #' @seealso \code{\link{betaclust}}
 #'
 #' @param data Methylation values for \eqn{C} CpG sites from \eqn{R} samples collected from \eqn{N} patients.
-#' @param K Number of methylation profiles to be identified.
+#' @param M Number of methylation profiles to be identified.
 #' @param patients Number of patients in the study.
 #' @param samples Number of samples collected from each patient for study.
 #' @param seed Seed to allow for reproducibility.
@@ -32,7 +32,7 @@
 #' \dontrun{
 #' data(pca.methylation.data)
 #' my.seed=190
-#' K=3
+#' M=3
 #' patients=4
 #' samples=2
 #' data_output=beta_cr(pca.methylation.data[,2:5],K,patients,samples,seed=my.seed)
@@ -45,7 +45,7 @@
 
 
 
-beta_cr<-function(data,K=3,patients,samples,seed,register=NULL){
+beta_cr<-function(data,M=3,patients,samples,seed,register=NULL){
 
   X=data
   ##### CR Model #######
@@ -74,7 +74,7 @@ beta_cr<-function(data,K=3,patients,samples,seed,register=NULL){
   ## K= 3 for hypo,hyper and hemi methylation. For R sample types there can be
   ## 3^R combinations of these profiles hence K^R clusters
 
-  clusters=K^samples
+  clusters=M^samples
   K=clusters
   k_cluster<-stats::kmeans(X,K)
   mem <- k_cluster$cluster
@@ -241,7 +241,7 @@ beta_cr<-function(data,K=3,patients,samples,seed,register=NULL){
   complete_data<-matrix(NA,C,(N*R+1))
   mem_final<-apply(z_new, 1, which.max)
   complete_data<-cbind(x,mem_final)
-  #cluster_count=table(mem_final)
+ # cluster_count=table(mem_final)
 
 
   ### uncertainty

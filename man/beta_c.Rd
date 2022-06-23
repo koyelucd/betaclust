@@ -4,12 +4,12 @@
 \alias{beta_c}
 \title{The C.. model}
 \usage{
-beta_c(data, K = 3, seed, register = NULL)
+beta_c(data, M = 3, seed, register = NULL)
 }
 \arguments{
 \item{data}{Methylation values for \eqn{C} CpG sites from \eqn{R=1} samples collected from \eqn{N} patients.}
 
-\item{K}{Number of methylation profiles to be identified.}
+\item{M}{Number of methylation profiles to be identified in a DNA sample.}
 
 \item{seed}{Seed to allow for reproducibility.}
 
@@ -40,8 +40,8 @@ Under the C.. model the shape parameters of each cluster are constrained to be e
 \dontrun{
 data(pca.methylation.data)
 my.seed=190
-K=3
-data_output=beta_c(pca.methylation.data[,2:5],K,seed=my.seed)
+M=3
+data_output=beta_c(pca.methylation.data[,2:5],M,seed=my.seed)
 }
 }
 \references{

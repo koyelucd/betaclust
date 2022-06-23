@@ -8,17 +8,18 @@
 #' @seealso  \code{\link{em_bic}}
 #' @param llk log-likelihood value.
 #' @param C number of CpG sites.
-#' @param K number of methylation profiles identified.
+#' @param M number of methylation profiles identified.
 #' @param patients number of patients.
 #' @param samples number of DNA samples collected from each patient.
 #' @param model_name fitted mixture model (method=c("C..","CN.","C.R")).
 #' @param z z matrix used for computing the complete-data log-likelihood function.
 #' @return The ICL value for the selected model.
 
-em_icl<-function(llk,C,K,patients=4,samples=1,model_name="C..",z){
+em_icl<-function(llk,C,M,patients=4,samples=1,model_name="C..",z){
 
   R=samples
   N=patients
+  K=M
   mod_len=length(model_name)
   icl=vector("numeric",mod_len)
 

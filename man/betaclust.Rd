@@ -6,7 +6,7 @@
 \usage{
 betaclust(
   data,
-  K = 3,
+  M = 3,
   patients,
   samples,
   model_names = "C..",
@@ -18,7 +18,7 @@ betaclust(
 \arguments{
 \item{data}{Methylation values for \eqn{C} CpG sites from \eqn{R} samples collected from \eqn{N} patients.}
 
-\item{K}{Number of methylation profiles to be identified.}
+\item{M}{Number of methylation profiles to be identified in a DNA sample.}
 
 \item{patients}{Number of patients in the study.}
 
@@ -69,7 +69,7 @@ the dataset into \eqn{K=M^R} clusters to identify the differentially methylated 
 \dontrun{
 data(pca.methylation.data)
 my.seed=190
-K=3
+M=3
 patients=4
 samples=2
 data_output=betaclust(pca.methylation.data[,2:9],K,patients,samples,

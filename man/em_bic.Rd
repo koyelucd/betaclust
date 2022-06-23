@@ -4,14 +4,14 @@
 \alias{em_bic}
 \title{Bayesian Information Criterion}
 \usage{
-em_bic(llk, C, K, patients = 4, samples = 1, model_name = "C..")
+em_bic(llk, C, M, patients = 4, samples = 1, model_name = "C..")
 }
 \arguments{
 \item{llk}{log-likelihood value.}
 
 \item{C}{number of CpG sites.}
 
-\item{K}{number of methylation profiles identified.}
+\item{M}{number of methylation profiles identified in a DNA sample.}
 
 \item{patients}{number of patients.}
 
