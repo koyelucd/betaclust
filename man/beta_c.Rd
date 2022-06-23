@@ -18,7 +18,7 @@ beta_c(data, M = 3, seed, register = NULL)
 \value{
 A list containing:
 \itemize{
-   \item cluster_size - the total number of CpG sites identified in each cluster.
+   \item cluster_size - the total number of CpG sites identified in each of the K clusters.
    \item llk - a vector containing the log-likelihood value at each step of the EM algorithm.
    \item data - this contains the methylation dataset along with the cluster label for each CpG site.
    \item alpha - this contains the shape parameter 1 for the beta mixture model.

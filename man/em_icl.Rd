@@ -11,7 +11,7 @@ em_icl(llk, C, M, patients = 4, samples = 1, model_name = "C..", z)
 
 \item{C}{number of CpG sites.}
 
-\item{M}{number of methylation profiles identified.}
+\item{M}{number of methylation profiles identified in a DNA sample.}
 
 \item{patients}{number of patients.}
 

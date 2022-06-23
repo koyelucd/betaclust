@@ -3,7 +3,7 @@
 #' @description A family of model based clustering techniques to identify methylation profiles in beta valued DNA methylation data.
 #'
 #' @details This is a wrapper function which can be used to fit all three models (C.., CN., C.R) together.
-#' The C.. and CN. models are used to analyse a single DNA sample (\eqn{R = 1}) and cluster the \eqn{C} CpG sites into the \eqn{K} methylation profiles. As each CpG site can belong to either of the \eqn{M=3} methylation profiles (hypomethylation, hemimethylation and hypermethylation), the default value for \eqn{K=M=3}.
+#' The C.. and CN. models are used to analyse a single DNA sample (\eqn{R = 1}) and cluster the \eqn{C} CpG sites into the \eqn{K} clusters which represent the different methylation profiles in a DNA sample. As each CpG site can belong to either of the \eqn{M=3} methylation profiles (hypomethylation, hemimethylation and hypermethylation), the default value for \eqn{K=M=3}.
 #' The thresholds between methylation profiles can be objectively identified from the clustering solution.
 #' The C.R model is used to analyse \eqn{R} independent samples collected from \eqn{N} patients, where each sample contains \eqn{C} CpG sites, and cluster
 #' the dataset into \eqn{K=M^R} clusters to identify the differentially methylated CpG sites between the \eqn{R} DNA samples.
@@ -35,7 +35,7 @@
 #' \item R - the number of samples analysed using the beta mixture models.
 #' \item optimal_model_results - this contains information from the optimal model. Specifically,
 #'    \itemize{
-#'    \item cluster_size - the total number of CpG sites identified in each cluster.
+#'    \item cluster_size - the total number of CpG sites identified in each of the K clusters.
 #'    \item llk - a vector containing the log-likelihood value at each step of the EM algorithm.
 #'    \item data - this contains the methylation dataset along with the cluster label for each CpG site.
 #'    \item alpha - this contains the shape parameter 1 for the beta mixture model.
@@ -53,7 +53,7 @@
 #' M=3
 #' patients=4
 #' samples=2
-#' data_output=betaclust(pca.methylation.data[,2:9],K,patients,samples,
+#' data_output=betaclust(pca.methylation.data[,2:9],M,patients,samples,
 #'             model_names=c("C..","CN.","C.R"),model_selection="BIC",seed=my.seed)
 #' }
 #'

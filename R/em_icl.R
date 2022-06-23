@@ -8,7 +8,7 @@
 #' @seealso  \code{\link{em_bic}}
 #' @param llk log-likelihood value.
 #' @param C number of CpG sites.
-#' @param M number of methylation profiles identified.
+#' @param M number of methylation profiles identified in a DNA sample.
 #' @param patients number of patients.
 #' @param samples number of DNA samples collected from each patient.
 #' @param model_name fitted mixture model (method=c("C..","CN.","C.R")).

@@ -19,7 +19,7 @@
 #' parameters in the M-step instead of a computationally inefficient numerical optimisation step.
 #' @return A list containing:
 #' \itemize{
-#'    \item cluster_size - the total number of CpG sites identified in each cluster.
+#'    \item cluster_size - the total number of CpG sites identified in each of the K clusters.
 #'    \item llk - a vector containing the log-likelihood value at each step of the EM algorithm.
 #'    \item data - this contains the methylation dataset along with the cluster label for each CpG site.
 #'    \item alpha - this contains the shape parameter 1 for the beta mixture model.
@@ -35,7 +35,7 @@
 #' M=3
 #' patients=4
 #' samples=2
-#' data_output=beta_cr(pca.methylation.data[,2:5],K,patients,samples,seed=my.seed)
+#' data_output=beta_cr(pca.methylation.data[,2:5],M,patients,samples,seed=my.seed)
 #' }
 #' @importFrom foreach %dopar%
 #' @importFrom stats C

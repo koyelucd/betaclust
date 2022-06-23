@@ -22,7 +22,7 @@ beta_cr(data, M = 3, patients, samples, seed, register = NULL)
 \value{
 A list containing:
 \itemize{
-   \item cluster_size - the total number of CpG sites identified in each cluster.
+   \item cluster_size - the total number of CpG sites identified in each of the K clusters.
    \item llk - a vector containing the log-likelihood value at each step of the EM algorithm.
    \item data - this contains the methylation dataset along with the cluster label for each CpG site.
    \item alpha - this contains the shape parameter 1 for the beta mixture model.
@@ -48,7 +48,7 @@ my.seed=190
 M=3
 patients=4
 samples=2
-data_output=beta_cr(pca.methylation.data[,2:5],K,patients,samples,seed=my.seed)
+data_output=beta_cr(pca.methylation.data[,2:5],M,patients,samples,seed=my.seed)
 }
 }
 \references{
