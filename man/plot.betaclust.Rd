@@ -21,7 +21,7 @@
 
 \item{title}{The title that the user wants to display on the graph. If no title is to be displayed the default is "NULL" value.}
 
-\item{scale_param}{The axis that needs to be fixed for density estimates plot for visualizing the C.R clustering solution are either "free_y","free_x" or "free". (default = "free_y").}
+\item{scale_param}{The axis that needs to be fixed for density estimates plot for visualizing the K.R clustering solution are either "free_y","free_x" or "free". (default = "free_y").}
 }
 \description{
 This function helps visualise the clustering solution by plotting the density estimates, the uncertainty and the information criterion.

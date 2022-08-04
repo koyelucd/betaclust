@@ -11,11 +11,11 @@
 #' @param M number of methylation profiles identified in a DNA sample.
 #' @param patients number of patients.
 #' @param samples number of DNA samples collected from each patient.
-#' @param model_name fitted mixture model (method=c("C..","CN.","C.R")).
+#' @param model_name fitted mixture model (method=c("K..","KN.","K.R")).
 #' @param z z matrix used for computing the complete-data log-likelihood function.
 #' @return The ICL value for the selected model.
 
-em_icl<-function(llk,C,M,patients=4,samples=1,model_name="C..",z){
+em_icl<-function(llk,C,M,patients=4,samples=1,model_name="K..",z){
 
   R=samples
   N=patients

@@ -2,15 +2,15 @@
 #' @export
 #' @description A family of model based clustering techniques to identify methylation profiles in beta valued DNA methylation data.
 #'
-#' @details This is a wrapper function which can be used to fit all three models (C.., CN., C.R) together.
-#' The C.. and CN. models are used to analyse a single DNA sample (\eqn{R = 1}) and cluster the \eqn{C} CpG sites into the \eqn{K} clusters which represent the different methylation profiles in a DNA sample. As each CpG site can belong to either of the \eqn{M=3} methylation profiles (hypomethylation, hemimethylation and hypermethylation), the default value for \eqn{K=M=3}.
+#' @details This is a wrapper function which can be used to fit all three models (K.., KN., K.R) together.
+#' The K.. and KN. models are used to analyse a single DNA sample (\eqn{R = 1}) and cluster the \eqn{C} CpG sites into the \eqn{K} clusters which represent the different methylation profiles in a DNA sample. As each CpG site can belong to either of the \eqn{M=3} methylation profiles (hypomethylation, hemimethylation and hypermethylation), the default value for \eqn{K=M=3}.
 #' The thresholds between methylation profiles can be objectively identified from the clustering solution.
-#' The C.R model is used to analyse \eqn{R} independent samples collected from \eqn{N} patients, where each sample contains \eqn{C} CpG sites, and cluster
+#' The K.R model is used to analyse \eqn{R} independent samples collected from \eqn{N} patients, where each sample contains \eqn{C} CpG sites, and cluster
 #' the dataset into \eqn{K=M^R} clusters to identify the differentially methylated CpG sites between the \eqn{R} DNA samples.
 #'
-#' @seealso \code{\link{beta_c}}
-#' @seealso \code{\link{beta_cn}}
-#' @seealso \code{\link{beta_cr}}
+#' @seealso \code{\link{beta_k}}
+#' @seealso \code{\link{beta_kn}}
+#' @seealso \code{\link{beta_kr}}
 #' @seealso \code{\link{pca.methylation.data}}
 #' @seealso \code{\link{plot.betaclust}}
 #' @seealso \code{\link{summary.betaclust}}
@@ -19,7 +19,7 @@
 #' @param M Number of methylation profiles to be identified in a DNA sample.
 #' @param patients Number of patients in the study.
 #' @param samples Number of samples collected from each patient for study.
-#' @param model_names Models to run from the set of models, C.., CN. and C.R, default = C.. . See details.
+#' @param model_names Models to run from the set of models, K.., KN. and K.R, default = K.. . See details.
 #' @param model_selection Information criterion used for model selection. Options are AIC/BIC/ICL/default=BIC.
 #' @param seed Seed to allow for reproducibility.
 #' @param register Setting for registering the parallel backend with the "foreach" package. To start parallel execution of R code on machine with multiple cores, "NULL" value needs to be assigned to this parameter.
@@ -30,6 +30,7 @@
 #' \item ic_output - this stores the information criterion value calculated for each model.
 #' \item optimal_model - the model selected as optimal.
 #' \item function_call - the parameters passed as arguments to the function betaclust.
+#' \item K - the number of clusters identified using the beta mixture models.
 #' \item C - the number of CpG sites analysed using the beta mixture models.
 #' \item N - the number of patients analysed using the beta mixture models.
 #' \item R - the number of samples analysed using the beta mixture models.
@@ -54,7 +55,7 @@
 #' patients=4
 #' samples=2
 #' data_output=betaclust(pca.methylation.data[,2:9],M,patients,samples,
-#'             model_names=c("C..","CN.","C.R"),model_selection="BIC",seed=my.seed)
+#'             model_names=c("K..","KN.","K.R"),model_selection="BIC",seed=my.seed)
 #' }
 #'
 #'
@@ -66,7 +67,7 @@
 #' @references {Microsoft, Weston, S. (2022): foreach: Provides Foreach Looping Construct. R package version 1.5.2. https://CRAN.R-project.org/package=foreach.}
 
 
-betaclust<-function(data,M=3,patients,samples,model_names="C..",model_selection="BIC",seed,register=NULL){
+betaclust<-function(data,M=3,patients,samples,model_names="K..",model_selection="BIC",seed,register=NULL){
 
   X=data
   len=length(model_names)
@@ -89,53 +90,53 @@ betaclust<-function(data,M=3,patients,samples,model_names="C..",model_selection=
   {
     for(i in 1:len)
     {
-      ## Call for C.. function
-      if(model_names[i] == "C..")
+      ## Call for K.. function
+      if(model_names[i] == "K..")
       {
         #print(model_names[i])
         ## check if samples>1
         if(samples>1)
         {
-          warning("C.. model only considers a single sample and not multiple samples.
+          warning("K.. model only considers a single sample and not multiple samples.
                   Model is fitted to 1st sample only.", call. = FALSE)
         }
 
         call_data=X[,1:patients]
         #print(call_data[1:4,])
-        c_out<-beta_c(call_data,M,seed,register)
-        len_llk<-length(c_out$llk)
-        llk<-c(llk,c_out$llk[len_llk])
-        z[[i]]<-c_out$z
+        k_out<-beta_k(call_data,M,seed,register)
+        len_llk<-length(k_out$llk)
+        llk<-c(llk,k_out$llk[len_llk])
+        z[[i]]<-k_out$z
         #print(c_out$alpha)
         #print(c_out$beta)
       }
-      ## Call for CN. function
-      if(model_names[i] == "CN.")
+      ## Call for KN. function
+      if(model_names[i] == "KN.")
       {
         ## check if samples>1
         if(samples>1)
-          warning("CN. model only considers a single sample and not multiple samples.
+          warning("KN. model only considers a single sample and not multiple samples.
                   Model is fitted to 1st sample only.", call. = FALSE)
         call_data<-X[,1:patients]
-        cn_out<-beta_cn(call_data,M,seed,register)
-        len_llk<-length(cn_out$llk)
-        llk<-c(llk,cn_out$llk[len_llk])
-        z[[i]]<-cn_out$z
+        kn_out<-beta_kn(call_data,M,seed,register)
+        len_llk<-length(kn_out$llk)
+        llk<-c(llk,kn_out$llk[len_llk])
+        z[[i]]<-kn_out$z
         #print(cn_out$alpha)
         #print(cn_out$beta)
       }
-      ## Call for C.R function
-      if(model_names[i] == "C.R")
+      ## Call for K.R function
+      if(model_names[i] == "K.R")
       {
         ## check if samples>1
         if(samples<=1){
-          warning("C.R considers only multiple samples. Please pass DNA methylation values for more than 1 sample.", call. = FALSE)
+          warning("K.R considers only multiple samples. Please pass DNA methylation values for more than 1 sample.", call. = FALSE)
           llk<-c(llk,NA)
         }else {
-          cr_out<-beta_cr(X,M,patients,samples,seed,register)
-          len_llk<-length(cr_out$llk)
-          llk<-c(llk,cr_out$llk[len_llk])
-          z[[i]]<-cr_out$z
+          kr_out<-beta_kr(X,M,patients,samples,seed,register)
+          len_llk<-length(kr_out$llk)
+          llk<-c(llk,kr_out$llk[len_llk])
+          z[[i]]<-kr_out$z
           #print(cr_out$alpha)
           #print(cr_out$beta)
         }
@@ -176,17 +177,21 @@ betaclust<-function(data,M=3,patients,samples,model_names="C..",model_selection=
 
   N=patients
   R=0
-  if(min_method=="C..")
+  K=0
+  if(min_method=="K..")
   {
-    final_output<-c_out
+    final_output<-k_out
+    K=M
     R=1
-  }else if(min_method=="CN.")
+  }else if(min_method=="KN.")
   {
-    final_output<-cn_out
+    final_output<-kn_out
+    K=M
     R=1
-  }else if(min_method=="C.R")
+  }else if(min_method=="K.R")
   {
-    final_output<-cr_out
+    final_output<-kr_out
+    K=M^samples
     R=samples
   }
 
@@ -195,7 +200,7 @@ betaclust<-function(data,M=3,patients,samples,model_names="C..",model_selection=
   #print("Execution is complete")
 
   beta_out<-list(information_criterion=model_selection,ic_output=ic_op,
-                 optimal_model=min_method,function_call=call_function,C=C,N=N,R=R,
+                 optimal_model=min_method,function_call=call_function,K=K,C=C,N=N,R=R,
                  optimal_model_results=final_output)
   class(beta_out)<-"betaclust"
   return(beta_out)

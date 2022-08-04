@@ -9,10 +9,10 @@
 #' @param M number of methylation profiles identified in a DNA sample.
 #' @param patients number of patients.
 #' @param samples number of DNA samples collected from each patient.
-#' @param model_name fitted mixture model (method=c("C..","CN.","C.R")).
+#' @param model_name fitted mixture model (method=c("K..","KN.","K.R")).
 #' @return The AIC value for the selected model.
 
-em_aic<-function(llk,C,M,patients=4,samples=1,model_name="C.."){
+em_aic<-function(llk,C,M,patients=4,samples=1,model_name="K.."){
 
   R=samples
   N=patients
@@ -22,13 +22,13 @@ em_aic<-function(llk,C,M,patients=4,samples=1,model_name="C.."){
   K=M
   for(i in 1:mod_len)
   {
-    if(model_name[i] ==  "C..") ##C
+    if(model_name[i] ==  "K..") ##K
     {
       num_par = (K*2)+(K-1)
-    }else if(model_name[i] == "CN.") ##CN
+    }else if(model_name[i] == "KN.") ##KN
     {
       num_par = (K*N*R*2)+(K-1)
-    }else if(model_name[i] == "C.R") ##CR
+    }else if(model_name[i] == "K.R") ##KR
     {
       num_par = (K*R*2)+(K-1)
     }

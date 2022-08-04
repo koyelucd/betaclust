@@ -32,7 +32,7 @@ M=3
 patients=4
 samples=2
 data_output=betaclust(pca.methylation.data[,2:9],M,patients,samples,
-            model_names=c("C..","CN.","C.R"),model_selection="BIC",seed=my.seed)
+            model_names=c("K..","KN.","K.R"),model_selection="BIC",seed=my.seed)
 summary(data_output)}
 }
 \seealso{

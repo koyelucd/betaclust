@@ -28,11 +28,11 @@ The ECDF plot for the selected CpG sites for all patients and their DNA samples.
 An empirical cumulative distribution function (ECDF) plot for a betaclust object.
 }
 \details{
-This function plots the ECDF graphs of the differentially methylated CpG sites identified using the C.R model for all patient samples.
+This function plots the ECDF graphs of the differentially methylated CpG sites identified using the K.R model for all patient samples.
 The graph visualises the methylation profile changes between the different DNA samples for each patient.
 }
 \seealso{
 \code{\link{betaclust}}
 
-\code{\link{beta_cr}}
+\code{\link{beta_kr}}
 }

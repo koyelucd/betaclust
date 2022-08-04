@@ -4,7 +4,7 @@
 \alias{em_icl}
 \title{Integrated Complete-data Likelihood (ICL) Criterion}
 \usage{
-em_icl(llk, C, M, patients = 4, samples = 1, model_name = "C..", z)
+em_icl(llk, C, M, patients = 4, samples = 1, model_name = "K..", z)
 }
 \arguments{
 \item{llk}{log-likelihood value.}
@@ -17,7 +17,7 @@ em_icl(llk, C, M, patients = 4, samples = 1, model_name = "C..", z)
 
 \item{samples}{number of DNA samples collected from each patient.}
 
-\item{model_name}{fitted mixture model (method=c("C..","CN.","C.R")).}
+\item{model_name}{fitted mixture model (method=c("K..","KN.","K.R")).}
 
 \item{z}{z matrix used for computing the complete-data log-likelihood function.}
 }

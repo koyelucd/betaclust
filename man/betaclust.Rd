@@ -9,7 +9,7 @@ betaclust(
   M = 3,
   patients,
   samples,
-  model_names = "C..",
+  model_names = "K..",
   model_selection = "BIC",
   seed,
   register = NULL
@@ -24,7 +24,7 @@ betaclust(
 
 \item{samples}{Number of samples collected from each patient for study.}
 
-\item{model_names}{Models to run from the set of models, C.., CN. and C.R, default = C.. . See details.}
+\item{model_names}{Models to run from the set of models, K.., KN. and K.R, default = K.. . See details.}
 
 \item{model_selection}{Information criterion used for model selection. Options are AIC/BIC/ICL/default=BIC.}
 
@@ -39,6 +39,7 @@ The function returns an object of "betaclust" class which contains the following
 \item ic_output - this stores the information criterion value calculated for each model.
 \item optimal_model - the model selected as optimal.
 \item function_call - the parameters passed as arguments to the function betaclust.
+\item K - the number of clusters identified using the beta mixture models.
 \item C - the number of CpG sites analysed using the beta mixture models.
 \item N - the number of patients analysed using the beta mixture models.
 \item R - the number of samples analysed using the beta mixture models.
@@ -59,10 +60,10 @@ The function returns an object of "betaclust" class which contains the following
 A family of model based clustering techniques to identify methylation profiles in beta valued DNA methylation data.
 }
 \details{
-This is a wrapper function which can be used to fit all three models (C.., CN., C.R) together.
-The C.. and CN. models are used to analyse a single DNA sample (\eqn{R = 1}) and cluster the \eqn{C} CpG sites into the \eqn{K} clusters which represent the different methylation profiles in a DNA sample. As each CpG site can belong to either of the \eqn{M=3} methylation profiles (hypomethylation, hemimethylation and hypermethylation), the default value for \eqn{K=M=3}.
+This is a wrapper function which can be used to fit all three models (K.., KN., K.R) together.
+The K.. and KN. models are used to analyse a single DNA sample (\eqn{R = 1}) and cluster the \eqn{C} CpG sites into the \eqn{K} clusters which represent the different methylation profiles in a DNA sample. As each CpG site can belong to either of the \eqn{M=3} methylation profiles (hypomethylation, hemimethylation and hypermethylation), the default value for \eqn{K=M=3}.
 The thresholds between methylation profiles can be objectively identified from the clustering solution.
-The C.R model is used to analyse \eqn{R} independent samples collected from \eqn{N} patients, where each sample contains \eqn{C} CpG sites, and cluster
+The K.R model is used to analyse \eqn{R} independent samples collected from \eqn{N} patients, where each sample contains \eqn{C} CpG sites, and cluster
 the dataset into \eqn{K=M^R} clusters to identify the differentially methylated CpG sites between the \eqn{R} DNA samples.
 }
 \examples{
@@ -73,7 +74,7 @@ M=3
 patients=4
 samples=2
 data_output=betaclust(pca.methylation.data[,2:9],M,patients,samples,
-            model_names=c("C..","CN.","C.R"),model_selection="BIC",seed=my.seed)
+            model_names=c("K..","KN.","K.R"),model_selection="BIC",seed=my.seed)
 }
 
 
@@ -86,11 +87,11 @@ data_output=betaclust(pca.methylation.data[,2:9],M,patients,samples,
 {Microsoft, Weston, S. (2022): foreach: Provides Foreach Looping Construct. R package version 1.5.2. https://CRAN.R-project.org/package=foreach.}
 }
 \seealso{
-\code{\link{beta_c}}
+\code{\link{beta_k}}
 
-\code{\link{beta_cn}}
+\code{\link{beta_kn}}
 
-\code{\link{beta_cr}}
+\code{\link{beta_kr}}
 
 \code{\link{pca.methylation.data}}
 
