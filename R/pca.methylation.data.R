@@ -7,14 +7,14 @@
 #' @format A data frame with 694820 rows and 9 columns. The data contains no missing values.
 #' \itemize{
 #'   \item{IlmnID: the unique identifier from the Illumina CG database, i.e. the probe ID.}
-#'   \item{Patient_benign_1: the methylation values from benign prostate tissue collected from patient 1.}
-#'   \item{Patient_benign_2: the methylation values from benign prostate tissue collected from patient 2.}
-#'   \item{Patient_benign_3: the methylation values from benign prostate tissue collected from patient 3.}
-#'   \item{Patient_benign_4: the methylation values from benign prostate tissue collected from patient 4.}
-#'   \item{Patient_benign_1: the methylation values from tumor prostate tissue collected from patient 1.}
-#'   \item{Patient_benign_2: the methylation values from tumor prostate tissue collected from patient 2.}
-#'   \item{Patient_benign_3: the methylation values from tumor prostate tissue collected from patient 3.}
-#'   \item{Patient_benign_4: the methylation values from tumor prostate tissue collected from patient 4.}
+#'   \item{Benign_Patient_1: the methylation values from benign prostate tissue collected from patient 1.}
+#'   \item{Benign_Patient_2: the methylation values from benign prostate tissue collected from patient 2.}
+#'   \item{Benign_Patient_3: the methylation values from benign prostate tissue collected from patient 3.}
+#'   \item{Benign_Patient_4: the methylation values from benign prostate tissue collected from patient 4.}
+#'   \item{Tumour_Patient_1: the methylation values from tumor prostate tissue collected from patient 1.}
+#'   \item{Tumour_Patient_2: the methylation values from tumor prostate tissue collected from patient 2.}
+#'   \item{Tumour_Patient_3: the methylation values from tumor prostate tissue collected from patient 3.}
+#'   \item{Tumour_Patient_4: the methylation values from tumor prostate tissue collected from patient 4.}
 #'    }
 #' @references {Mueller F, Scherer M, Assenov Y, Lutsik P, Walter J, Lengauer T, Bock C (2019). “RnBeads 2.0: comprehensive analysis of DNA methylation data.” Genome Biology, 20(55). doi: 10.1186/s13059-019-1664-9, https://rnbeads.org.}
 #' @references {Assenov Y, Mueller F, Lutsik P, Walter J, Lengauer T, Bock C (2014). “Compehensive Analysis of DNA Methylation Data with RnBeads.” Nature Methods, 11(11), 1138–1140. doi: 10.1038/nmeth.3115, https://rnbeads.org.}

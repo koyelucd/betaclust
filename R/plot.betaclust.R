@@ -6,15 +6,17 @@
 #' @export
 #' @seealso \code{\link{betaclust}}
 #' @param object A betaclust object.
-#' @param what The different plots that can be obtained are either "density","uncertainty" or "InformationCriterion". (default="density").
+#' @param what The different plots that can be obtained are either "fitted density","kernel density","uncertainty" or "information criterion". (default="fitted density").
 #' @param plot_type The plot type to be displayed are either "ggplot" or "plotly". (default="ggplot").
 #' @param title The title that the user wants to display on the graph. If no title is to be displayed the default is "NULL" value.
 #' @param scale_param The axis that needs to be fixed for density estimates plot for visualizing the K.R clustering solution are either "free_y","free_x" or "free". (default = "free_y").
 #' @importFrom ggplot2 ggplot aes
 #' @importFrom  plotly ggplotly
 
-plot.betaclust <- function(object,what="density",
-                           plot_type="ggplot",title=NULL,scale_param="free_y")
+plot.betaclust <- function(object,what="fitted density",
+                           plot_type="ggplot",sample_name = c("Sample 1","Sample 2"),
+                           title=NULL,patient_number=1,
+                           threshold=FALSE,scale_param="free_y")
 {
 
   if(is.null(title))
@@ -23,7 +25,7 @@ plot.betaclust <- function(object,what="density",
   }else{
     txt=title
   }
-  if(what == "density")
+  if(what == "kernel density")
   {
     data<-object$optimal_model_results$data
     data_ggplot<-as.data.frame(data)
@@ -38,6 +40,12 @@ plot.betaclust <- function(object,what="density",
                       #title=paste0("Density estimates for ",object$optimal_model,"  clustering solution"),
                       title=txt,
                       fill ="Cluster")
+      if(object$K==3)
+      {
+        colours<-c("chartreuse3","magenta","cyan3")
+        plot_graph<-plot_graph+
+          ggplot2::scale_fill_manual(values=colours)
+      }
 
       p.data <- ggplot2::ggplot_build(plot_graph)$data[[1]]
 
@@ -53,6 +61,7 @@ plot.betaclust <- function(object,what="density",
                                                  y = p.text$y,
                                                  label = sprintf('%.3f',
                                                                  p.text$prop),
+                                                 colour=p.text$fill,
                                                  vjust = 0)
 
 
@@ -68,7 +77,8 @@ plot.betaclust <- function(object,what="density",
       Patient_sample=vector()
       for(i in 1:(col_len-1))
       {
-        ps_names<-rep(col_names[i],rows)
+        temp=gsub("_"," ",col_names[i])
+        ps_names<-rep(temp,rows)
         Patient_sample<-c(Patient_sample,ps_names)
         Cluster<-c(Cluster,data_ggplot[,cols])
       }
@@ -83,7 +93,7 @@ plot.betaclust <- function(object,what="density",
         ggplot2::geom_density(aes(x=beta_value,color=Patient_Sample))+
         ggplot2::xlab("Beta Value")+
         ggplot2::ylab("Density")+
-        ggplot2::scale_color_manual(values=colours)+
+        ggplot2::scale_color_manual("DNA sample",values=colours)+
         ggplot2::facet_wrap(~Cluster,scales = scale_param
                             # ,labeller = ggplot2::labeller(Cluster= cluster_count_label)
         )+
@@ -97,6 +107,142 @@ plot.betaclust <- function(object,what="density",
         ggplot2::geom_text(x = 0.2, y = 1, ggplot2::aes(label = label), data = f_labels)
 
     }
+
+
+  }
+  if(what=="fitted density")
+  {
+    if(object$optimal_model == "K.." || object$optimal_model == "KN.")
+    {
+        pn=patient_number
+        data_x=sort(object$optimal_model_results$data[,pn])
+        K=object$K
+        prop=object$optimal_model_results$tau
+        data_th_plot<-matrix(data=NA,nrow=1,ncol=3)
+        data_th_plot<-as.data.frame(data_th_plot)
+        colnames(data_th_plot)<-c("beta_value","density","Cluster")
+        alpha=object$optimal_model_results$alpha
+        delta=object$optimal_model_results$delta
+        if(object$optimal_model == "K..")
+        {
+          for(i in 1:K)
+          {
+            beta_value=data_x
+             density=prop[i]*dbeta(data_x,alpha[i],delta[i])
+            Cluster<-rep(i,length(data_x))
+            temp<-cbind(beta_value,density,Cluster)
+            data_th_plot<-rbind(data_th_plot,temp)
+          }
+        }else if(object$optimal_model == "KN.")
+        {
+          for(i in 1:K)
+          {
+            beta_value=data_x
+            density=prop[i]*dbeta(data_x,alpha[i,pn],delta[i,pn])
+            Cluster<-rep(i,length(data_x))
+            temp<-cbind(beta_value,density,Cluster)
+            data_th_plot<-rbind(data_th_plot,temp)
+          }
+        }
+        data_th_plot<-as.data.frame(data_th_plot)
+        data_th_plot<-data_th_plot[-1,]
+        data_th_plot$Cluster<-as.factor(data_th_plot$Cluster)
+        #txt=""
+        #colours<-c("chartreuse3","magenta","cyan3")
+        plot_graph<-ggplot2::ggplot(data_th_plot)+
+          ggplot2::geom_line(ggplot2::aes(beta_value,density,color=Cluster),
+                             linetype = "solid")+
+          ggplot2::labs(x="Beta value",y="Density",title=txt,
+                        color ="Cluster")
+        # +
+        #   ggplot2::scale_color_manual(values=colours)
+        if(K==3)
+        {
+          colours<-c("chartreuse3","magenta","cyan3")
+          plot_graph<-plot_graph+
+            ggplot2::scale_color_manual(values=colours)
+        }
+        p.data <- ggplot2::ggplot_build(plot_graph)$data[[1]]
+
+
+        p.text <- lapply(split(p.data, f = p.data$group), function(df){
+          df[which.max(df$y), ]
+        })
+        p.text <- do.call(rbind, p.text)
+        p.text$prop=prop
+        plot_graph<-plot_graph + ggplot2::annotate('text', x = p.text$x,
+                                                   #y = p.text$y,
+                                                   y=0.2,
+                                                   label = sprintf('%.3f',
+                                                                   p.text$prop),
+                                                   colour=p.text$colour,
+                                                   vjust = 0)
+    }
+    else{
+      vec_C=1001
+      R<-object$R
+      K<-object$K
+      N<-object$N
+      C<-object$C
+      alpha<-object$optimal_model_results$alpha
+      delta<-object$optimal_model_results$delta
+      tau<-object$optimal_model_results$tau
+
+      density_vec<-vector()
+      cluster_vec<-vector()
+      sample_vec<-vector()
+      beta_vec<-vector()
+      vec_x<-seq(0.001, 0.999, length=vec_C)
+      #sample_name<-c("Sample A","Sample B")
+
+      for(i in 1:R)
+      {
+        for(j in 1:K)
+        {
+          #j=1
+          tmp_vec<-sapply(vec_x,function(x) {tau[j]*(dbeta(x,alpha[j,i],delta[j,i]))})
+          beta_vec<-c(beta_vec,vec_x)
+          density_vec<-c(density_vec,tmp_vec)
+          cluster_vec<-c(cluster_vec,rep(j,times=length(tmp_vec)))
+          sample_vec<-c(sample_vec,rep(sample_name[i],times=length(tmp_vec)))
+
+        }
+      }
+
+      df_new_tmp<-as.data.frame(cbind(beta_vec,density_vec,cluster_vec,sample_vec))
+      df_new_tmp$sample_vec<-as.factor(df_new_tmp$sample_vec)
+      df_new_tmp$cluster_vec<-as.factor(df_new_tmp$cluster_vec)
+      df_new_tmp$beta_vec<-as.numeric(df_new_tmp$beta_vec)
+      df_new_tmp$density_vec<-as.numeric(df_new_tmp$density_vec)
+      color_length<-R
+      colours<-scales::seq_gradient_pal(low="#FFC20A",high="#0C7BDC",space = "Lab")(1:color_length/color_length)
+
+      plot_graph<-ggplot2::ggplot(df_new_tmp,ggplot2::aes(x=beta_vec,y=density_vec,color=sample_vec))+
+        ggplot2::geom_line()+
+        ggplot2::scale_color_manual(values=colours)+
+        ggplot2::facet_wrap(~cluster_vec,scales = scale_param
+        )+ ggplot2::labs(color="DNA sample", x="Beta value", y="Density")+
+        ggplot2::ggtitle(txt)
+      f_labels<-data.frame(cluster_vec=as.factor(seq(1,K,by=1)),label=as.vector(round((object$optimal_model_results$cluster_size/object$C),3)))
+      plot_graph<-plot_graph+
+        ggplot2::geom_text(data = f_labels, ggplot2::aes(x = 0.2, y = 0.1,label = label,color=NA),show.legend = F,fontface="bold" )
+
+    }
+
+  }
+  if(threshold==TRUE)
+  {
+    if(object$optimal_model == "K..")
+    {
+      th_plot<-object$optimal_model_results$thresholds
+      ano_th<-object$optimal_model_results$thresholds-.02
+    }else{
+      th_plot<-object$optimal_model_results$thresholds[,pn]
+      ano_th<-object$optimal_model_results$thresholds[,pn]-.02
+    }
+    num=sort(p.text$y)
+    ano_y=num[length(num)]-0.1
+    plot_graph<-plot_graph+ggplot2::geom_vline(xintercept = th_plot,linetype="dotted")+ggplot2::annotate("text",x=ano_th,y=ano_y,label=th_plot,angle=90)
 
 
   }
@@ -115,7 +261,8 @@ plot.betaclust <- function(object,what="density",
       ggplot2::geom_boxplot()+
       ggplot2::theme(axis.text.x=ggplot2::element_blank(),
                      axis.ticks.x=ggplot2::element_blank()
-      )+
+      )+ggplot2::labs(color="Cluster number")+
+      ggplot2::xlab("Cluster number")+
       #ggplot2::theme(legend.position = "none")+
       ggplot2::ggtitle(txt)+
       #ggplot2::ggtitle("Boxplot for uncertainties in clustering solution")+
@@ -126,7 +273,7 @@ plot.betaclust <- function(object,what="density",
 
 
   }
-  if(what == "InformationCriterion")
+  if(what == "information criterion")
   {
     if(length(object$ic_output)>1)
     {

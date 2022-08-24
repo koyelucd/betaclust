@@ -34,7 +34,8 @@ ecdf.betaclust <- function(x, samples=2, sample_name = c("Sample 1","Sample 2"),
   colnames(ecdf_df)[1]<-"beta_value"
   for(i in 1:(col_len))
   {
-    ps_names<-rep(col_names[i],row_len)
+    temp=gsub("_"," ",col_names[i])
+    ps_names<-rep(temp,row_len)
     Patient_sample<-c(Patient_sample,ps_names)
   }
   for(j in 1:samples)
@@ -55,30 +56,33 @@ ecdf.betaclust <- function(x, samples=2, sample_name = c("Sample 1","Sample 2"),
 
 
 
-  if(samples<7)
-  {
+  # if(samples<7)
+  # {
     patient_count<-col_len/samples
     colours<-vector()
-    colours<-c(colours,rep("black",times=patient_count),rep("red",times=patient_count),rep("darkblue",times=patient_count),
-               rep("darkgreen",times=patient_count),rep("yellow",times=patient_count),rep("brown",times=patient_count),
-               rep("lavender",times=patient_count))
-    colours<-colours[1:col_len]
+    # colours<-c(colours,rep("black",times=patient_count),rep("red",times=patient_count),rep("darkblue",times=patient_count),
+    #            rep("darkgreen",times=patient_count),rep("yellow",times=patient_count),rep("brown",times=patient_count),
+    #            rep("lavender",times=patient_count))
+    color_length<-length(sample_name)
+    colours<-scales::seq_gradient_pal(low="#FFC20A",high="#0C7BDC",space = "Lab")(1:color_length/color_length)
+    #colours<-colours[1:col_len]
     pecdf<-ggplot2::ggplot(data_plot, ggplot2::aes(beta_value, colour = Patient_Sample)) +
       ggplot2::stat_ecdf()+
-      ggplot2::scale_color_manual(values=colours)+
+      ggplot2::scale_color_manual("DNA Sample",values=colours)+
       ggplot2::ggtitle(txt)+
       #ggplot2::ggtitle("Empirical Cumulative Distribution Function")+
       ggplot2::xlab("Beta value")+
       ggplot2::ylab("F(Beta value)")
-  }else{
-    pecdf<-ggplot2::ggplot(data_plot, ggplot2::aes(beta_value, colour = Patient_Sample)) +
-      ggplot2::stat_ecdf()+
-      #ggplot2::scale_color_manual(values=colours)+
-      #ggplot2::ggtitle("Empirical Cumulative Distribution Function")+
-      ggplot2::ggtitle(txt)+
-      ggplot2::xlab("Beta value")+
-      ggplot2::ylab("F(Beta value)")
-  }
+  # }else{
+  #   pecdf<-ggplot2::ggplot(data_plot, ggplot2::aes(beta_value, colour = Patient_Sample)) +
+  #     ggplot2::stat_ecdf()+
+  #     ggplot2::labs(color="DNA Sample")+
+  #     #ggplot2::scale_color_manual(values=colours)+
+  #     #ggplot2::ggtitle("Empirical Cumulative Distribution Function")+
+  #     ggplot2::ggtitle(txt)+
+  #     ggplot2::xlab("Beta value")+
+  #     ggplot2::ylab("F(Beta value)")
+  # }
 
 
   pecdf

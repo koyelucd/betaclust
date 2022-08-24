@@ -6,16 +6,19 @@
 \usage{
 \method{plot}{betaclust}(
   object,
-  what = "density",
+  what = "fitted density",
   plot_type = "ggplot",
+  sample_name = c("Sample 1", "Sample 2"),
   title = NULL,
+  patient_number = 1,
+  threshold = FALSE,
   scale_param = "free_y"
 )
 }
 \arguments{
 \item{object}{A betaclust object.}
 
-\item{what}{The different plots that can be obtained are either "density","uncertainty" or "InformationCriterion". (default="density").}
+\item{what}{The different plots that can be obtained are either "fitted density","kernel density","uncertainty" or "information criterion". (default="fitted density").}
 
 \item{plot_type}{The plot type to be displayed are either "ggplot" or "plotly". (default="ggplot").}
 
