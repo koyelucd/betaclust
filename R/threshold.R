@@ -65,7 +65,7 @@ threshold <- function(object,model_name){
   }else{
 
       th_new<-vector(length = 2)
-    for(i in 1:length(object$cluster_size))
+    for(i in 1:(ncol(object$alpha)))
     {
       data_x=sort(object$data[,i])
       mode<-(object$alpha[,i]-1)/(object$alpha[,i]+object$delta[,i]-2)
