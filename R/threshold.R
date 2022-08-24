@@ -63,9 +63,10 @@ threshold <- function(object,model_name){
     th_vec<-c(th_1,th_2)
     th_new1<-unique(round(th_vec,3))
   }else{
+
+      th_new<-vector(length = 2)
     for(i in 1:length(object$cluster_size))
     {
-      th_new<-vector(length = 2)
       data_x=sort(object$data[,i])
       mode<-(object$alpha[,i]-1)/(object$alpha[,i]+object$delta[,i]-2)
       cluster<-c(1,2,3)
