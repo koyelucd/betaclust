@@ -63,7 +63,7 @@ threshold <- function(object,model_name){
     th_vec<-c(th_1,th_2)
     th_new1<-unique(round(th_vec,3))
   }else{
-    for(i in 1:length(object$cluster_count)
+    for(i in 1:length(object$cluster_count))
     {
       th_new<-vector(length = 2)
       data_x=sort(object$data[,i])
