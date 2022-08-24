@@ -18,6 +18,7 @@ plot.betaclust <- function(object,what="fitted density",
                            title=NULL,patient_number=1,
                            threshold=FALSE,scale_param="free_y")
 {
+  pn=patient_number
 
   if(is.null(title))
   {
@@ -114,7 +115,7 @@ plot.betaclust <- function(object,what="fitted density",
   {
     if(object$optimal_model == "K.." || object$optimal_model == "KN.")
     {
-        pn=patient_number
+        
         data_x=sort(object$optimal_model_results$data[,pn])
         K=object$K
         prop=object$optimal_model_results$tau
