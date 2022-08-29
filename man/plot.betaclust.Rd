@@ -22,7 +22,7 @@
 
 \item{plot_type}{The plot type to be displayed are either "ggplot" or "plotly". (default="ggplot").}
 
-\item{sample_name}{The DNA samples in the dataset used for the K.R model.}
+\item{sample_name}{The names of DNA samples in the dataset used for the K.R model. If no value is passed then default values of sample names, for e.g. Sample 1, Sample 2 and so on are used (default=NULL).}
 
 \item{title}{The title that the user wants to display on the graph. If no title is to be displayed the default is "NULL" value.}
 
