@@ -2,27 +2,31 @@
 % Please edit documentation in R/threshold.R
 \name{threshold}
 \alias{threshold}
-\title{Thresholds for K.. and KN. models}
+\title{Thresholds for the K.. and the KN. models}
 \usage{
 threshold(object, model_name)
 }
 \arguments{
-\item{object}{A dataframe containing methylation values of identified differentially methylated regions related to a gene.}
+\item{object}{A beta_k or beta_kn object.}
+
+\item{model_name}{The name of the model for which the thresholds need to be calculated.}
 }
 \value{
-The thresholds calculated for the clustering solution
+The thresholds calculated for the selected model. A vector containing two threshold points are returned for the K.. model whereas a matrix containing two threshold points for each patient is returned for the KN. model.
 }
 \description{
-An empirical cumulative distribution function (ECDF) plot for a betaclust object.
+An objective method to calculate the threshold points for the clustering solution of the K.. and the KN. models.
 }
 \details{
-This function plots the ECDF graphs of the differentially methylated CpG sites identified using the K.R model for all patient samples.
-The graph visualises the methylation profile changes between the different DNA samples for each patient.
+As the K.. model constrains the shape parameters to be equal for all patients, a single pair of threshold points are calculated for all patients. The KN. model allows patient-specific shape parameters which results in a pair of threshold points calculated separately for each patient based on the shape parameters defining the beta values for that patient.
+The first threshold point denotes any beta value less than this value is likely to be hypomethylated.
+The second threshold point denotes any beta value greater than this is highly likely to be hypermethylated.
+A beta value lying between the two threshold points is likely to be hemimethylated.
 }
 \seealso{
-\code{\link{betaclust}}
-
 \code{\link{beta_k}}
 
 \code{\link{beta_kn}}
+
+\code{\link{betaclust}}
 }

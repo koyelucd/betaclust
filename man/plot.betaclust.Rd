@@ -8,7 +8,7 @@
   object,
   what = "fitted density",
   plot_type = "ggplot",
-  sample_name = c("Sample 1", "Sample 2"),
+  sample_name,
   title = NULL,
   patient_number = 1,
   threshold = FALSE,
@@ -22,7 +22,13 @@
 
 \item{plot_type}{The plot type to be displayed are either "ggplot" or "plotly". (default="ggplot").}
 
+\item{sample_name}{The DNA samples in the dataset used for the K.R model.}
+
 \item{title}{The title that the user wants to display on the graph. If no title is to be displayed the default is "NULL" value.}
+
+\item{patient_number}{The column number representing the patient in the patient-wise ordered dataset selected for visualizing the clustering solution of the KN. model. (default = 1)}
+
+\item{threshold}{The "TRUE" option displays the threshold points in the graph for the K.. and the KN. model. (default="FALSE")}
 
 \item{scale_param}{The axis that needs to be fixed for density estimates plot for visualizing the K.R clustering solution are either "free_y","free_x" or "free". (default = "free_y").}
 }
@@ -30,9 +36,11 @@
 This function helps visualise the clustering solution by plotting the density estimates, the uncertainty and the information criterion.
 }
 \details{
-The density estimates under the optimal clustering solution by specifying what = "density" in the function. Interactive plots can also be produced using
- plot_type = "plotly". The uncertainty in the clustering solution can be plotted using what="uncertainty".
-The information criterion values for all fitted models can be plotted using what = "InformationCriterion".
+The fitted density estimates under the optimal clustering solution by specifying what = "fitted density" in the
+ function and kernel density estimates under the optimal clustering solution by specifying what = "kernel density". The threshold inferred can be visualized by specifying threshold=TRUE.
+ The KN. model calculates different pairs of threshold points for each patient as the shape parameters are allowed to vary for each patient. So the patient for whom the threshold needs to be displayed can be specified by inputting the column number representing the patient in the patient-wise ordered dataset in the parameter patient_number.
+ Interactive plots can also be produced using plot_type = "plotly". The uncertainty in the clustering solution can be plotted using what="uncertainty".
+ The information criterion values for all fitted models can be plotted using what = "information criterion".
 }
 \seealso{
 \code{\link{betaclust}}

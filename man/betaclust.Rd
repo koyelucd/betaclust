@@ -53,7 +53,7 @@ The function returns an object of "betaclust" class which contains the following
    \item tau - the proportion of CpG sites in each cluster.
    \item z - a matrix containing the probability for each CpG site of belonging to each of the \eqn{K} clusters.
    \item uncertainty - the uncertainty of each CpG site's clustering.
-   \item thresholds - threshold points calculated for K.. or KN. model
+   \item thresholds - threshold points calculated for the K.. or the KN. model
    }
 }
 }
@@ -99,4 +99,6 @@ data_output=betaclust(pca.methylation.data[,2:9],M,patients,samples,
 \code{\link{plot.betaclust}}
 
 \code{\link{summary.betaclust}}
+
+\code{\link{threshold}}
 }

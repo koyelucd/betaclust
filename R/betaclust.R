@@ -14,6 +14,7 @@
 #' @seealso \code{\link{pca.methylation.data}}
 #' @seealso \code{\link{plot.betaclust}}
 #' @seealso \code{\link{summary.betaclust}}
+#' @seealso \code{\link{threshold}}
 #'
 #' @param data Methylation values for \eqn{C} CpG sites from \eqn{R} samples collected from \eqn{N} patients.
 #' @param M Number of methylation profiles to be identified in a DNA sample.
@@ -44,7 +45,7 @@
 #'    \item tau - the proportion of CpG sites in each cluster.
 #'    \item z - a matrix containing the probability for each CpG site of belonging to each of the \eqn{K} clusters.
 #'    \item uncertainty - the uncertainty of each CpG site's clustering.
-#'    \item thresholds - threshold points calculated for K.. or KN. model
+#'    \item thresholds - threshold points calculated for the K.. or the KN. model
 #'    }
 #' }
 #'

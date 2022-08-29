@@ -34,7 +34,8 @@ Fit the KN. model from the family of beta mixture models for DNA methylation dat
 \details{
 This model clusters each of the \eqn{C} CpG sites into one of \eqn{K} methylation profiles, based on data from \eqn{N} patients for one DNA sample (i.e. \eqn{R=1}).
 As each CpG site can belong to either of the \eqn{M=3} methylation profiles (hypomethylated, hemimethylated or hypermethylated), the default value of \eqn{K=M=3}.
-The KN. model differs from the C.. model as it is less parsimonious, allowing cluster and patient-specific shape parameters.
+The KN. model differs from the C.. model as it is less parsimonious, allowing cluster and patient-specific shape parameters.The return object from this function can be passed as an input parameter to the
+\strong{\emph{threshold}} function available in this package to calculate the thresholds for the methylation states.
 }
 \examples{
 \dontrun{
@@ -42,6 +43,7 @@ data(pca.methylation.data)
 my.seed=190
 M=3
 data_output=beta_kn(pca.methylation.data[,2:5],M,seed=my.seed)
+thresholds=threshold(data_output,"KN.")
 }
 }
 \references{
@@ -51,4 +53,6 @@ data_output=beta_kn(pca.methylation.data[,2:5],M,seed=my.seed)
 \code{\link{beta_k}}
 
 \code{\link{betaclust}}
+
+\code{\link{threshold}}
 }
