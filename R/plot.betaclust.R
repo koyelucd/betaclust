@@ -19,7 +19,7 @@
 #' @importFrom  plotly ggplotly
 
 plot.betaclust <- function(object,what="fitted density",
-                           plot_type="ggplot",sample_name,
+                           plot_type="ggplot",sample_name=NULL,
                            title=NULL,patient_number=1,
                            threshold=FALSE,scale_param="free_y")
 {

@@ -15,7 +15,7 @@
 #' @importFrom ggplot2 ggplot aes
 #' @importFrom  plotly ggplotly
 
-ecdf.betaclust <- function(x, samples=2, sample_name,title=NULL){
+ecdf.betaclust <- function(x, samples=2, sample_name=NULL,title=NULL){
 
   if(is.null(title))
   {

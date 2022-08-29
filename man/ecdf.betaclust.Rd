@@ -4,7 +4,7 @@
 \alias{ecdf.betaclust}
 \title{The empirical cumulative distribution function}
 \usage{
-ecdf.betaclust(x, samples = 2, sample_name, title = NULL)
+ecdf.betaclust(x, samples = 2, sample_name = NULL, title = NULL)
 }
 \arguments{
 \item{x}{A dataframe containing methylation values of identified differentially methylated regions related to a gene.

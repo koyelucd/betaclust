@@ -8,7 +8,7 @@
   object,
   what = "fitted density",
   plot_type = "ggplot",
-  sample_name,
+  sample_name = NULL,
   title = NULL,
   patient_number = 1,
   threshold = FALSE,
