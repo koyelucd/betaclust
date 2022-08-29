@@ -10,7 +10,7 @@
 #' @param object A betaclust object.
 #' @param what The different plots that can be obtained are either "fitted density","kernel density","uncertainty" or "information criterion". (default="fitted density").
 #' @param plot_type The plot type to be displayed are either "ggplot" or "plotly". (default="ggplot").
-#' @param sample_name The DNA samples in the dataset used for the K.R model.
+#' @param sample_name The names of DNA samples in the dataset used for the K.R model. If no value is passed then default values of sample names, for e.g. Sample 1, Sample 2 and so on are used (default=NULL).
 #' @param title The title that the user wants to display on the graph. If no title is to be displayed the default is "NULL" value.
 #' @param patient_number The column number representing the patient in the patient-wise ordered dataset selected for visualizing the clustering solution of the KN. model. (default = 1)
 #' @param threshold The "TRUE" option displays the threshold points in the graph for the K.. and the KN. model. (default="FALSE")

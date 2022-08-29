@@ -6,7 +6,7 @@
 #' @param x A dataframe containing methylation values of identified differentially methylated regions related to a gene.
 #' Group each sample together in the dataframe such that the columns are ordered as Sample1_Patient1, Sample1_Patient2, Sample2_Patient1, Sample2_Patient2.
 #' @param samples number of tissue samples from which DNA methylation data are collected (default samples = 2).
-#' @param sample_name The order in which the samples are grouped in the dataframe x.
+#' @param sample_name The order in which the samples are grouped in the dataframe x. If no value is passed then default values of sample names, for e.g. Sample 1, Sample 2 and so on are used (default=NULL).
 #' @param title The title that the user wants to display on the graph. If no title is to be displayed the default is "NULL" value.
 #' @return The ECDF plot for the selected CpG sites for all patients and their DNA samples.
 #'
