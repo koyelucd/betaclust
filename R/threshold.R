@@ -68,6 +68,7 @@ threshold <- function(object,model_name){
   }else{
 
     th_new<-vector(length = 2)
+    col_th<-vector(length = 1)
     for(i in 1:(ncol(object$alpha)))
     {
       data_x=sort(object$data[,i])
@@ -83,9 +84,11 @@ threshold <- function(object,model_name){
       th_vec<-c(th_1,th_2)
       th_new1<-unique(round(th_vec,3))
       th_new<-cbind(th_new,th_new1)
+      col_th<-c(col_th,paste0("Patient ",i))
     }
     th_new1<-th_new[,-1]
-    colnames(th_new1)<-c("Cluster 1","Cluster 2","Cluster 3")
+    col_th<-col_th[-1]
+    colnames(th_new1)<-col_th
   }
   return(th_new1)
 }
