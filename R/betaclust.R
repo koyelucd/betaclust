@@ -16,16 +16,16 @@
 #' @seealso \code{\link{summary.betaclust}}
 #' @seealso \code{\link{threshold}}
 #'
-#' @param data Methylation values for \eqn{C} CpG sites from \eqn{R} samples collected from \eqn{N} patients.
+#' @param data A dataframe of dimension \eqn{C*NR} containing methylation values for \eqn{C} CpG sites from \eqn{R} samples collected from \eqn{N} patients.
+#' Samples are grouped together in the dataframe such that the columns are ordered as Sample1_Patient1, Sample1_Patient2, Sample2_Patient1, Sample2_Patient2, etc.
 #' @param M Number of methylation states to be identified in a DNA sample.
-#' @param patients Number of patients in the study.
-#' @param samples Number of samples collected from each patient for the study.
+#' @param N Number of patients in the study.
+#' @param R Number of samples collected from each patient for the study.
 #' @param model_names Models to run from the set of models, K.., KN. and K.R, default = K.. . See details.
 #' @param model_selection Information criterion used for model selection. Options are AIC/BIC/ICL/default = BIC.
-#' @param seed Seed to allow for reproducibility.
-#' @param register Setting for registering the parallel backend with the "foreach" package. To start parallel execution of R code on machine with multiple cores, "NULL" value needs to be assigned to this parameter.
+#' @param seed Seed to allow for reproducibility (default = NULL).
 #'
-#' @return The function returns an object of "betaclust" class which contains the following values:
+#' @return The function returns an object of \code{\link[betaclust:betaclust]{betaclust}} class which contains the following values:
 #' \itemize{
 #' \item information_criterion - the information criterion used to select the optimal model.
 #' \item ic_output - this stores the information criterion value calculated for each model.
@@ -37,15 +37,15 @@
 #' \item R - the number of samples analysed using the beta mixture models.
 #' \item optimal_model_results - this contains information from the optimal model. Specifically,
 #'    \itemize{
-#'    \item cluster_size - the total number of CpG sites identified in each of the K clusters.
+#'    \item cluster_size - the total number of CpG sites in each of the K clusters.
 #'    \item llk - a vector containing the log-likelihood value at each step of the EM algorithm.
 #'    \item data - this contains the methylation dataset along with the cluster label for each CpG site.
 #'    \item alpha - this contains the first shape parameter for the beta mixture model.
 #'    \item delta - this contains the second shape parameter for the beta mixture model.
 #'    \item tau - the proportion of CpG sites in each cluster.
-#'    \item z - a matrix containing the probability for each CpG site of belonging to each of the \eqn{K} clusters.
+#'    \item z - a matrix of dimension \eqn{C*K} containing the posterior probability of each CpG site belonging to each of the \eqn{K} clusters.
 #'    \item uncertainty - the uncertainty of each CpG site's clustering.
-#'    \item thresholds - threshold points calculated for the K.. or the KN. model
+#'    \item thresholds - threshold points calculated under the K.. or the KN. model
 #'    }
 #' }
 #'
@@ -54,9 +54,9 @@
 #' data(pca.methylation.data)
 #' my.seed = 190
 #' M = 3
-#' patients = 4
-#' samples = 2
-#' data_output = betaclust(pca.methylation.data[,2:9],M,patients,samples,
+#' N = 4
+#' R = 2
+#' data_output = betaclust(pca.methylation.data[,2:9],M,N,R,
 #'             model_names = c("K..","KN.","K.R"),model_selection = "BIC",seed = my.seed)
 #' }
 #'
@@ -66,10 +66,9 @@
 #' @importFrom utils txtProgressBar
 #' @references {Silva, R., Moran, B., Russell, N.M., Fahey, C., Vlajnic, T., Manecksha, R.P., Finn, S.P., Brennan, D.J., Gallagher, W.M., Perry, A.S.: Evaluating liquid biopsies for methylomic profiling of prostate cancer. Epigenetics 15(6-7), 715-727 (2020). doi:10.1080/15592294.2020.1712876.}
 #' @references {Majumdar, K., Silva, R., Perry, A.S., Watson, R.W., Murphy, T.B., Gormley, I.C.: betaclust: a family of mixture models for beta valued DNA methylation data.}
-#' @references {Microsoft, Weston, S. (2022): foreach: Provides Foreach Looping Construct. R package version 1.5.2. https://CRAN.R-project.org/package=foreach.}
 
 
-betaclust<-function(data,M=3,patients,samples,model_names="K..",model_selection="BIC",seed,register=NULL){
+betaclust<-function(data,M=3,N,R,model_names="K..",model_selection="BIC",seed=NULL){
 
   X=data
   len=length(model_names)
@@ -96,16 +95,16 @@ betaclust<-function(data,M=3,patients,samples,model_names="K..",model_selection=
       if(model_names[i] == "K..")
       {
         #print(model_names[i])
-        ## check if samples>1
-        if(samples>1)
+        ## check if R>1
+        if(R>1)
         {
           warning("K.. model only considers a single sample and not multiple samples.
                   Model is fitted to 1st sample only.", call. = FALSE)
         }
 
-        call_data=X[,1:patients]
+        call_data=X[,1:N]
         #print(call_data[1:4,])
-        k_out<-beta_k(call_data,M,seed,register)
+        k_out<-beta_k(call_data,M,seed)
         len_llk<-length(k_out$llk)
         llk<-c(llk,k_out$llk[len_llk])
         z[[i]]<-k_out$z
@@ -115,12 +114,12 @@ betaclust<-function(data,M=3,patients,samples,model_names="K..",model_selection=
       ## Call for KN. function
       if(model_names[i] == "KN.")
       {
-        ## check if samples>1
-        if(samples>1)
+        ## check if R>1
+        if(R>1)
           warning("KN. model only considers a single sample and not multiple samples.
                   Model is fitted to 1st sample only.", call. = FALSE)
-        call_data<-X[,1:patients]
-        kn_out<-beta_kn(call_data,M,seed,register)
+        call_data<-X[,1:N]
+        kn_out<-beta_kn(call_data,M,seed)
         len_llk<-length(kn_out$llk)
         llk<-c(llk,kn_out$llk[len_llk])
         z[[i]]<-kn_out$z
@@ -130,12 +129,12 @@ betaclust<-function(data,M=3,patients,samples,model_names="K..",model_selection=
       ## Call for K.R function
       if(model_names[i] == "K.R")
       {
-        ## check if samples>1
-        if(samples<=1){
+        ## check if R>1
+        if(R<=1){
           warning("K.R considers only multiple samples. Please pass DNA methylation values for more than 1 sample.", call. = FALSE)
           llk<-c(llk,NA)
         }else {
-          kr_out<-beta_kr(X,M,patients,samples,seed,register)
+          kr_out<-beta_kr(X,M,N,R,seed)
           len_llk<-length(kr_out$llk)
           llk<-c(llk,kr_out$llk[len_llk])
           z[[i]]<-kr_out$z
@@ -157,48 +156,48 @@ betaclust<-function(data,M=3,patients,samples,model_names="K..",model_selection=
   if(model_selection=="BIC")
   {
     ## compare bic value
-    ic_op<-em_bic(llk,C,M,patients,samples,model_names)
+    ic_op<-em_bic(llk,C,M,N,R,model_names)
     min_index<-which.min(ic_op)
     min_method<-model_names[min_index]
 
   }else if(model_selection=="AIC")
   {
     ## compare aic value
-    ic_op<-em_aic(llk,C,M,patients,samples,model_names)
+    ic_op<-em_aic(llk,C,M,N,R,model_names)
     min_index<-which.min(ic_op)
     min_method<-model_names[min_index]
   }else if(model_selection=="ICL")
   {
     ## compare icl value
-    ic_op<-em_icl(llk,C,M,patients,samples,model_names,z)
+    ic_op<-em_icl(llk,C,M,N,R,model_names,z)
     min_index<-which.min(ic_op)
     min_method<-model_names[min_index]
   }
 
   call_function<-match.call()
 
-  N=patients
+  #N=patients
   R=0
   K=0
   if(min_method=="K..")
   {
     final_output<-k_out
     thresholds<-threshold(k_out,min_method)
-    final_output$thresholds<-thresholds
+    final_output$thresholds<-thresholds$thresholds
     K=M
     R=1
   }else if(min_method=="KN.")
   {
     final_output<-kn_out
     thresholds<-threshold(kn_out,min_method)
-    final_output$thresholds<-thresholds
+    final_output$thresholds<-thresholds$thresholds
     K=M
     R=1
   }else if(min_method=="K.R")
   {
     final_output<-kr_out
-    K=M^samples
-    R=samples
+    K=M^R
+    #R=samples
   }
 
 

@@ -2,17 +2,17 @@
 % Please edit documentation in R/ecdf.betaclust.R
 \name{ecdf.betaclust}
 \alias{ecdf.betaclust}
-\title{The empirical cumulative distribution function}
+\title{The empirical cumulative distribution function plot}
 \usage{
-ecdf.betaclust(x, samples = 2, sample_name = NULL, title = NULL)
+ecdf.betaclust(x, R = 2, sample_name = NULL, title = NULL)
 }
 \arguments{
 \item{x}{A dataframe containing methylation values of identified differentially methylated regions related to a gene.
-Group each sample together in the dataframe such that the columns are ordered as Sample1_Patient1, Sample1_Patient2, Sample2_Patient1, Sample2_Patient2.}
+Samples are grouped together in the dataframe such that the columns are ordered as Sample1_Patient1, Sample1_Patient2, Sample2_Patient1, Sample2_Patient2, etc.}
 
-\item{samples}{number of tissue samples from which DNA methylation data are collected (default samples = 2).}
+\item{R}{number of tissue samples from which DNA methylation data are collected (default R = 2).}
 
-\item{sample_name}{The order in which the samples are grouped in the dataframe x. If no value is passed then default values of sample names, for e.g. Sample 1, Sample 2 and so on are used (default = NULL).}
+\item{sample_name}{The order in which the samples are grouped in the dataframe x. If no value is specified then default values of sample names, e.g. Sample 1, Sample 2, etc are used (default = NULL).}
 
 \item{title}{The title that the user wants to display on the graph. If no title is to be displayed the default is "NULL" value.}
 }
@@ -23,8 +23,8 @@ The ECDF plot for the selected CpG sites for all patients and their DNA samples.
 An empirical cumulative distribution function (ECDF) plot for a betaclust object.
 }
 \details{
-This function plots the ECDF graphs of the differentially methylated CpG sites identified using the K.R model for all patient samples.
-The graph visualises the methylation state changes between the different DNA samples for each patient.
+This function plots the ECDF of the differentially methylated CpG sites identified using the K.R model for all patient samples.
+The plot visualises the methylation state changes between the different DNA samples for each patient.
 }
 \seealso{
 \code{\link{betaclust}}

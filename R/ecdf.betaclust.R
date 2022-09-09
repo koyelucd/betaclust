@@ -1,12 +1,12 @@
-#' @title The empirical cumulative distribution function
+#' @title The empirical cumulative distribution function plot
 #' @description An empirical cumulative distribution function (ECDF) plot for a betaclust object.
-#' @details This function plots the ECDF graphs of the differentially methylated CpG sites identified using the K.R model for all patient samples.
-#' The graph visualises the methylation state changes between the different DNA samples for each patient.
+#' @details This function plots the ECDF of the differentially methylated CpG sites identified using the K.R model for all patient samples.
+#' The plot visualises the methylation state changes between the different DNA samples for each patient.
 #' @export
 #' @param x A dataframe containing methylation values of identified differentially methylated regions related to a gene.
-#' Group each sample together in the dataframe such that the columns are ordered as Sample1_Patient1, Sample1_Patient2, Sample2_Patient1, Sample2_Patient2.
-#' @param samples number of tissue samples from which DNA methylation data are collected (default samples = 2).
-#' @param sample_name The order in which the samples are grouped in the dataframe x. If no value is passed then default values of sample names, for e.g. Sample 1, Sample 2 and so on are used (default = NULL).
+#' Samples are grouped together in the dataframe such that the columns are ordered as Sample1_Patient1, Sample1_Patient2, Sample2_Patient1, Sample2_Patient2, etc.
+#' @param R number of tissue samples from which DNA methylation data are collected (default R = 2).
+#' @param sample_name The order in which the samples are grouped in the dataframe x. If no value is specified then default values of sample names, e.g. Sample 1, Sample 2, etc are used (default = NULL).
 #' @param title The title that the user wants to display on the graph. If no title is to be displayed the default is "NULL" value.
 #' @return The ECDF plot for the selected CpG sites for all patients and their DNA samples.
 #'
@@ -15,7 +15,7 @@
 #' @importFrom ggplot2 ggplot aes
 #' @importFrom  plotly ggplotly
 
-ecdf.betaclust <- function(x, samples=2, sample_name=NULL,title=NULL){
+ecdf.betaclust <- function(x, R=2, sample_name=NULL,title=NULL){
 
   if(is.null(title))
   {
@@ -25,7 +25,7 @@ ecdf.betaclust <- function(x, samples=2, sample_name=NULL,title=NULL){
   }
   if(is.null(sample_name))
   {
-    sample_name=sapply(1:samples, function(x) paste0("Sample ",x))
+    sample_name=sapply(1:R, function(x) paste0("Sample ",x))
   }
   col_len<-ncol(x)
   row_len<-nrow(x)
@@ -42,9 +42,9 @@ ecdf.betaclust <- function(x, samples=2, sample_name=NULL,title=NULL){
     ps_names<-rep(temp,row_len)
     Patient_sample<-c(Patient_sample,ps_names)
   }
-  for(j in 1:samples)
+  for(j in 1:R)
   {
-    for(i in 1:(col_len/samples))
+    for(i in 1:(col_len/R))
     {
       samp_names<-rep(sample_name[j],row_len)
       Samples<-c(Samples,samp_names)
@@ -60,9 +60,9 @@ ecdf.betaclust <- function(x, samples=2, sample_name=NULL,title=NULL){
 
 
 
-   if(samples<3)
+   if(R<3)
    {
-    patient_count<-col_len/samples
+    patient_count<-col_len/R
     colours<-vector()
     color_length<-length(sample_name)
     colors<-scales::seq_gradient_pal(low="#FFC20A",high="#0C7BDC",space = "Lab")(1:color_length/color_length)
@@ -75,8 +75,8 @@ ecdf.betaclust <- function(x, samples=2, sample_name=NULL,title=NULL){
       #ggplot2::ggtitle("Empirical Cumulative Distribution Function")+
       ggplot2::xlab("Beta value")+
       ggplot2::ylab("F(Beta value)")
-   }else if(samples>2 & samples<7){
-     patient_count<-col_len/samples
+   }else if(R>2 & R<7){
+     patient_count<-col_len/R
      colours<-vector()
      colours<-c(colours,rep("black",times=patient_count),rep("red",times=patient_count),rep("darkblue",times=patient_count),
                 rep("darkgreen",times=patient_count),rep("yellow",times=patient_count),rep("brown",times=patient_count),

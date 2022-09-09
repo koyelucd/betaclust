@@ -1,20 +1,20 @@
-#' @title DNA methylation dataset of patients suffering from prostate cancer disease.
+#' @title DNA methylation data from patients with prostate cancer disease.
 #'
-#' @description The dataset contains pre-processed beta methylation values from \eqn{R=2} sample, collected from \eqn{N=4} patients suffering from prostate cancer disease.
+#' @description The dataset contains pre-processed beta methylation values from \eqn{R=2} sample, collected from \eqn{N=4} patients with prostate cancer disease.
 #'
-#' @details The raw methylation array data was first quality controlled and preprocessed using the RnBeads package. The array data was then normalized and and probes located outside of CpG sites and on the sex chromosome were filtered out. The CpG sites with missing values were removed from the resulting dataset.
+#' @details The raw methylation array data was first quality controlled and preprocessed using the \code{\link[RnBeads]{RnBeads}} package. The array data were then normalized and and probes located outside of CpG sites and on the sex chromosome were filtered out. The CpG sites with missing values were removed from the resulting dataset.
 #' @seealso \code{\link{legacy.data}}
-#' @format A data frame with 694,820 rows and 9 columns. The data contains no missing values.
+#' @format A data frame with 694,820 rows and 9 columns. The data contain no missing values.
 #' \itemize{
 #'   \item{IlmnID: the unique identifier from the Illumina CG database, i.e. the probe ID.}
-#'   \item{Benign_Patient_1: the methylation values from benign prostate tissue collected from patient 1.}
-#'   \item{Benign_Patient_2: the methylation values from benign prostate tissue collected from patient 2.}
-#'   \item{Benign_Patient_3: the methylation values from benign prostate tissue collected from patient 3.}
-#'   \item{Benign_Patient_4: the methylation values from benign prostate tissue collected from patient 4.}
-#'   \item{Tumour_Patient_1: the methylation values from tumor prostate tissue collected from patient 1.}
-#'   \item{Tumour_Patient_2: the methylation values from tumor prostate tissue collected from patient 2.}
-#'   \item{Tumour_Patient_3: the methylation values from tumor prostate tissue collected from patient 3.}
-#'   \item{Tumour_Patient_4: the methylation values from tumor prostate tissue collected from patient 4.}
+#'   \item{Benign_Patient_1: methylation values from benign prostate tissue from patient 1.}
+#'   \item{Benign_Patient_2: methylation values from benign prostate tissue from patient 2.}
+#'   \item{Benign_Patient_3: methylation values from benign prostate tissue from patient 3.}
+#'   \item{Benign_Patient_4: methylation values from benign prostate tissue from patient 4.}
+#'   \item{Tumour_Patient_1: methylation values from tumor prostate tissue from patient 1.}
+#'   \item{Tumour_Patient_2: methylation values from tumor prostate tissue from patient 2.}
+#'   \item{Tumour_Patient_3: methylation values from tumor prostate tissue from patient 3.}
+#'   \item{Tumour_Patient_4: methylation values from tumor prostate tissue from patient 4.}
 #'    }
 #' @references {Mueller F, Scherer M, Assenov Y, Lutsik P, Walter J, Lengauer T, Bock C (2019). “RnBeads 2.0: comprehensive analysis of DNA methylation data.” Genome Biology, 20(55). doi: 10.1186/s13059-019-1664-9, https://rnbeads.org.}
 #' @references {Assenov Y, Mueller F, Lutsik P, Walter J, Lengauer T, Bock C (2014). “Compehensive Analysis of DNA Methylation Data with RnBeads.” Nature Methods, 11(11), 1138–1140. doi: 10.1038/nmeth.3115, https://rnbeads.org.}

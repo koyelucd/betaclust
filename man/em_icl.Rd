@@ -4,7 +4,7 @@
 \alias{em_icl}
 \title{Integrated Complete-data Likelihood (ICL) Criterion}
 \usage{
-em_icl(llk, C, M, patients = 4, samples = 1, model_name = "K..", z)
+em_icl(llk, C, M, N, R, model_name = "K..", z)
 }
 \arguments{
 \item{llk}{log-likelihood value.}
@@ -13,13 +13,13 @@ em_icl(llk, C, M, patients = 4, samples = 1, model_name = "K..", z)
 
 \item{M}{number of methylation states identified in a DNA sample.}
 
-\item{patients}{number of patients.}
+\item{N}{number of patients.}
 
-\item{samples}{number of DNA samples collected from each patient.}
+\item{R}{number of DNA samples collected from each patient.}
 
-\item{model_name}{fitted mixture model (method = c("K..","KN.","K.R")).}
+\item{model_name}{fitted mixture model (model_name = c("K..","KN.","K.R")).}
 
-\item{z}{matrix containing the probability for each CpG site of belonging to each of the K clusters.}
+\item{z}{a matrix of posterior probability of cluster membership, stored as z in the object from \code{\link[betaclust]{beta_k}}/\code{\link[betaclust]{beta_kn}}/\code{\link[betaclust]{beta_kr}} functions.}
 }
 \value{
 The ICL value for the selected model.
@@ -28,7 +28,7 @@ The ICL value for the selected model.
 Compute the ICL value for the optimal model.
 }
 \details{
-Computes the ICL for a specified model given the log-likelihood, the dimension of the data, and the model specification. This criterion penalises the BIC by including the entropy term favouring the
+Computes the ICL for a specified model given the log-likelihood, the dimension of the data, and the model specification. This criterion penalises the BIC by including an entropy term favouring the
 well separated clusters.
 }
 \seealso{

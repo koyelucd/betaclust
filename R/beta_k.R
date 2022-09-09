@@ -1,33 +1,33 @@
 #' @title The K.. model
 #' @description Fit the K.. model from the family of beta mixture models for DNA methylation data.
-#'              The K.. model analyses a single DNA sample and identifies the thresholds for the different methylation states.
+#'              The K.. model analyses a single DNA sample and identifies the thresholds between the different methylation states.
 #'
 #' @export
 #'
-#' @details This model clusters each of the \eqn{C} CpG sites into one of \eqn{K} methylation states, based on data from \eqn{N} patients for one DNA sample (i.e. \eqn{R = 1}).
+#' @details The K.. model clusters each of the \eqn{C} CpG sites into one of \eqn{K} methylation states, based on data from \eqn{N} patients for one DNA sample (i.e. \eqn{R = 1}).
 #' As each CpG site can belong to either of the \eqn{M = 3} methylation states (hypomethylated, hemimethylated or hypermethylated), the default value of \eqn{K = M = 3}.
-#' Under the K.. model the shape parameters of each cluster are constrained to be equal for each patient. The return object from this function can be passed as an input parameter to the
-#' \strong{\emph{threshold}} function available in this package to calculate the thresholds for the methylation states.
+#' Under the K.. model the shape parameters of each cluster are constrained to be equal for each patient. The returned object from this function can be passed as an input parameter to the
+#' \code{\link[betaclust:threshold]{threshold}} function available in this package to calculate the thresholds between the methylation states.
 #'
 #' @seealso \code{\link{beta_kn}}
 #' @seealso \code{\link{betaclust}}
 #' @seealso \code{\link{threshold}}
 #'
-#' @param data Methylation values for \eqn{C} CpG sites from \eqn{R = 1} samples collected from \eqn{N} patients.
+#' @param data A dataframe of dimension \eqn{C*N} containing methylation values for \eqn{C} CpG sites from \eqn{R = 1} sample collected from \eqn{N} patients.
+#' Samples are grouped together in the dataframe such that the columns are ordered as Sample1_Patient1, Sample1_Patient2, etc.
 #' @param M Number of methylation states to be identified in a DNA sample.
-#' @param seed Seed to allow for reproducibility. (default = NULL)
-#' @param register Setting for registering the parallel backend with the "foreach" package. To start parallel execution of R code on machine with multiple cores, "NULL" value needs to be assigned to this parameter.
+#' @param seed Seed to allow for reproducibility (default = NULL).
 #'
 #'
 #' @return A list containing:
 #' \itemize{
-#'    \item cluster_size - the total number of CpG sites identified in each of the K clusters.
+#'    \item cluster_size - the total number of CpG sites in each of the K clusters.
 #'    \item llk - a vector containing the log-likelihood value at each step of the EM algorithm.
 #'    \item data - this contains the methylation dataset along with the cluster label for each CpG site.
 #'    \item alpha - this contains the first shape parameter for the beta mixture model.
 #'    \item delta - this contains the second shape parameter for the beta mixture model.
 #'    \item tau - the proportion of CpG sites in each cluster.
-#'    \item z - a matrix containing the probability for each CpG site of belonging to each of the \eqn{K} clusters.
+#'    \item z - a matrix of dimension \eqn{C*K} containing the posterior probability of each CpG site belonging to each of the \eqn{K} clusters.
 #'    \item uncertainty - the uncertainty of each CpG site's clustering.    }
 #'
 #' @examples
@@ -41,10 +41,9 @@
 #' @importFrom foreach %dopar%
 #' @importFrom stats C
 #' @importFrom utils txtProgressBar
-#' @references {Microsoft, Weston, S. (2022): foreach: Provides Foreach Looping Construct. R package version 1.5.2. https://CRAN.R-project.org/package=foreach.}
 
 
-beta_k<-function(data,M=3,seed = NULL,register=NULL){
+beta_k<-function(data,M=3,seed = NULL){
 
 
   ######### K.. Model ##########
@@ -52,6 +51,7 @@ beta_k<-function(data,M=3,seed = NULL,register=NULL){
 
 
   ## select the # of cores on which the parallel code is to run
+  register=NULL
   if(is.null(register)){
     ncores = parallel::detectCores()
     my.cluster <- parallel::makeCluster(ncores-1)

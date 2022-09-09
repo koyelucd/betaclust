@@ -4,38 +4,37 @@
 \alias{beta_k}
 \title{The K.. model}
 \usage{
-beta_k(data, M = 3, seed = NULL, register = NULL)
+beta_k(data, M = 3, seed = NULL)
 }
 \arguments{
-\item{data}{Methylation values for \eqn{C} CpG sites from \eqn{R = 1} samples collected from \eqn{N} patients.}
+\item{data}{A dataframe of dimension \eqn{C*N} containing methylation values for \eqn{C} CpG sites from \eqn{R = 1} sample collected from \eqn{N} patients.
+Samples are grouped together in the dataframe such that the columns are ordered as Sample1_Patient1, Sample1_Patient2, etc.}
 
 \item{M}{Number of methylation states to be identified in a DNA sample.}
 
-\item{seed}{Seed to allow for reproducibility. (default = NULL)}
-
-\item{register}{Setting for registering the parallel backend with the "foreach" package. To start parallel execution of R code on machine with multiple cores, "NULL" value needs to be assigned to this parameter.}
+\item{seed}{Seed to allow for reproducibility (default = NULL).}
 }
 \value{
 A list containing:
 \itemize{
-   \item cluster_size - the total number of CpG sites identified in each of the K clusters.
+   \item cluster_size - the total number of CpG sites in each of the K clusters.
    \item llk - a vector containing the log-likelihood value at each step of the EM algorithm.
    \item data - this contains the methylation dataset along with the cluster label for each CpG site.
    \item alpha - this contains the first shape parameter for the beta mixture model.
    \item delta - this contains the second shape parameter for the beta mixture model.
    \item tau - the proportion of CpG sites in each cluster.
-   \item z - a matrix containing the probability for each CpG site of belonging to each of the \eqn{K} clusters.
+   \item z - a matrix of dimension \eqn{C*K} containing the posterior probability of each CpG site belonging to each of the \eqn{K} clusters.
    \item uncertainty - the uncertainty of each CpG site's clustering.    }
 }
 \description{
 Fit the K.. model from the family of beta mixture models for DNA methylation data.
-             The K.. model analyses a single DNA sample and identifies the thresholds for the different methylation states.
+             The K.. model analyses a single DNA sample and identifies the thresholds between the different methylation states.
 }
 \details{
-This model clusters each of the \eqn{C} CpG sites into one of \eqn{K} methylation states, based on data from \eqn{N} patients for one DNA sample (i.e. \eqn{R = 1}).
+The K.. model clusters each of the \eqn{C} CpG sites into one of \eqn{K} methylation states, based on data from \eqn{N} patients for one DNA sample (i.e. \eqn{R = 1}).
 As each CpG site can belong to either of the \eqn{M = 3} methylation states (hypomethylated, hemimethylated or hypermethylated), the default value of \eqn{K = M = 3}.
-Under the K.. model the shape parameters of each cluster are constrained to be equal for each patient. The return object from this function can be passed as an input parameter to the
-\strong{\emph{threshold}} function available in this package to calculate the thresholds for the methylation states.
+Under the K.. model the shape parameters of each cluster are constrained to be equal for each patient. The returned object from this function can be passed as an input parameter to the
+\code{\link[betaclust:threshold]{threshold}} function available in this package to calculate the thresholds between the methylation states.
 }
 \examples{
 \dontrun{
@@ -45,9 +44,6 @@ M = 3
 data_output = beta_k(pca.methylation.data[,2:5],M,seed = my.seed)
 thresholds = threshold(data_output,"K..")
 }
-}
-\references{
-{Microsoft, Weston, S. (2022): foreach: Provides Foreach Looping Construct. R package version 1.5.2. https://CRAN.R-project.org/package=foreach.}
 }
 \seealso{
 \code{\link{beta_kn}}

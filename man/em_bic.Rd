@@ -4,7 +4,7 @@
 \alias{em_bic}
 \title{Bayesian Information Criterion}
 \usage{
-em_bic(llk, C, M, patients = 4, samples = 1, model_name = "K..")
+em_bic(llk, C, M, N, R, model_name = "K..")
 }
 \arguments{
 \item{llk}{log-likelihood value.}
@@ -13,11 +13,11 @@ em_bic(llk, C, M, patients = 4, samples = 1, model_name = "K..")
 
 \item{M}{number of methylation states identified in a DNA sample.}
 
-\item{patients}{number of patients.}
+\item{N}{number of patients.}
 
-\item{samples}{number of DNA samples collected from each patient.}
+\item{R}{number of DNA samples collected from each patient.}
 
-\item{model_name}{fitted mixture model (method = c("K..","KN.","K.R")).}
+\item{model_name}{fitted mixture model (model_name = c("K..","KN.","K.R")).}
 }
 \value{
 The BIC value for the selected model.

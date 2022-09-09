@@ -7,33 +7,31 @@
 betaclust(
   data,
   M = 3,
-  patients,
-  samples,
+  N,
+  R,
   model_names = "K..",
   model_selection = "BIC",
-  seed,
-  register = NULL
+  seed = NULL
 )
 }
 \arguments{
-\item{data}{Methylation values for \eqn{C} CpG sites from \eqn{R} samples collected from \eqn{N} patients.}
+\item{data}{A dataframe of dimension \eqn{C*NR} containing methylation values for \eqn{C} CpG sites from \eqn{R} samples collected from \eqn{N} patients.
+Samples are grouped together in the dataframe such that the columns are ordered as Sample1_Patient1, Sample1_Patient2, Sample2_Patient1, Sample2_Patient2, etc.}
 
 \item{M}{Number of methylation states to be identified in a DNA sample.}
 
-\item{patients}{Number of patients in the study.}
+\item{N}{Number of patients in the study.}
 
-\item{samples}{Number of samples collected from each patient for the study.}
+\item{R}{Number of samples collected from each patient for the study.}
 
 \item{model_names}{Models to run from the set of models, K.., KN. and K.R, default = K.. . See details.}
 
 \item{model_selection}{Information criterion used for model selection. Options are AIC/BIC/ICL/default = BIC.}
 
-\item{seed}{Seed to allow for reproducibility.}
-
-\item{register}{Setting for registering the parallel backend with the "foreach" package. To start parallel execution of R code on machine with multiple cores, "NULL" value needs to be assigned to this parameter.}
+\item{seed}{Seed to allow for reproducibility (default = NULL).}
 }
 \value{
-The function returns an object of "betaclust" class which contains the following values:
+The function returns an object of \code{\link[betaclust:betaclust]{betaclust}} class which contains the following values:
 \itemize{
 \item information_criterion - the information criterion used to select the optimal model.
 \item ic_output - this stores the information criterion value calculated for each model.
@@ -45,15 +43,15 @@ The function returns an object of "betaclust" class which contains the following
 \item R - the number of samples analysed using the beta mixture models.
 \item optimal_model_results - this contains information from the optimal model. Specifically,
    \itemize{
-   \item cluster_size - the total number of CpG sites identified in each of the K clusters.
+   \item cluster_size - the total number of CpG sites in each of the K clusters.
    \item llk - a vector containing the log-likelihood value at each step of the EM algorithm.
    \item data - this contains the methylation dataset along with the cluster label for each CpG site.
    \item alpha - this contains the first shape parameter for the beta mixture model.
    \item delta - this contains the second shape parameter for the beta mixture model.
    \item tau - the proportion of CpG sites in each cluster.
-   \item z - a matrix containing the probability for each CpG site of belonging to each of the \eqn{K} clusters.
+   \item z - a matrix of dimension \eqn{C*K} containing the posterior probability of each CpG site belonging to each of the \eqn{K} clusters.
    \item uncertainty - the uncertainty of each CpG site's clustering.
-   \item thresholds - threshold points calculated for the K.. or the KN. model
+   \item thresholds - threshold points calculated under the K.. or the KN. model
    }
 }
 }
@@ -72,9 +70,9 @@ the dataset into \eqn{K=M^R} clusters to identify the differentially methylated 
 data(pca.methylation.data)
 my.seed = 190
 M = 3
-patients = 4
-samples = 2
-data_output = betaclust(pca.methylation.data[,2:9],M,patients,samples,
+N = 4
+R = 2
+data_output = betaclust(pca.methylation.data[,2:9],M,N,R,
             model_names = c("K..","KN.","K.R"),model_selection = "BIC",seed = my.seed)
 }
 
@@ -84,8 +82,6 @@ data_output = betaclust(pca.methylation.data[,2:9],M,patients,samples,
 {Silva, R., Moran, B., Russell, N.M., Fahey, C., Vlajnic, T., Manecksha, R.P., Finn, S.P., Brennan, D.J., Gallagher, W.M., Perry, A.S.: Evaluating liquid biopsies for methylomic profiling of prostate cancer. Epigenetics 15(6-7), 715-727 (2020). doi:10.1080/15592294.2020.1712876.}
 
 {Majumdar, K., Silva, R., Perry, A.S., Watson, R.W., Murphy, T.B., Gormley, I.C.: betaclust: a family of mixture models for beta valued DNA methylation data.}
-
-{Microsoft, Weston, S. (2022): foreach: Provides Foreach Looping Construct. R package version 1.5.2. https://CRAN.R-project.org/package=foreach.}
 }
 \seealso{
 \code{\link{beta_k}}

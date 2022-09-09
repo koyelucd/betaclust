@@ -1,6 +1,6 @@
 Package: betaclust
 Type: Package
-Title: A family of mixture models for clustering beta valued DNA methylation data.
+Title: A family of beta mixture models for clustering beta valued DNA methylation data.
 Version: 1.0.0
 Author: Koyel Majumdar <koyel.majumdar@ucdconnect.ie>,
   Isobel Claire Gormley <claire.gormley@ucd.ie>,

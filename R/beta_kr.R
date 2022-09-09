@@ -4,28 +4,28 @@
 #'
 #' @seealso \code{\link{betaclust}}
 #'
-#' @param data Methylation values for \eqn{C} CpG sites from \eqn{R} samples collected from \eqn{N} patients.
+#' @param data A dataframe of dimension \eqn{C*NR} containing methylation values for \eqn{C} CpG sites from \eqn{R} samples collected from \eqn{N} patients.
+#' Samples are grouped together in the dataframe such that the columns are ordered as Sample1_Patient1, Sample1_Patient2, Sample2_Patient1, Sample2_Patient2, etc.
 #' @param M Number of methylation states to be identified.
-#' @param patients Number of patients in the study.
-#' @param samples Number of samples collected from each patient for study.
-#' @param seed Seed to allow for reproducibility.
-#' @param register Setting for registering the parallel backend with the "foreach" package. To start parallel execution of R code on machine with multiple cores, "NULL" value needs to be assigned to this parameter.
+#' @param N Number of patients in the study.
+#' @param R Number of samples collected from each patient for study.
+#' @param seed Seed to allow for reproducibility (default = NULL).
 #'
 #' @details
 #' The K.R model allows identification of the differentially methylated CpG sites between the \eqn{R} DNA samples collected from each of \eqn{N} patients.
-#' As each CpG site in a DNA sample can belong to either of \eqn{M} methylation states, there can be \eqn{K=M^R} methylation state changes between \eqn{R} DNA samples.
-#' The parameters vary for each DNA sample but are constrained to be equal for each patient. An initial clustering using K-means is performed to identify \eqn{K} clusters. The resulting clustering solution is provided as
+#' As each CpG site in a DNA sample can belong to one of \eqn{M} methylation states, there can be \eqn{K=M^R} methylation state changes between \eqn{R} DNA samples.
+#' The shape parameters vary for each DNA sample but are constrained to be equal for each patient. An initial clustering using k-means is performed to identify \eqn{K} clusters. The resulting clustering solution is provided as
 #' starting values to the Expectation-Maximisation algorithm. A digamma approximation is used to obtain the maximised
 #' parameters in the M-step instead of a computationally inefficient numerical optimisation step.
 #' @return A list containing:
 #' \itemize{
-#'    \item cluster_size - the total number of CpG sites identified in each of the K clusters.
+#'    \item cluster_size - the total number of CpG sites in each of the K clusters.
 #'    \item llk - a vector containing the log-likelihood value at each step of the EM algorithm.
 #'    \item data - this contains the methylation dataset along with the cluster label for each CpG site.
 #'    \item alpha - this contains the first shape parameter for the beta mixture model.
 #'    \item delta - this contains the second shape parameter for the beta mixture model.
 #'    \item tau - the proportion of CpG sites in each cluster.
-#'    \item z - a matrix containing the probability for each CpG site of belonging to each of the \eqn{K} clusters.
+#'    \item z - a matrix of dimension \eqn{C*K} containing the posterior probability of each CpG site belonging to each of the \eqn{K} clusters.
 #'    \item uncertainty - the uncertainty of each CpG site's clustering.    }
 #'
 #' @examples
@@ -33,19 +33,17 @@
 #' data(pca.methylation.data)
 #' my.seed = 190
 #' M = 3
-#' patients = 4
-#' samples = 2
-#' data_output = beta_kr(pca.methylation.data[,2:5],M,patients,samples,seed = my.seed)
+#' N = 4
+#' R = 2
+#' data_output = beta_kr(pca.methylation.data[,2:5],M,N,R,seed = my.seed)
 #' }
 #' @importFrom foreach %dopar%
 #' @importFrom stats C
 #' @importFrom utils txtProgressBar
-#' @references {Microsoft, Weston, S. (2022): foreach: Provides Foreach Looping Construct. R package version 1.5.2. https://CRAN.R-project.org/package=foreach.}
 
 
 
-
-beta_kr<-function(data,M=3,patients,samples,seed=NULL,register=NULL){
+beta_kr<-function(data,M=3,N,R,seed=NULL){
 
   X=data
   ##### K.R Model #######
@@ -53,6 +51,7 @@ beta_kr<-function(data,M=3,patients,samples,seed=NULL,register=NULL){
 
 
   ## select the # of cores on which the parallel code is to run
+  register=NULL
   if(is.null(register)){
     ncores = parallel::detectCores()
     my.cluster <- parallel::makeCluster(ncores-1)
@@ -81,7 +80,7 @@ beta_kr<-function(data,M=3,patients,samples,seed=NULL,register=NULL){
 
 
     flag_uni=FALSE
-    clusters=M^samples
+    clusters=M^R
     K=clusters
     k_cluster<-stats::kmeans(X,K)
     mem <- k_cluster$cluster
@@ -93,8 +92,8 @@ beta_kr<-function(data,M=3,patients,samples,seed=NULL,register=NULL){
     data_full=x
     x=x[,-ncol(x)]
     C=nrow(x)
-    R=samples
-    N=patients
+    #R=samples
+    #N=patients
 
     ##  starting values from initial clustering
     mu=matrix(NA,ncol=R,nrow = K)

@@ -1,28 +1,27 @@
 #' @title Plots for visualizing the betaclust class object
-#' @description This function helps visualise the clustering solution by plotting the fitted and kernel density estimates, the uncertainty and the information criterion.
-#' @details The fitted density estimates can be visualized under the optimal clustering solution by specifying what = "fitted density" in the
-#'  function and kernel density estimates under the optimal clustering solution by specifying what = "kernel density". The threshold inferred can be visualized by specifying threshold = TRUE.
-#'  The KN. model calculates different pairs of threshold points for each patient as the shape parameters are allowed to vary for each patient. So the patient for whom the threshold needs to be displayed can be specified by inputting the column number representing the patient in the patient-wise ordered dataset in the parameter patient_number. The kernel density estimates for a particular patient can also be visualized using this parameter.
+#' @description Visualise a \code{\link[betaclust:betaclust]{betaclust}} clustering solution by plotting the fitted and kernel density estimates, the uncertainty and the information criterion.
+#' @details The fitted density estimates can be visualized under the optimal clustering solution by specifying what = "fitted density" and kernel density estimates under the optimal clustering solution by specifying what = "kernel density". The threshold inferred can be visualized by specifying threshold = TRUE.
+#'  The KN. model calculates different pairs of threshold points for each patient as the shape parameters are allowed to vary for each patient. So the patient for whom the threshold needs to be displayed can be specified by inputting the column number representing the patient in the patient-wise ordered dataset in the parameter patient_number.
 #'  Interactive plots can also be produced using plot_type = "plotly". The uncertainty in the clustering solution can be plotted using what = "uncertainty".
 #'  The information criterion values for all fitted models can be plotted using what = "information criterion".
 #' @export
 #' @examples
 #' \dontrun{
 #' M = 3
-#' patients = 4
-#' samples = 2
-#' data_output = betaclust(pca.methylation.data[,2:9],M,patients,samples,
+#' N = 4
+#' R = 2
+#' data_output = betaclust(pca.methylation.data[,2:9],M,N,R,
 #'             model_names = c("K..","KN.","K.R"),model_selection = "BIC",seed = my.seed)
 #' plot(data_output,what = "fitted density",plot_type = "ggplot")}
 #' @seealso \code{\link{betaclust}}
 #' @param object A betaclust object.
 #' @param what The different plots that can be obtained are either "fitted density","kernel density","uncertainty" or "information criterion". (default = "fitted density").
 #' @param plot_type The plot type to be displayed are either "ggplot" or "plotly". (default = "ggplot").
-#' @param sample_name The names of DNA samples in the dataset analysed by the K.R model. If no value is passed then default values of sample names, for e.g. Sample 1, Sample 2 and so on are used as legend text (default = NULL).
-#' @param title The title that the user wants to display on the graph. If no title is to be displayed the default is "NULL" value.
-#' @param patient_number The column number representing the patient in the patient-wise ordered dataset selected for visualizing the clustering solution of the K.. or KN. model. (default = 1)
-#' @param threshold The "TRUE" option displays the threshold points in the graph for the K.. and the KN. model. (default = "FALSE")
-#' @param scale_param The axis that needs to be fixed for density estimates plot for visualizing the K.R clustering solution are either "free_y","free_x" or "free". (default = "free_y").
+#' @param sample_name The names of DNA samples in the dataset analysed by the K.R model. If no value is passed then default values of sample names, e.g. Sample 1, Sample 2, etc are used as legend text (default = NULL).
+#' @param title The title that the user wants to display. If no title is to be displayed the default is "NULL".
+#' @param patient_number The column number representing the patient in the patient-wise ordered dataset selected for visualizing the clustering solution of the K.. or KN. model (default = 1).
+#' @param threshold The "TRUE" option displays the threshold points in the graph for the K.. and the KN. model (default = "FALSE").
+#' @param scale_param The axis that needs to be fixed for density estimates plot for visualizing the K.R clustering solution are either "free_y","free_x" or "free" (default = "free_y").
 #' @importFrom ggplot2 ggplot aes
 #' @importFrom  plotly ggplotly
 
