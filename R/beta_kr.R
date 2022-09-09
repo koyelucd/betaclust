@@ -5,7 +5,7 @@
 #' @seealso \code{\link{betaclust}}
 #'
 #' @param data Methylation values for \eqn{C} CpG sites from \eqn{R} samples collected from \eqn{N} patients.
-#' @param M Number of methylation profiles to be identified.
+#' @param M Number of methylation states to be identified.
 #' @param patients Number of patients in the study.
 #' @param samples Number of samples collected from each patient for study.
 #' @param seed Seed to allow for reproducibility.
@@ -13,7 +13,7 @@
 #'
 #' @details
 #' The K.R model allows identification of the differentially methylated CpG sites between the \eqn{R} DNA samples collected from each of \eqn{N} patients.
-#' As each CpG site in a DNA sample can belong to either of \eqn{M} methylation profiles, there can be \eqn{K=M^R} methylation profile changes between \eqn{R} DNA samples.
+#' As each CpG site in a DNA sample can belong to either of \eqn{M} methylation states, there can be \eqn{K=M^R} methylation state changes between \eqn{R} DNA samples.
 #' The parameters vary for each DNA sample but are constrained to be equal for each patient. An initial clustering using K-means is performed to identify \eqn{K} clusters. The resulting clustering solution is provided as
 #' starting values to the Expectation-Maximisation algorithm. A digamma approximation is used to obtain the maximised
 #' parameters in the M-step instead of a computationally inefficient numerical optimisation step.
@@ -22,8 +22,8 @@
 #'    \item cluster_size - the total number of CpG sites identified in each of the K clusters.
 #'    \item llk - a vector containing the log-likelihood value at each step of the EM algorithm.
 #'    \item data - this contains the methylation dataset along with the cluster label for each CpG site.
-#'    \item alpha - this contains the shape parameter 1 for the beta mixture model.
-#'    \item delta - this contains the shape parameter 2 for the beta mixture model.
+#'    \item alpha - this contains the first shape parameter for the beta mixture model.
+#'    \item delta - this contains the second shape parameter for the beta mixture model.
 #'    \item tau - the proportion of CpG sites in each cluster.
 #'    \item z - a matrix containing the probability for each CpG site of belonging to each of the \eqn{K} clusters.
 #'    \item uncertainty - the uncertainty of each CpG site's clustering.    }
@@ -31,11 +31,11 @@
 #' @examples
 #' \dontrun{
 #' data(pca.methylation.data)
-#' my.seed=190
-#' M=3
-#' patients=4
-#' samples=2
-#' data_output=beta_kr(pca.methylation.data[,2:5],M,patients,samples,seed=my.seed)
+#' my.seed = 190
+#' M = 3
+#' patients = 4
+#' samples = 2
+#' data_output = beta_kr(pca.methylation.data[,2:5],M,patients,samples,seed = my.seed)
 #' }
 #' @importFrom foreach %dopar%
 #' @importFrom stats C
@@ -45,7 +45,7 @@
 
 
 
-beta_kr<-function(data,M=3,patients,samples,seed,register=NULL){
+beta_kr<-function(data,M=3,patients,samples,seed=NULL,register=NULL){
 
   X=data
   ##### K.R Model #######
@@ -69,14 +69,14 @@ beta_kr<-function(data,M=3,patients,samples,seed,register=NULL){
     stop("Missing values observed in dataset")
   }
   ## Initial clustering using k-means
-  ## K= 3 for hypo,hyper and hemi methylation. For R sample types there can be
-  ## 3^R combinations of these profiles hence K^R clusters
+  ## K = 3 for hypo,hyper and hemi methylation. For R sample types there can be
+  ## 3^R combinations of these states hence K^R clusters
   flag_uni=TRUE
 
   while(flag_uni){
 
     ## set the seed for reproducible work
-    if (!missing(seed))
+    if (!is.null(seed))
       set.seed(seed)
 
 
@@ -243,7 +243,8 @@ beta_kr<-function(data,M=3,patients,samples,seed,register=NULL){
       }
 
       if(flag_uni==TRUE){
-        seed = seed+1
+        if(!is.null(seed))
+        {seed = seed+1}else seed=1
         break
       }
 

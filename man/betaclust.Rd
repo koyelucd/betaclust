@@ -18,15 +18,15 @@ betaclust(
 \arguments{
 \item{data}{Methylation values for \eqn{C} CpG sites from \eqn{R} samples collected from \eqn{N} patients.}
 
-\item{M}{Number of methylation profiles to be identified in a DNA sample.}
+\item{M}{Number of methylation states to be identified in a DNA sample.}
 
 \item{patients}{Number of patients in the study.}
 
-\item{samples}{Number of samples collected from each patient for study.}
+\item{samples}{Number of samples collected from each patient for the study.}
 
 \item{model_names}{Models to run from the set of models, K.., KN. and K.R, default = K.. . See details.}
 
-\item{model_selection}{Information criterion used for model selection. Options are AIC/BIC/ICL/default=BIC.}
+\item{model_selection}{Information criterion used for model selection. Options are AIC/BIC/ICL/default = BIC.}
 
 \item{seed}{Seed to allow for reproducibility.}
 
@@ -48,8 +48,8 @@ The function returns an object of "betaclust" class which contains the following
    \item cluster_size - the total number of CpG sites identified in each of the K clusters.
    \item llk - a vector containing the log-likelihood value at each step of the EM algorithm.
    \item data - this contains the methylation dataset along with the cluster label for each CpG site.
-   \item alpha - this contains the shape parameter 1 for the beta mixture model.
-   \item delta - this contains the shape parameter 2 for the beta mixture model.
+   \item alpha - this contains the first shape parameter for the beta mixture model.
+   \item delta - this contains the second shape parameter for the beta mixture model.
    \item tau - the proportion of CpG sites in each cluster.
    \item z - a matrix containing the probability for each CpG site of belonging to each of the \eqn{K} clusters.
    \item uncertainty - the uncertainty of each CpG site's clustering.
@@ -58,24 +58,24 @@ The function returns an object of "betaclust" class which contains the following
 }
 }
 \description{
-A family of model based clustering techniques to identify methylation profiles in beta valued DNA methylation data.
+A family of model based clustering techniques to identify methylation states in beta valued DNA methylation data.
 }
 \details{
 This is a wrapper function which can be used to fit all three models (K.., KN., K.R) together.
-The K.. and KN. models are used to analyse a single DNA sample (\eqn{R = 1}) and cluster the \eqn{C} CpG sites into the \eqn{K} clusters which represent the different methylation profiles in a DNA sample. As each CpG site can belong to either of the \eqn{M=3} methylation profiles (hypomethylation, hemimethylation and hypermethylation), the default value for \eqn{K=M=3}.
-The thresholds between methylation profiles can be objectively identified from the clustering solution.
+The K.. and KN. models are used to analyse a single DNA sample (\eqn{R = 1}) and cluster the \eqn{C} CpG sites into the \eqn{K} clusters which represent the different methylation states in a DNA sample. As each CpG site can belong to either of the \eqn{M=3} methylation states (hypomethylation, hemimethylation and hypermethylation), the default value for \eqn{K=M=3}.
+The thresholds between methylation states are objectively inferred from the clustering solution.
 The K.R model is used to analyse \eqn{R} independent samples collected from \eqn{N} patients, where each sample contains \eqn{C} CpG sites, and cluster
-the dataset into \eqn{K=M^R} clusters to identify the differentially methylated CpG sites between the \eqn{R} DNA samples.
+the dataset into \eqn{K=M^R} clusters to identify the differentially methylated CpG (DMC) sites between the \eqn{R} DNA samples.
 }
 \examples{
 \dontrun{
 data(pca.methylation.data)
-my.seed=190
-M=3
-patients=4
-samples=2
-data_output=betaclust(pca.methylation.data[,2:9],M,patients,samples,
-            model_names=c("K..","KN.","K.R"),model_selection="BIC",seed=my.seed)
+my.seed = 190
+M = 3
+patients = 4
+samples = 2
+data_output = betaclust(pca.methylation.data[,2:9],M,patients,samples,
+            model_names = c("K..","KN.","K.R"),model_selection = "BIC",seed = my.seed)
 }
 
 

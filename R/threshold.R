@@ -7,7 +7,7 @@
 #' @export
 #' @param object A beta_k or beta_kn object.
 #' @param model_name The name of the model for which the thresholds need to be calculated.
-#' @return The thresholds calculated for the selected model. A vector containing two threshold points are returned for the K.. model whereas a matrix containing two threshold points for each patient is returned for the KN. model.
+#' @return thresholds - the threshold points calculated for the selected model. A vector containing two threshold points are returned for the K.. model whereas a matrix containing two threshold points for each patient is returned for the KN. model.
 #'
 #' @seealso \code{\link{beta_k}}
 #' @seealso \code{\link{beta_kn}}
@@ -90,5 +90,5 @@ threshold <- function(object,model_name){
     col_th<-col_th[-1]
     colnames(th_new1)<-col_th
   }
-  return(th_new1)
+  return(list(threholds=th_new1))
 }

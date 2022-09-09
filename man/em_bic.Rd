@@ -11,13 +11,13 @@ em_bic(llk, C, M, patients = 4, samples = 1, model_name = "K..")
 
 \item{C}{number of CpG sites.}
 
-\item{M}{number of methylation profiles identified in a DNA sample.}
+\item{M}{number of methylation states identified in a DNA sample.}
 
 \item{patients}{number of patients.}
 
 \item{samples}{number of DNA samples collected from each patient.}
 
-\item{model_name}{fitted mixture model (method=c("K..","KN.","K.R")).}
+\item{model_name}{fitted mixture model (method = c("K..","KN.","K.R")).}
 }
 \value{
 The BIC value for the selected model.

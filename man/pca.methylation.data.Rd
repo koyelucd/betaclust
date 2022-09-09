@@ -5,7 +5,7 @@
 \alias{pca.methylation.data}
 \title{DNA methylation dataset of patients suffering from prostate cancer disease.}
 \format{
-A data frame with 694820 rows and 9 columns. The data contains no missing values.
+A data frame with 694,820 rows and 9 columns. The data contains no missing values.
 \itemize{
   \item{IlmnID: the unique identifier from the Illumina CG database, i.e. the probe ID.}
   \item{Benign_Patient_1: the methylation values from benign prostate tissue collected from patient 1.}

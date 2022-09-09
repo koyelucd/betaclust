@@ -4,12 +4,12 @@
 \alias{beta_kr}
 \title{The K.R Model}
 \usage{
-beta_kr(data, M = 3, patients, samples, seed, register = NULL)
+beta_kr(data, M = 3, patients, samples, seed = NULL, register = NULL)
 }
 \arguments{
 \item{data}{Methylation values for \eqn{C} CpG sites from \eqn{R} samples collected from \eqn{N} patients.}
 
-\item{M}{Number of methylation profiles to be identified.}
+\item{M}{Number of methylation states to be identified.}
 
 \item{patients}{Number of patients in the study.}
 
@@ -25,8 +25,8 @@ A list containing:
    \item cluster_size - the total number of CpG sites identified in each of the K clusters.
    \item llk - a vector containing the log-likelihood value at each step of the EM algorithm.
    \item data - this contains the methylation dataset along with the cluster label for each CpG site.
-   \item alpha - this contains the shape parameter 1 for the beta mixture model.
-   \item delta - this contains the shape parameter 2 for the beta mixture model.
+   \item alpha - this contains the first shape parameter for the beta mixture model.
+   \item delta - this contains the second shape parameter for the beta mixture model.
    \item tau - the proportion of CpG sites in each cluster.
    \item z - a matrix containing the probability for each CpG site of belonging to each of the \eqn{K} clusters.
    \item uncertainty - the uncertainty of each CpG site's clustering.    }
@@ -36,7 +36,7 @@ A beta mixture model for identifying differentially methylated CpG sites between
 }
 \details{
 The K.R model allows identification of the differentially methylated CpG sites between the \eqn{R} DNA samples collected from each of \eqn{N} patients.
-As each CpG site in a DNA sample can belong to either of \eqn{M} methylation profiles, there can be \eqn{K=M^R} methylation profile changes between \eqn{R} DNA samples.
+As each CpG site in a DNA sample can belong to either of \eqn{M} methylation states, there can be \eqn{K=M^R} methylation state changes between \eqn{R} DNA samples.
 The parameters vary for each DNA sample but are constrained to be equal for each patient. An initial clustering using K-means is performed to identify \eqn{K} clusters. The resulting clustering solution is provided as
 starting values to the Expectation-Maximisation algorithm. A digamma approximation is used to obtain the maximised
 parameters in the M-step instead of a computationally inefficient numerical optimisation step.
@@ -44,11 +44,11 @@ parameters in the M-step instead of a computationally inefficient numerical opti
 \examples{
 \dontrun{
 data(pca.methylation.data)
-my.seed=190
-M=3
-patients=4
-samples=2
-data_output=beta_kr(pca.methylation.data[,2:5],M,patients,samples,seed=my.seed)
+my.seed = 190
+M = 3
+patients = 4
+samples = 2
+data_output = beta_kr(pca.methylation.data[,2:5],M,patients,samples,seed = my.seed)
 }
 }
 \references{

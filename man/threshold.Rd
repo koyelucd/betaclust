@@ -12,7 +12,7 @@ threshold(object, model_name)
 \item{model_name}{The name of the model for which the thresholds need to be calculated.}
 }
 \value{
-The thresholds calculated for the selected model. A vector containing two threshold points are returned for the K.. model whereas a matrix containing two threshold points for each patient is returned for the KN. model.
+thresholds - the threshold points calculated for the selected model. A vector containing two threshold points are returned for the K.. model whereas a matrix containing two threshold points for each patient is returned for the KN. model.
 }
 \description{
 An objective method to calculate the threshold points for the clustering solution of the K.. and the KN. models.

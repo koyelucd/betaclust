@@ -11,15 +11,15 @@ em_icl(llk, C, M, patients = 4, samples = 1, model_name = "K..", z)
 
 \item{C}{number of CpG sites.}
 
-\item{M}{number of methylation profiles identified in a DNA sample.}
+\item{M}{number of methylation states identified in a DNA sample.}
 
 \item{patients}{number of patients.}
 
 \item{samples}{number of DNA samples collected from each patient.}
 
-\item{model_name}{fitted mixture model (method=c("K..","KN.","K.R")).}
+\item{model_name}{fitted mixture model (method = c("K..","KN.","K.R")).}
 
-\item{z}{z matrix used for computing the complete-data log-likelihood function.}
+\item{z}{matrix containing the probability for each CpG site of belonging to each of the K clusters.}
 }
 \value{
 The ICL value for the selected model.
