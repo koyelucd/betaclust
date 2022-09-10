@@ -1,11 +1,11 @@
 #' @title Thresholds for the K.. and the KN. models
 #' @description An objective method to calculate the threshold points for the clustering solution of the K.. and the KN. models.
-#' @details As the K.. model constrains the shape parameters to be equal for all patients, a single pair of threshold points are calculated for all patients. The KN. model allows patient-specific shape parameters which results in a pair of threshold points for each patient based on the shape parameters defining the beta values for that patient.
+#' @details As the K.. model constrains the shape parameters to be equal for all patients, a single pair of threshold points are calculated for all patients. The KN. model allows patient-specific shape parameters which results in a pair of threshold points for each patient based on the shape parameters for that patient.
 #' The first threshold point denotes any beta value less than this value is likely to be hypomethylated.
 #' The second threshold point denotes any beta value greater than this is highly likely to be hypermethylated.
 #' A beta value lying between the two threshold points is likely to be hemimethylated.
 #' @export
-#' @param object A beta_k or beta_kn object.
+#' @param object A \code{\link[betaclust:beta_k]{beta_k}} or \code{\link[betaclust:beta_kn]{beta_kn}} object.
 #' @param model_name The name of the model for which the thresholds need to be calculated.
 #' @return thresholds - the threshold points calculated for the selected model. A vector containing two threshold points are returned for the K.. model whereas a matrix containing two threshold points for each patient is returned for the KN. model.
 #'

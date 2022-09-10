@@ -1,5 +1,5 @@
 #' @title The empirical cumulative distribution function plot
-#' @description An empirical cumulative distribution function (ECDF) plot for a betaclust object.
+#' @description An empirical cumulative distribution function (ECDF) plot for a \code{\link[betaclust:betaclust]{betaclust}} object.
 #' @details This function plots the ECDF of the differentially methylated CpG sites identified using the K.R model for all patient samples.
 #' The plot visualises the methylation state changes between the different DNA samples for each patient.
 #' @export
@@ -7,7 +7,7 @@
 #' Samples are grouped together in the dataframe such that the columns are ordered as Sample1_Patient1, Sample1_Patient2, Sample2_Patient1, Sample2_Patient2, etc.
 #' @param R number of tissue samples from which DNA methylation data are collected (default R = 2).
 #' @param sample_name The order in which the samples are grouped in the dataframe x. If no value is specified then default values of sample names, e.g. Sample 1, Sample 2, etc are used (default = NULL).
-#' @param title The title that the user wants to display on the graph. If no title is to be displayed the default is "NULL" value.
+#' @param title The title that the user wants to display on the graph. If no title is to be displayed the default is "NULL".
 #' @return The ECDF plot for the selected CpG sites for all patients and their DNA samples.
 #'
 #' @seealso \code{\link{betaclust}}

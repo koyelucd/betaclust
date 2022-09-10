@@ -7,7 +7,7 @@
 \method{summary}{betaclust}(object)
 }
 \arguments{
-\item{object}{A betaclust object.}
+\item{object}{A \code{\link[betaclust:betaclust]{betaclust}} object.}
 }
 \value{
 An object of class \code{\link[betaclust:summary.betaclust]{summary.betaclust}} which contains the following list of values:

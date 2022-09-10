@@ -45,7 +45,7 @@
 #'    \item tau - the proportion of CpG sites in each cluster.
 #'    \item z - a matrix of dimension \eqn{C*K} containing the posterior probability of each CpG site belonging to each of the \eqn{K} clusters.
 #'    \item uncertainty - the uncertainty of each CpG site's clustering.
-#'    \item thresholds - threshold points calculated under the K.. or the KN. model
+#'    \item thresholds - threshold points calculated under the K.. or the KN. model.
 #'    }
 #' }
 #'
@@ -183,21 +183,21 @@ betaclust<-function(data,M=3,N,R,model_names="K..",model_selection="BIC",seed=NU
   {
     final_output<-k_out
     thresholds<-threshold(k_out,min_method)
-    final_output$thresholds<-thresholds$thresholds
+    final_output$thresholds<-thresholds
     K=M
     R=1
   }else if(min_method=="KN.")
   {
     final_output<-kn_out
     thresholds<-threshold(kn_out,min_method)
-    final_output$thresholds<-thresholds$thresholds
+    final_output$thresholds<-thresholds
     K=M
     R=1
   }else if(min_method=="K.R")
   {
     final_output<-kr_out
     K=M^R
-    #R=samples
+    R=R
   }
 
 

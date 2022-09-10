@@ -51,7 +51,7 @@ The function returns an object of \code{\link[betaclust:betaclust]{betaclust}} c
    \item tau - the proportion of CpG sites in each cluster.
    \item z - a matrix of dimension \eqn{C*K} containing the posterior probability of each CpG site belonging to each of the \eqn{K} clusters.
    \item uncertainty - the uncertainty of each CpG site's clustering.
-   \item thresholds - threshold points calculated under the K.. or the KN. model
+   \item thresholds - threshold points calculated under the K.. or the KN. model.
    }
 }
 }

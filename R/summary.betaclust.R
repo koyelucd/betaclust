@@ -1,7 +1,7 @@
 #' @title Summarizing the beta mixture model fits
 #' @description Summary method for a \code{\link[betaclust:betaclust]{betaclust}} object containing the results under the optimal model selected.
 #' @export
-#' @param object A betaclust object.
+#' @param object A \code{\link[betaclust:betaclust]{betaclust}} object.
 #' @return An object of class \code{\link[betaclust:summary.betaclust]{summary.betaclust}} which contains the following list of values:
 #' \itemize{
 #' \item C - the number of CpG sites analysed using the beta mixture models.
