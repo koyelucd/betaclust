@@ -254,8 +254,8 @@ plot.betaclust <- function(object,what = "fitted density",
       th_plot<-object$optimal_model_results$thresholds
       ano_th<-object$optimal_model_results$thresholds-.02
     }else{
-      th_plot<-object$optimal_model_results$thresholds[,pn]
-      ano_th<-object$optimal_model_results$thresholds[,pn]-.02
+      th_plot<-object$optimal_model_results$thresholds$threholds[,pn]
+      ano_th<-object$optimal_model_results$thresholds$threholds[,pn]-.02
     }
     num=sort(p.text$y)
     ano_y=num[length(num)]-0.1
