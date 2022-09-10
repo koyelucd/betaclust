@@ -177,7 +177,7 @@ betaclust<-function(data,M=3,N,R,model_names="K..",model_selection="BIC",seed=NU
   call_function<-match.call()
 
   #N=patients
-  R=0
+  R_old=R
   K=0
   if(min_method=="K..")
   {
@@ -196,8 +196,8 @@ betaclust<-function(data,M=3,N,R,model_names="K..",model_selection="BIC",seed=NU
   }else if(min_method=="K.R")
   {
     final_output<-kr_out
-    K=M^R
-    R=R
+    K=M^R_old
+    R=R_old
   }
 
 
