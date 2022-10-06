@@ -177,6 +177,9 @@ beta_kr<-function(data,M=3,N,R,seed=NULL){
           l3=l3*stats::dbeta(x[,(((r-1)*N)+1):(((r-1)*N)+N)],al[r],de[r])
         }
 
+        if(is.vector(l3))
+          l4=l3
+        else
         l4=apply(l3,1,prod)
         return(p*l4)
       }
@@ -197,8 +200,14 @@ beta_kr<-function(data,M=3,N,R,seed=NULL){
         de_new=vector()
         for(r in 1:R)
         {
-          y11[r]=(sum(z1*rowSums(log(x[,(((r-1)*N)+1):(((r-1)*N)+N)]))))/(N*sum(z1))
-          y22[r]=(sum(z1*rowSums(log(1-x[,(((r-1)*N)+1):(((r-1)*N)+N)]))))/(N*sum(z1))
+          if(N==1)
+          {
+            y11[r]=(sum(z1*(log(x[,(((r-1)*N)+1):(((r-1)*N)+N)]))))/(N*sum(z1))
+            y22[r]=(sum(z1*(log(1-x[,(((r-1)*N)+1):(((r-1)*N)+N)]))))/(N*sum(z1))
+          }else{
+            y11[r]=(sum(z1*rowSums(log(x[,(((r-1)*N)+1):(((r-1)*N)+N)]))))/(N*sum(z1))
+            y22[r]=(sum(z1*rowSums(log(1-x[,(((r-1)*N)+1):(((r-1)*N)+N)]))))/(N*sum(z1))
+          }
           term=0
           term=((exp(-y11[r])-1)*(exp(-y22[r])-1))-1
           al_new[r]=0.5+(0.5*exp(-y22[r])/term)
