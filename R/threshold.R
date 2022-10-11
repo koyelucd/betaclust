@@ -87,6 +87,7 @@ threshold <- function(object,model_name){
       col_th<-c(col_th,paste0("Patient ",i))
     }
     th_new1<-th_new[,-1]
+    th_new1<-as.data.frame(th_new1)
     col_th<-col_th[-1]
     colnames(th_new1)<-col_th
   }
