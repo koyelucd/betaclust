@@ -43,7 +43,7 @@
 
 beta_kn<-function(data,M=3,seed=NULL){
 
-  X=data
+  X=as.data.frame(data)
   ##### KN. Model #######
 
 
@@ -82,12 +82,18 @@ beta_kn<-function(data,M=3,seed=NULL){
     data_clust<-cbind(X,mem)
 
     ## Get values for parameters C (no. of CpG sites), N (No. of patients)
-    x=as.matrix(data_clust)
+    x=as.data.frame(data_clust)
     mem=x[,ncol(x)]
     data_full=x
     x=x[,-ncol(x)]
-    C=nrow(x)
-    N=ncol(x)
+    if(is.vector(x)){
+      C=length(x)
+      N=1
+
+    }else{
+      C=nrow(x)
+      N=ncol(x)
+    }
 
     ##  starting values from initial clustering
     mu=matrix(NA,ncol=N,nrow = K)
@@ -103,11 +109,14 @@ beta_kn<-function(data,M=3,seed=NULL){
     term_new=matrix(NA,ncol=N,nrow = K)
     tau_new=vector(length=K)
 
+    x=as.data.frame(x)
+
     ## function for calculating starting values for beta distribution parameters
     ## we consider the models unimodal in nature which restricts the parameters
     ## to be greater than 1.
     ini_theta_estimation = function(data,N,mem,C)
     {
+      data=as.data.frame(data)
       mu=vector()
       sigma=vector()
       term=vector()

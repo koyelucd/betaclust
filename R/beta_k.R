@@ -189,14 +189,6 @@ beta_k<-function(data,M=3,seed = NULL){
         de_new=0
         y11=(sum(z1*rowSums(log(x))))/(N*sum(z1))
         y22=(sum(z1*rowSums(log(1-x))))/(N*sum(z1))
-        #if(N==1)
-        #{
-        #  y11=(sum(z1*(log(x))))/(N*sum(z1))
-        #  y22=(sum(z1*(log(1-x))))/(N*sum(z1))
-        #}else{
-        #  y11=(sum(z1*rowSums(log(x))))/(N*sum(z1))
-        #  y22=(sum(z1*rowSums(log(1-x))))/(N*sum(z1))
-        #}
         term=0
         term=((exp(-y11)-1)*(exp(-y22)-1))-1
         al_new=0.5+(0.5*exp(-y22)/term)

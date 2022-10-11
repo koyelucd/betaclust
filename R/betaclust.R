@@ -70,7 +70,7 @@
 
 betaclust<-function(data,M=3,N,R,model_names="K..",model_selection="BIC",seed=NULL){
 
-  X=data
+  X=as.data.frame(data)
   len=length(model_names)
   llk<-vector()
   C=nrow(X)
