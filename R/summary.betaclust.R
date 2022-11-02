@@ -1,7 +1,9 @@
 #' @title Summarizing the beta mixture model fits
 #' @description Summary method for a \code{\link[betaclust:betaclust]{betaclust}} object containing the results under the optimal model selected.
+#' @rdname summary.betaclust
 #' @export
 #' @param object A \code{\link[betaclust:betaclust]{betaclust}} object.
+#' @param ... Further arguments to be ignored.
 #' @return An object of class \code{\link[betaclust:summary.betaclust]{summary.betaclust}} which contains the following list of values:
 #' \itemize{
 #' \item C - the number of CpG sites analysed using the beta mixture models.
@@ -24,7 +26,7 @@
 #' summary(data_output)}
 #' @seealso \code{\link{betaclust}}
 
-summary.betaclust<-function(object)
+summary.betaclust<-function(object,...)
 {
   title <- paste("Multivariate beta mixture model fitted by EM algorithm")
   ic_value=min(object$ic_output)

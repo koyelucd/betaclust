@@ -5,18 +5,19 @@
 \title{Plots for visualizing the betaclust class object}
 \usage{
 \method{plot}{betaclust}(
-  object,
+  x,
   what = "fitted density",
   plot_type = "ggplot",
   sample_name = NULL,
   title = NULL,
   patient_number = 1,
   threshold = FALSE,
-  scale_param = "free_y"
+  scale_param = "free_y",
+  ...
 )
 }
 \arguments{
-\item{object}{A \code{\link[betaclust:betaclust]{betaclust}} object.}
+\item{x}{A \code{\link[betaclust:betaclust]{betaclust}} object.}
 
 \item{what}{The different plots that can be obtained are either "fitted density","kernel density","uncertainty" or "information criterion" (default = "fitted density").}
 
@@ -31,6 +32,8 @@
 \item{threshold}{The "TRUE" option displays the threshold points in the graph for the K.. and the KN. model (default = "FALSE").}
 
 \item{scale_param}{The axis that needs to be fixed for density estimates plot for visualizing the K.R clustering solution are either "free_y","free_x" or "free" (default = "free_y").}
+
+\item{...}{Further arguments to be ignored.}
 }
 \description{
 Visualise a \code{\link[betaclust:betaclust]{betaclust}} clustering solution by plotting the fitted and kernel density estimates, the uncertainty and the information criterion.

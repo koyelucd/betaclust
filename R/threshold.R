@@ -9,6 +9,7 @@
 #' @param model_name The name of the model for which the thresholds need to be calculated.
 #' @return thresholds - the threshold points calculated for the selected model. A vector containing two threshold points are returned for the K.. model whereas a matrix containing two threshold points for each patient is returned for the KN. model.
 #'
+#' @importFrom stats C
 #' @seealso \code{\link{beta_k}}
 #' @seealso \code{\link{beta_kn}}
 #' @seealso \code{\link{betaclust}}
@@ -17,14 +18,14 @@
 threshold <- function(object,model_name){
   threshold_func_low<-function(data_x,alpha,delta,tau,i)
   {
-    num<-tau[i]*dbeta(data_x,alpha[i],delta[i])
+    num<-tau[i]*stats::dbeta(data_x,alpha[i],delta[i])
     deno<-0
     for(j in 1:length(alpha))
     {
       if(j!=i)
       {
 
-        deno<-deno+(tau[j]*dbeta(data_x,alpha[j],delta[j]))
+        deno<-deno+(tau[j]*stats::dbeta(data_x,alpha[j],delta[j]))
       }
     }
 
@@ -35,13 +36,13 @@ threshold <- function(object,model_name){
   }
   threshold_func_upper<-function(data_x,alpha,delta,tau,i)
   {
-    num<-tau[i]*dbeta(data_x,alpha[i],delta[i])
+    num<-tau[i]*stats::dbeta(data_x,alpha[i],delta[i])
     deno<-0
     for(j in 1:length(alpha))
     {
       if(j!=i)
       {
-        deno<-deno+(tau[j]*dbeta(data_x,alpha[j],delta[j]))
+        deno<-deno+(tau[j]*stats::dbeta(data_x,alpha[j],delta[j]))
       }
     }
 

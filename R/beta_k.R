@@ -1,3 +1,4 @@
+globalVariables(c("k"))
 #' @title The K.. model
 #' @description Fit the K.. model from the family of beta mixture models for DNA methylation data.
 #'              The K.. model analyses a single DNA sample and identifies the thresholds between the different methylation states.
@@ -53,7 +54,17 @@ beta_k<-function(data,M=3,seed = NULL){
   ## select the # of cores on which the parallel code is to run
   register=NULL
   if(is.null(register)){
-    ncores = parallel::detectCores()
+    ## Cores restricted to 2 for CRAN submission check
+    chk <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
+
+    if (nzchar(chk) && chk == "TRUE") {
+      # use 2 cores in CRAN/Travis/AppVeyor
+      ncores <- 2L
+    } else {
+      # use all cores in devtools::test()
+      ncores <- parallel::detectCores()
+    }
+    #ncores = parallel::detectCores()
     my.cluster <- parallel::makeCluster(ncores-1)
     doParallel::registerDoParallel(cl = my.cluster)}
 

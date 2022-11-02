@@ -1,3 +1,4 @@
+globalVariables(c("k"))
 #' @title The K.R Model
 #' @export
 #' @description A beta mixture model for identifying differentially methylated CpG sites between \eqn{R} DNA samples collected from \eqn{N} patients.
@@ -53,7 +54,17 @@ beta_kr<-function(data,M=3,N,R,seed=NULL){
   ## select the # of cores on which the parallel code is to run
   register=NULL
   if(is.null(register)){
-    ncores = parallel::detectCores()
+    ## Cores restricted to 2 for CRAN submission check
+    chk <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
+
+    if (nzchar(chk) && chk == "TRUE") {
+      # use 2 cores in CRAN/Travis/AppVeyor
+      ncores <- 2L
+    } else {
+      # use all cores in devtools::test()
+      ncores <- parallel::detectCores()
+    }
+    #ncores = parallel::detectCores()
     my.cluster <- parallel::makeCluster(ncores-1)
     doParallel::registerDoParallel(cl = my.cluster)}
 

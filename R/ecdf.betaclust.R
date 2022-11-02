@@ -1,3 +1,4 @@
+globalVariables(c("beta_value","Patient_Sample"))
 #' @title The empirical cumulative distribution function plot
 #' @description An empirical cumulative distribution function (ECDF) plot for a \code{\link[betaclust:betaclust]{betaclust}} object.
 #' @details This function plots the ECDF of the differentially methylated CpG sites identified using the K.R model for all patient samples.
@@ -14,6 +15,7 @@
 #' @seealso \code{\link{beta_kr}}
 #' @importFrom ggplot2 ggplot aes
 #' @importFrom  plotly ggplotly
+#' @importFrom scales seq_gradient_pal
 
 ecdf.betaclust <- function(x, R=2, sample_name=NULL,title=NULL){
 

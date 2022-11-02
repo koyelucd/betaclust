@@ -1,3 +1,4 @@
+globalVariables(c("patients","samples"))
 #' @title Integrated Complete-data Likelihood (ICL) Criterion
 #' @description Compute the ICL value for the optimal model.
 #'

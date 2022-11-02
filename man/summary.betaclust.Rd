@@ -4,10 +4,12 @@
 \alias{summary.betaclust}
 \title{Summarizing the beta mixture model fits}
 \usage{
-\method{summary}{betaclust}(object)
+\method{summary}{betaclust}(object, ...)
 }
 \arguments{
 \item{object}{A \code{\link[betaclust:betaclust]{betaclust}} object.}
+
+\item{...}{Further arguments to be ignored.}
 }
 \value{
 An object of class \code{\link[betaclust:summary.betaclust]{summary.betaclust}} which contains the following list of values:

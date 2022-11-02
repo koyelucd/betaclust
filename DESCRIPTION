@@ -1,15 +1,19 @@
 Package: betaclust
 Type: Package
-Title: A family of beta mixture models for clustering beta valued DNA methylation data.
+Title: A Family of Beta Mixture Models for Clustering Beta Valued DNA Methylation Data
 Version: 1.0.0
-Author: Koyel Majumdar <koyel.majumdar@ucdconnect.ie>,
-  Isobel Claire Gormley <claire.gormley@ucd.ie>,
-  Thomas Brendan Murphy <brendan.murphy@ucd.ie>
-Maintainer: Koyel Majumdar <koyel.majumdar@ucdconnect.ie>
+Authors@R: c(person("Koyel", "Majumdar",email = "koyel.majumdar@ucdconnect.ie", role = c("aut", "cre")),
+    person("Isobel Claire", "Gormley",email = "claire.gormley@ucd.ie", role = c("aut")),
+    person("Thomas Brendan", "Murphy",email = "brendan.murphy@ucd.ie", role = c("aut")))
 Description: A family of novel beta mixture models (BMMs) to appositely model beta valued DNA methylation data, to objectively identify methylation state thresholds and to identify the differentially methylated CpG (DMC) sites using a model-based clustering approach. The family of BMMs employ different parameter constraints applicable to different study settings. Parameter estimation proceeds via the EM algorithm, with a novel approximation during the M-step providing tractability and ensuring computational feasibility.
 License: GPL-3
 Depends: R (>= 3.5.0)
-Imports: foreach, doParallel, stats, utils, ggplot2, plotly
+Imports: foreach, doParallel, stats, utils, ggplot2, plotly, scales, devtools
 Encoding: UTF-8
 LazyData: true
+LazyDataCompression:xz
 RoxygenNote: 7.2.1
+Suggests: 
+    rmarkdown,
+    knitr
+VignetteBuilder: knitr
