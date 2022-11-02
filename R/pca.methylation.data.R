@@ -2,9 +2,9 @@
 #'
 #' @description The dataset contains pre-processed beta methylation values from \eqn{R=2} sample, collected from \eqn{N=4} patients with prostate cancer disease.
 #'
-#' @details The raw methylation array data was first quality controlled and preprocessed using the \code{\link[RnBeads]{RnBeads}} package. The array data were then normalized and and probes located outside of CpG sites and on the sex chromosome were filtered out. The CpG sites with missing values were removed from the resulting dataset.
+#' @details The raw methylation array data was first quality controlled and preprocessed using the \code{\link[RnBeads]{RnBeads}} package. The array data were then normalized and and probes located outside of CpG sites and on the sex chromosome were filtered out. The CpG sites with missing values were removed from the resulting dataset. A subset of the complete dataset is loaded in the package for testing purpose. The complete dataset is available in GitHub <https://github.com/koyelucd/betaclust>.
 #' @seealso \code{\link{legacy.data}}
-#' @format A data frame with 694,820 rows and 9 columns. The data contain no missing values.
+#' @format A data frame with 10,068 rows and 9 columns. The data contain no missing values.
 #' \itemize{
 #'   \item{IlmnID: the unique identifier from the Illumina CG database, i.e. the probe ID.}
 #'   \item{Benign_Patient_1: methylation values from benign prostate tissue from patient 1.}

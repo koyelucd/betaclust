@@ -48,10 +48,10 @@ threshold_points$threholds
 ## ----output2,include=TRUE, echo=TRUE,fig.width = 5, fig.height = 4,dev = 'png'----
 plot(threshold_out,what = "fitted density",threshold = TRUE, patient_number = 1,plot_type = "ggplot")
 
-## ----output3,include=TRUE, echo=TRUE,fig.width = 5, fig.height = 4,dev = 'png'----
+## ----output3,include=TRUE, echo=TRUE,fig.width = 4, fig.height = 3,dev = 'png'----
 plot(threshold_out,what = "kernel density",threshold = TRUE, patient_number = 2,plot_type = "plotly")
 
-## ----output4,include=TRUE, echo=TRUE,fig.width = 4, fig.height = 4, dev = 'png'----
+## ----output4,include=TRUE, echo=TRUE,fig.width = 4, fig.height = 3, dev = 'png'----
 plot(threshold_out,what = "uncertainty")
 
 ## ----dmc,include=TRUE, echo=TRUE----------------------------------------------
@@ -72,7 +72,7 @@ plot(dmc_output,what = "fitted density",plot_type = "ggplot",sample_name = c("Be
 ## ----dmcoutput3,include=TRUE, echo=TRUE,fig.width = 6.5, fig.height = 5,dev = 'png'----
 plot(dmc_output,what = "kernel density",plot_type = "ggplot")
 
-## ----dmcoutput4,include=TRUE, echo=TRUE,fig.width = 4, fig.height = 4, dev = 'png'----
+## ----dmcoutput4,include=TRUE, echo=TRUE,fig.width = 4, fig.height = 3, dev = 'png'----
 plot(dmc_output,what = "uncertainty",plot_type = "ggplot")
 
 ## ----dmcoutput5,include=TRUE, echo=TRUE,fig.width = 5, fig.height = 4,dev = 'png'----
@@ -84,8 +84,8 @@ dmc_df <- as.data.frame(cbind(pca.methylation.data$IlmnID,dmc_df))
 colnames(dmc_df)[1] <- "IlmnID"
 
 ## select the differentially methylated CpG sites identified using the K.R model
-dmc_df <- dmc_df[dmc_df$mem_final == "1" |dmc_df$mem_final == "2" |dmc_df$mem_final == "3", ]
-       #          dmc_df$mem_final == "4", ]
+dmc_df <- dmc_df[dmc_df$mem_final == "1" |dmc_df$mem_final == "2" |dmc_df$mem_final == "3"| 
+                 dmc_df$mem_final == "4" | dmc_df$mem_final == "5", ]
 
 ##read the legacy data
 data(legacy.data)

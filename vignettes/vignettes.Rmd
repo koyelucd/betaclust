@@ -55,7 +55,7 @@ library(betaclust)
 ## Loading the data
 The **betaclust** package provides a preprocessed methylation dataframe which contains beta values of DNA samples collected from 4 patients suffering from high-grade prostate cancer. The samples are collected from benign and tumor prostate tissues. The methylation profiling of these samples is done using the Infinium MethylationEPIC Beadchip technology. The dataset comprises *R = 2* DNA samples collected from each of *N = 4* patients and each sample contains beta values at *C = 694,820* CpG sites. The data were collected for a study on prostate cancer methylomics (Silva et al. 2020).
 
-The methylation array data was quality controlled and preprocessed using the **RnBeads** package (Mueller et al. 2019). The data were then normalized and probes located outside of CpG sites and on the sex chromosome were filtered out. The CpG sites with missing values were removed from the resulting dataset. The user can load the data available in the package and look at the first 6 rows present in the dataframe as follows:
+The methylation array data was quality controlled and preprocessed using the **RnBeads** package (Mueller et al. 2019). The data were then normalized and probes located outside of CpG sites and on the sex chromosome were filtered out. The CpG sites with missing values were removed from the resulting dataset. A subset of the complete dataset with *C = 10,068* CpG sites is loaded in the package for testing purpose. The user can load the data available in the package and look at the first 6 rows present in the dataframe as follows:
 
 ```{r data,include=TRUE, echo=TRUE}
 data(pca.methylation.data)
