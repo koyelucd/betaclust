@@ -1,0 +1,282 @@
+---
+title: "betaclust: a family of beta mixture models for beta-valued DNA methylation data"
+author: "Koyel Majumdar, Thomas Brendan Murphy and Isobel Claire Gormley"
+output: rmarkdown::html_vignette
+always_allow_html: true
+vignette: >
+  %\VignetteIndexEntry{betaclust: a family of beta mixture models for beta-valued DNA methylation data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}{inputenc}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(eval = TRUE)
+#knitr::opts_chunk$set(dev = 'png')
+#knitr::opts_chunk$set(dpi=100)
+```
+
+```{r setup2, echo=FALSE,include=FALSE}
+library(plotly)
+library(ggplot2)
+library(foreach)
+library(doParallel)
+
+ # library(devtools)
+ # install_github('koyelucd/betaclust',force = TRUE)
+ # library(betaclust)
+```
+
+# Introduction
+
+The methylation state of a cytosine-guanine dinucleotide (CpG) site is hypermethylated if both the alleles are methylated, hypomethylated if neither of the alleles are methylated and hemimethylated otherwise. A differentially methylated CpG (DMC) site has different methylation states between different samples. Identifying the DMCs between benign and malignant tissue samples can help understand disease and its treatment. The methylation values are known as beta values and can be modelled using beta distributions. The beta values are constrained between 0 and 1 and a beta value close to 0 suggests hypomethylation whereas a value close to 1 suggests hypermethylation. Due to a lack of suitable methods for the beta values in their innate form, beta values are usually transformed to M-values, which can be modelled using a Gaussian distribution. The DMCs are identified using M-values or beta values via multiple t-tests but this can be computationally expensive. Also, arbitrary thresholds are selected to identify the methylation states and used to identify the methylation state of a CpG site.
+
+The package **betaclust** contains a family of novel beta mixture models (BMMs) which use a model-based clustering approach to cluster the CpG sites in their innate beta form to (i) objectively identify methylation state thresholds and (ii) identify the DMCs between different samples. The family of BMMs employs different parameter constraints applicable to different study settings. The EM algorithm is used for parameter estimation, with a novel approximation during the M-step providing tractability and ensuring computational feasibility.
+
+This document gives a quick tour of the functionalities in **betaclust**. See `help(package="betaclust")` for further details and references provided by `citation("betaclust")`.
+
+# Walk through
+
+## Prerequisites
+Before starting the **betaclust** walk through, the user should have a working R software environment installed on their machine. The **betaclust** package has the following dependencies which, if not already installed on the machine will automatically be installed along with the package: **foreach, doParallel, stats, utils, ggplot2, plotly,  scales, devtools**.
+
+Assuming that the user has the **betaclust** package installed, the user first needs to load the package:
+
+```{r package, include=TRUE, echo=TRUE, message=FALSE,warning=FALSE}
+library(betaclust)
+```
+
+
+## Loading the data
+The **betaclust** package provides a preprocessed methylation dataframe which contains beta values of DNA samples collected from 4 patients suffering from high-grade prostate cancer. The samples are collected from benign and tumor prostate tissues. The methylation profiling of these samples is done using the Infinium MethylationEPIC Beadchip technology. The dataset comprises *R = 2* DNA samples collected from each of *N = 4* patients and each sample contains beta values at *C = 694,820* CpG sites. The data were collected for a study on prostate cancer methylomics (Silva et al. 2020).
+
+The methylation array data was quality controlled and preprocessed using the **RnBeads** package (Mueller et al. 2019). The data were then normalized and probes located outside of CpG sites and on the sex chromosome were filtered out. The CpG sites with missing values were removed from the resulting dataset. A subset of the complete PCa dataset (Majumdar et al. 2022) with *C = 10,068* CpG sites is available in the package for testing purposes. The user can load the data available in the package and look at the first 6 rows present in the dataframe as follows:
+
+```{r data,include=TRUE, echo=TRUE}
+data(pca.methylation.data)
+head(pca.methylation.data)
+```
+
+## Identifying methylation thresholds in a DNA sample
+
+The K$\cdot\cdot$ and KN$\cdot$ models (Majumdar et al. 2022) are used to analyse a single DNA sample (*R = 1*) and cluster the CpG sites into *K = M* groups, where *M* is the number of methylation states of a CpG site (typically the methylation state of a CpG site is either hypomethylated, hemimethylated or hypermethylated).
+The thresholds are objectively inferred from the clustering solution. The optimal model can be selected using the AIC, BIC or ICL model selection criterion. The KN$\cdot$ model is selected by the BIC as the optimal model to cluster the CpG sites in the benign sample into 3 methylation states and objectively infer the thresholds.
+
+```{r thresholds,include=TRUE, echo=TRUE}
+M <- 3 ## No. of methylation states in a DNA sample
+N <- 4 ## No. of patients
+R <- 1 ## No. of DNA samples
+my.seed <- 190 ## set seed for reproducibility
+
+threshold_out <- betaclust(pca.methylation.data[,2:5], M, N, R,
+                         model_names = c("K..","KN."),
+                         model_selection = "BIC",
+                         seed = my.seed)
+
+```
+
+### Summary statistics of the clustering solution
+
+Summary statistics can then be obtained using the `summary()` function (see `help("summary.betaclust")`). The output contains the clustering solution of the model selected as optimal.
+
+```{r output0,include=TRUE, echo=TRUE}
+summary(threshold_out)
+```
+
+### Thresholds objectively inferred from the clustering solution
+
+The thresholds, calculated based on the estimated shape parameters, are provided in the output:
+
+```{r output1,include=TRUE, echo=TRUE}
+threshold_points <- threshold_out$optimal_model_results$thresholds
+threshold_points$threholds
+```
+
+### Plotting the density estimates of the clustering solution
+The clustering solution can be visualized using the `plot()` function. The fitted and kernel density estimates, uncertainty and model selection plots can be obtained using the `what` parameter in this function. To generate the fitted and kernel density estimates, the data that has been used for analysis in the previous section, needs to be passed as an input using the `data` argument. Apart from static plots using `plot_type = "ggplot"` interactive plots are also available using `plot_type = "plotly"`.
+
+The fitted densities and the proportion of data in each cluster is displayed in the plots. The thresholds for the methylation states can be displayed using `threshold = TRUE`. As the K$\cdot\cdot$ model constrains the shape parameters to be equal for each patient, a single pair of threshold points is calculated for all patients, and this results in the same fitted density for all patients. In the KN$\cdot$ model, a pair of thresholds is independently determined for each patient based on the estimated shape parameters since the shape parameters differ for each patient. The parameter `patient_number` can be used to choose the patient for whom the fitted density and thresholds need to be visualized. For visualization, the parameter `patient_number` accepts the patient's column number as a value.
+
+The fitted density and threshold points for the first patient in the dataset can be visualized as shown below:
+
+```{r output2,include=TRUE, echo=TRUE,fig.width = 5, fig.height = 4,dpi = 125}
+plot(threshold_out, what = "fitted density", threshold = TRUE, data = pca.methylation.data[,2:5], patient_number = 1, plot_type = "ggplot")
+```
+
+The kernel density estimates for the first patient are displayed as below:
+
+```{r output3,include=TRUE, echo=TRUE,fig.width = 5, fig.height = 4,dpi = 125,warning=FALSE}
+plot(threshold_out, what = "kernel density", threshold = TRUE, data = pca.methylation.data[,2:5], plot_type = "ggplot")
+```
+
+### Plotting the uncertainties in the clustering solution
+
+The uncertainties in clustering represent the probability of a CpG site not belonging to the corresponding cluster. The value $\hat{z}_{ck}$ is the conditional probability that the CpG site *c* belongs to the cluster *k*. For each CpG site *c*, $(1- \max_k {\hat{z}_{ck}})$ is the measure of uncertainty in the associated membership. A low uncertainty shows good certainty in the clustering of the CpG site. A boxplot of the uncertainties in the clustering solution can be obtained as follows:
+
+```{r output4,include=TRUE, echo=TRUE,fig.width = 6, fig.height = 5, dpi = 125}
+plot(threshold_out, what = "uncertainty")
+```
+
+## Identifying DMCs between *R = 2* samples
+
+The methylation values in multiple samples can be analysed and the differentially methylated CpG sites between these samples can be identified. The K$\cdot$R model (Majumdar et al. 2022) clusters the $C \times (NR)$ data into *K = M^R^* groups.
+
+A total of *R = 2* DNA samples were collected from each patient (Silva et al. 2020). Each DNA sample has CpG sites that belong to one of the *M* methylation states, typically *M = 3*. As a result, the *C* CpG sites are clustered into *K = M^R^ = 9* groups.
+
+
+```{r dmc,include=TRUE, echo=TRUE}
+M <- 3  ## No. of methylation states in a DNA sample
+N <- 4  ## No. of patients
+R <- 2  ## No. of DNA samples
+my.seed <- 190 ## set seed for reproducibility
+
+dmc_output <- betaclust(pca.methylation.data[,2:9], M, N, R,
+                      model_names = "K.R",
+                      seed = my.seed)
+```
+
+
+### Summary statistics of the clustering solution
+
+Summary statistics of the clustering solution can then be obtained as follows:
+
+```{r dmcoutput1,include=TRUE, echo=TRUE}
+summary(dmc_output)
+```
+
+
+### Plotting the density estimates of the clustering solution
+
+The fitted density estimates of the clustering solution can be visualised. The names of the DNA samples used in the analysis are passed to the function using `sample_name`. If no input is provided in `sample_name` then default values of sample names, for e.g. Sample 1, Sample 2, etc. are used. The proportion of CpG sites belonging to each cluster is also displayed in each panel. From the plot it can be observed that clusters 1--4 identify the CpG sites where the methylation state tends to change between the two samples whereas clusters 5--9 identify CpG sites which tend to have the same methylation states in both samples.
+
+```{r dmcoutput2,include=TRUE, echo=TRUE,fig.width = 6.5, fig.height = 5,dpi = 125}
+plot(dmc_output, what = "fitted density", plot_type = "ggplot", data = pca.methylation.data[,2:9], sample_name = c("Benign","Tumour"))
+```
+
+The kernel density estimates of the clustering solution are obtained as below:
+
+```{r dmcoutput3,include=TRUE, echo=TRUE,fig.width = 6.5, fig.height = 5,dpi = 125}
+plot(dmc_output, what = "kernel density",plot_type = "ggplot", data = pca.methylation.data[,2:9])
+```
+
+### Plotting the uncertainty in the clustering solution
+
+The uncertainties in the clustering solution can be plotted as follows:
+
+```{r dmcoutput4,include=TRUE, echo=TRUE,fig.width = 6, fig.height = 5, dpi = 125}
+plot(dmc_output, what = "uncertainty", plot_type = "ggplot")
+```
+
+
+### Plotting the empirical cumulative distribution function
+
+Hypermethylation of RARB genes is an important biomarker in prostate cancer studies (Ameri et al. 2011).
+The MethylationEPIC annotated data (see `help("legacy.data")`) available in the package **betaclust** can be used to obtain information on the genes to which the selected DMCs are related. The differentially methylated CpG sites related to RARB genes are selected and passed to the `ecdf.betaclust()` function to visualise the empirical distribution functions (see `help("ecdf.betaclust")`). From the plot it is visible that the CpG sites in the tumour samples have increased beta values compared to those in the benign samples, suggesting hypermethylation of the CpG sites.
+
+```{r dmcoutput5,include=TRUE, echo=TRUE,fig.width = 6, fig.height = 5,dpi = 125}
+## save the clustering solution in a dataframe
+dmc_df <- dmc_output$optimal_model_results$classification
+
+## merge the IlmnID and methylation values to the classification and change the final column name to classification
+dmc_df <- as.data.frame(cbind(pca.methylation.data[,1:9],dmc_df))
+colnames(dmc_df)[ncol(dmc_df)] <- "classification"
+
+## select the differentially methylated CpG sites identified using the K.R model
+dmc_df <- dmc_df[dmc_df$classification == "1" |dmc_df$classification == "2" |dmc_df$classification == "3"|
+                 dmc_df$classification == "4" , ]
+
+##read the legacy data
+data(legacy.data)
+head(legacy.data)
+
+## create empty dataframes and matrices to store the DMCs related to the RARB genes
+ecdf_rarb <- data.frame()
+cpg_rarb <- data.frame(matrix(NA, nrow = 0, ncol = 6))
+colnames(cpg_rarb) <- colnames(legacy.data)
+
+## split the UCSC_RefGene_name column to read the gene name related to that CpG site
+## select the CpG sites related to the RARB genes
+a <- 1
+for(i in 1:nrow(legacy.data))
+{
+  str_vec = unlist(strsplit(as.character(legacy.data[i,"UCSC_RefGene_Name"]),"[;]"))
+  if(length(str_vec) != 0)
+  {
+    if(str_vec[[1]] == "RARB")
+    {
+      cpg_rarb[a,] <- legacy.data[i,]
+      a <- a+1
+    }
+  }
+}
+
+## Read the DMCs related to the RARB genes
+ecdf_rarb <- dmc_df[dmc_df$IlmnID %in% cpg_rarb$IlmnID,]
+
+## Plot the ecdf of the selected DMCs
+ecdf.betaclust(ecdf_rarb[,2:9], R = 2, sample_name = c("Benign","Tumour"))
+```
+
+
+## Wrapper function to fit all models in the family of beta mixture models
+
+All the BMM models or a selection of BMM models can be fit using the wrapper function `betaclust()`. All three BMM models can be fit to a dataset and the optimal model can be selected using the AIC, BIC or ICL criterion.
+
+```{r wrapper,include=TRUE, echo=TRUE}
+wrapper_out <- betaclust(pca.methylation.data[,2:9], M, N, R,
+                        model_names = c("K..","KN.","K.R"),
+                        model_selection = "BIC",
+                        seed = my.seed)
+```
+
+### Summary statistics of the clustering solution
+
+Summary statistics of the clustering solution of the optimal model can then be obtained. The K$\cdot$R model has been selected as the optimal model to identify the DMCs between the benign and tumour samples. The proportion of data belonging to each group has been displayed below.
+
+```{r wrapperoutput1,include=TRUE, echo=TRUE}
+summary(wrapper_out)
+```
+
+
+### Plotting the density estimates of the clustering solution
+
+The fitted density estimates of the clustering solution of the optimal model can be visualised.
+
+```{r wrapperoutput2,include=TRUE, echo=TRUE,fig.width = 6.5, fig.height = 5,dpi = 125}
+plot(wrapper_out, what = "fitted density", plot_type = "ggplot", data = pca.methylation.data[,2:9], sample_name = c("Benign","Tumour"))
+```
+
+
+### Plotting the information criterion values of all models
+
+The information criterion specified in the wrapper function provides values for all models fitted and can be visualised to support the selection of the optimal model.
+
+```{r wrapperoutput3,include=TRUE, echo=TRUE,fig.width = 4, fig.height = 4,dpi = 125}
+plot(wrapper_out, what = "information criterion", plot_type = "ggplot")
+```
+
+
+# References
+Silva, R., Moran, B., Russell, N.M., Fahey, C., Vlajnic, T., Manecksha, R.P., Finn, S.P., Brennan, D.J., Gallagher, W.M., Perry, A.S.: Evaluating liquid biopsies for methylomic profiling of prostate cancer. Epigenetics 15(6-7), 715-727 (2020). https://doi.org/10.1080/15592294.2020.1712876.
+
+Majumdar, K., Silva, R., Perry, A.S., Watson, R.W., Murphy, T.B., Gormley, I.C.: betaclust: a family of mixture models for beta valued DNA methylation data. arXiv [stat.ME] (2022). https://doi.org/10.48550/ARXIV.2211.01938.
+
+Mueller F, Scherer M, Assenov Y, Lutsik P, Walter J, Lengauer T, Bock C (2019): RnBeads 2.0: comprehensive analysis of DNA methylation data. Genome Biology, 20(55). https://doi.org/10.1186/s13059-019-1664-9.
+
+Ameri A, Alidoosti A, Hosseini SY, et al. Prognostic Value of Promoter Hypermethylation of Retinoic
+Acid Receptor Beta (RARB) and CDKN2 (p16/MTS1) in Prostate Cancer. Chinese journal of cancer
+research. 2011;23(4):306-311. https://doi.org/10.1007/s11670-011-0306-x.
+
+Fraley, C., Raftery, A.E.: How many clusters? which clustering method? answers via model-based cluster analysis. The Computer Journal 41, 578-588 (1998). https://doi.org/10.1093/comjnl/41.8.578.
+
+Dempster, A., Laird, N., Rubin, D.: Maximum likelihood from incomplete data via the EM algorithm. Journal of the Royal Statistical Society. Series B (Methodological), 39(1), 1–38 (1977). https://www.jstor.org/stable/2984875.
+
+Diamond, H.G., Straub, A.: Bounds for the logarithm of the Euler gamma function and its derivatives. Journal of Mathematical Analysis and Applications 433(2), 1072-1083 (2016). https://doi.org/10.1016/j.jmaa.2015.08.034.
+
+
+
+
