@@ -103,13 +103,13 @@ The fitted densities and the proportion of data in each cluster is displayed in 
 
 The fitted density and threshold points for the first patient in the dataset can be visualized as shown below:
 
-```{r output2,include=TRUE, echo=TRUE,fig.width = 5, fig.height = 4,dev = 'svg'}
+```{r output2,include=TRUE, echo=TRUE,fig.width = 5, fig.height = 4,dpi = 125}
 plot(threshold_out, what = "fitted density", threshold = TRUE, data = pca.methylation.data[,2:5], patient_number = 1, plot_type = "ggplot")
 ```
 
 The kernel density estimates for the first patient are displayed as below:
 
-```{r output3,include=TRUE, echo=TRUE,fig.width = 5, fig.height = 4,dev = 'svg',warning=FALSE}
+```{r output3,include=TRUE, echo=TRUE,fig.width = 5, fig.height = 4,dpi = 125,warning=FALSE}
 plot(threshold_out, what = "kernel density", threshold = TRUE, data = pca.methylation.data[,2:5], plot_type = "ggplot")
 ```
 
@@ -117,7 +117,7 @@ plot(threshold_out, what = "kernel density", threshold = TRUE, data = pca.methyl
 
 The uncertainties in clustering represent the probability of a CpG site not belonging to the corresponding cluster. The value $\hat{z}_{ck}$ is the conditional probability that the CpG site *c* belongs to the cluster *k*. For each CpG site *c*, $(1- \max_k {\hat{z}_{ck}})$ is the measure of uncertainty in the associated membership. A low uncertainty shows good certainty in the clustering of the CpG site. A boxplot of the uncertainties in the clustering solution can be obtained as follows:
 
-```{r output4,include=TRUE, echo=TRUE,fig.width = 6, fig.height = 5, dev = 'svg'}
+```{r output4,include=TRUE, echo=TRUE,fig.width = 6, fig.height = 5, dpi = 125}
 plot(threshold_out, what = "uncertainty")
 ```
 
@@ -153,13 +153,13 @@ summary(dmc_output)
 
 The fitted density estimates of the clustering solution can be visualised. The names of the DNA samples used in the analysis are passed to the function using `sample_name`. If no input is provided in `sample_name` then default values of sample names, for e.g. Sample 1, Sample 2, etc. are used. The proportion of CpG sites belonging to each cluster is also displayed in each panel. From the plot it can be observed that clusters 1--4 identify the CpG sites where the methylation state tends to change between the two samples whereas clusters 5--9 identify CpG sites which tend to have the same methylation states in both samples.
 
-```{r dmcoutput2,include=TRUE, echo=TRUE,fig.width = 6.5, fig.height = 5,dev = 'svg'}
+```{r dmcoutput2,include=TRUE, echo=TRUE,fig.width = 6.5, fig.height = 5,dpi = 125}
 plot(dmc_output, what = "fitted density", plot_type = "ggplot", data = pca.methylation.data[,2:9], sample_name = c("Benign","Tumour"))
 ```
 
 The kernel density estimates of the clustering solution are obtained as below:
 
-```{r dmcoutput3,include=TRUE, echo=TRUE,fig.width = 6.5, fig.height = 5,dev = 'svg'}
+```{r dmcoutput3,include=TRUE, echo=TRUE,fig.width = 6.5, fig.height = 5,dpi = 125}
 plot(dmc_output, what = "kernel density",plot_type = "ggplot", data = pca.methylation.data[,2:9])
 ```
 
@@ -167,7 +167,7 @@ plot(dmc_output, what = "kernel density",plot_type = "ggplot", data = pca.methyl
 
 The uncertainties in the clustering solution can be plotted as follows:
 
-```{r dmcoutput4,include=TRUE, echo=TRUE,fig.width = 6, fig.height = 5, dev = 'svg'}
+```{r dmcoutput4,include=TRUE, echo=TRUE,fig.width = 6, fig.height = 5, dpi = 125}
 plot(dmc_output, what = "uncertainty", plot_type = "ggplot")
 ```
 
@@ -177,7 +177,7 @@ plot(dmc_output, what = "uncertainty", plot_type = "ggplot")
 Hypermethylation of RARB genes is an important biomarker in prostate cancer studies (Ameri et al. 2011).
 The MethylationEPIC annotated data (see `help("legacy.data")`) available in the package **betaclust** can be used to obtain information on the genes to which the selected DMCs are related. The differentially methylated CpG sites related to RARB genes are selected and passed to the `ecdf.betaclust()` function to visualise the empirical distribution functions (see `help("ecdf.betaclust")`). From the plot it is visible that the CpG sites in the tumour samples have increased beta values compared to those in the benign samples, suggesting hypermethylation of the CpG sites.
 
-```{r dmcoutput5,include=TRUE, echo=TRUE,fig.width = 6, fig.height = 5,dev = 'svg'}
+```{r dmcoutput5,include=TRUE, echo=TRUE,fig.width = 6, fig.height = 5,dpi = 125}
 ## save the clustering solution in a dataframe
 dmc_df <- dmc_output$optimal_model_results$classification
 
@@ -246,7 +246,7 @@ summary(wrapper_out)
 
 The fitted density estimates of the clustering solution of the optimal model can be visualised.
 
-```{r wrapperoutput2,include=TRUE, echo=TRUE,fig.width = 6.5, fig.height = 5,dev = 'svg'}
+```{r wrapperoutput2,include=TRUE, echo=TRUE,fig.width = 6.5, fig.height = 5,dpi = 125}
 plot(wrapper_out, what = "fitted density", plot_type = "ggplot", data = pca.methylation.data[,2:9], sample_name = c("Benign","Tumour"))
 ```
 
@@ -255,7 +255,7 @@ plot(wrapper_out, what = "fitted density", plot_type = "ggplot", data = pca.meth
 
 The information criterion specified in the wrapper function provides values for all models fitted and can be visualised to support the selection of the optimal model.
 
-```{r wrapperoutput3,include=TRUE, echo=TRUE,fig.width = 4, fig.height = 4,dev = 'svg'}
+```{r wrapperoutput3,include=TRUE, echo=TRUE,fig.width = 4, fig.height = 4,dpi = 125}
 plot(wrapper_out, what = "information criterion", plot_type = "ggplot")
 ```
 
