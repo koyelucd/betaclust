@@ -15,7 +15,9 @@ Imports: foreach,
          ggplot2, 
          plotly, 
          scales, 
-         devtools
+         devtools,
+         graphics,
+         grDevices
 Encoding: UTF-8
 NeedsCompilation: yes
 LazyData: true

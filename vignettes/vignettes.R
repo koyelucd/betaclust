@@ -44,13 +44,13 @@ summary(threshold_out)
 threshold_points <- threshold_out$optimal_model_results$thresholds
 threshold_points$threholds
 
-## ----output2,include=TRUE, echo=TRUE,fig.width = 5, fig.height = 4,dev = 'svg'----
+## ----output2,include=TRUE, echo=TRUE,fig.width = 5, fig.height = 4,dpi = 125----
 plot(threshold_out, what = "fitted density", threshold = TRUE, data = pca.methylation.data[,2:5], patient_number = 1, plot_type = "ggplot")
 
-## ----output3,include=TRUE, echo=TRUE,fig.width = 5, fig.height = 4,dev = 'svg',warning=FALSE----
+## ----output3,include=TRUE, echo=TRUE,fig.width = 5, fig.height = 4,dpi = 125,warning=FALSE----
 plot(threshold_out, what = "kernel density", threshold = TRUE, data = pca.methylation.data[,2:5], plot_type = "ggplot")
 
-## ----output4,include=TRUE, echo=TRUE,fig.width = 6, fig.height = 5, dev = 'svg'----
+## ----output4,include=TRUE, echo=TRUE,fig.width = 6, fig.height = 5, dpi = 125----
 plot(threshold_out, what = "uncertainty")
 
 ## ----dmc,include=TRUE, echo=TRUE----------------------------------------------
@@ -66,16 +66,16 @@ dmc_output <- betaclust(pca.methylation.data[,2:9], M, N, R,
 ## ----dmcoutput1,include=TRUE, echo=TRUE---------------------------------------
 summary(dmc_output)
 
-## ----dmcoutput2,include=TRUE, echo=TRUE,fig.width = 6.5, fig.height = 5,dev = 'svg'----
+## ----dmcoutput2,include=TRUE, echo=TRUE,fig.width = 6.5, fig.height = 5,dpi = 125----
 plot(dmc_output, what = "fitted density", plot_type = "ggplot", data = pca.methylation.data[,2:9], sample_name = c("Benign","Tumour"))
 
-## ----dmcoutput3,include=TRUE, echo=TRUE,fig.width = 6.5, fig.height = 5,dev = 'svg'----
+## ----dmcoutput3,include=TRUE, echo=TRUE,fig.width = 6.5, fig.height = 5,dpi = 125----
 plot(dmc_output, what = "kernel density",plot_type = "ggplot", data = pca.methylation.data[,2:9])
 
-## ----dmcoutput4,include=TRUE, echo=TRUE,fig.width = 6, fig.height = 5, dev = 'svg'----
+## ----dmcoutput4,include=TRUE, echo=TRUE,fig.width = 6, fig.height = 5, dpi = 125----
 plot(dmc_output, what = "uncertainty", plot_type = "ggplot")
 
-## ----dmcoutput5,include=TRUE, echo=TRUE,fig.width = 6, fig.height = 5,dev = 'svg'----
+## ----dmcoutput5,include=TRUE, echo=TRUE,fig.width = 6, fig.height = 5,dpi = 125----
 ## save the clustering solution in a dataframe
 dmc_df <- dmc_output$optimal_model_results$classification
 
@@ -127,9 +127,9 @@ wrapper_out <- betaclust(pca.methylation.data[,2:9], M, N, R,
 ## ----wrapperoutput1,include=TRUE, echo=TRUE-----------------------------------
 summary(wrapper_out)
 
-## ----wrapperoutput2,include=TRUE, echo=TRUE,fig.width = 6.5, fig.height = 5,dev = 'svg'----
+## ----wrapperoutput2,include=TRUE, echo=TRUE,fig.width = 6.5, fig.height = 5,dpi = 125----
 plot(wrapper_out, what = "fitted density", plot_type = "ggplot", data = pca.methylation.data[,2:9], sample_name = c("Benign","Tumour"))
 
-## ----wrapperoutput3,include=TRUE, echo=TRUE,fig.width = 4, fig.height = 4,dev = 'svg'----
+## ----wrapperoutput3,include=TRUE, echo=TRUE,fig.width = 4, fig.height = 4,dpi = 125----
 plot(wrapper_out, what = "information criterion", plot_type = "ggplot")
 
