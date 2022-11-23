@@ -1,15 +1,15 @@
 #' @title Bayesian Information Criterion
 #' @description Compute the BIC value for the optimal model.
-#' @details Computes the BIC for a specified model given the log-likelihood, the dimension of the data, and the model specification.
+#' @details Computes the BIC for a specified model given the log-likelihood, the dimension of the data, and the model names.
 #' @export
 #' @seealso \code{\link{em_aic}}
 #' @seealso  \code{\link{em_icl}}
-#' @param llk log-likelihood value.
-#' @param C number of CpG sites.
-#' @param M number of methylation states identified in a DNA sample.
-#' @param N number of patients.
-#' @param R number of DNA samples collected from each patient.
-#' @param model_name fitted mixture model (model_name = c("K..","KN.","K.R")).
+#' @param llk Log-likelihood value.
+#' @param C Number of CpG sites.
+#' @param M Number of methylation states identified in a DNA sample.
+#' @param N Number of patients.
+#' @param R Number of DNA samples collected from each patient.
+#' @param model_name Fitted mixture model. Options are "K..", "KN." and/or "K.R" (default = "K..").
 #' @return The BIC value for the selected model.
 
 em_bic<-function(llk,C,M,N,R,model_name="K.."){

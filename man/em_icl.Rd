@@ -7,19 +7,19 @@
 em_icl(llk, C, M, N, R, model_name = "K..", z)
 }
 \arguments{
-\item{llk}{log-likelihood value.}
+\item{llk}{Log-likelihood value.}
 
-\item{C}{number of CpG sites.}
+\item{C}{Number of CpG sites.}
 
-\item{M}{number of methylation states identified in a DNA sample.}
+\item{M}{Number of methylation states identified in a DNA sample.}
 
-\item{N}{number of patients.}
+\item{N}{Number of patients.}
 
-\item{R}{number of DNA samples collected from each patient.}
+\item{R}{Number of DNA samples collected from each patient.}
 
-\item{model_name}{fitted mixture model (model_name = c("K..","KN.","K.R")).}
+\item{model_name}{Fitted mixture model. Options are "K..", "KN." and/or "K.R" (default = "K..").}
 
-\item{z}{a matrix of posterior probability of cluster membership, stored as z in the object from \code{\link[betaclust]{beta_k}}/\code{\link[betaclust]{beta_kn}}/\code{\link[betaclust]{beta_kr}} functions.}
+\item{z}{A matrix of posterior probabilities of cluster membership, stored as z in the object from \code{\link[betaclust]{beta_k}}, \code{\link[betaclust]{beta_kn}} and \code{\link[betaclust]{beta_kr}} functions.}
 }
 \value{
 The ICL value for the selected model.
@@ -28,8 +28,7 @@ The ICL value for the selected model.
 Compute the ICL value for the optimal model.
 }
 \details{
-Computes the ICL for a specified model given the log-likelihood, the dimension of the data, and the model specification. This criterion penalises the BIC by including an entropy term favouring the
-well separated clusters.
+Computes the ICL for a specified model given the log-likelihood, the dimension of the data, and the model names. This criterion penalises the BIC by including an entropy term favouring well separated clusters.
 }
 \seealso{
 \code{\link{em_aic}}

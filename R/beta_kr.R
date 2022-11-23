@@ -1,11 +1,11 @@
 globalVariables(c("k"))
-#' @title The K.R Model
+#' @title Fit the K.R Model
 #' @export
 #' @description A beta mixture model for identifying differentially methylated CpG sites between \eqn{R} DNA samples collected from \eqn{N} patients.
 #'
 #' @seealso \code{\link{betaclust}}
 #'
-#' @param data A dataframe of dimension \eqn{C*NR} containing methylation values for \eqn{C} CpG sites from \eqn{R} samples collected from \eqn{N} patients.
+#' @param data A dataframe of dimension \eqn{C \times NR} containing methylation values for \eqn{C} CpG sites from \eqn{R} samples collected from \eqn{N} patients.
 #' Samples are grouped together in the dataframe such that the columns are ordered as Sample1_Patient1, Sample1_Patient2, Sample2_Patient1, Sample2_Patient2, etc.
 #' @param M Number of methylation states to be identified.
 #' @param N Number of patients in the study.
@@ -17,26 +17,26 @@ globalVariables(c("k"))
 #' As each CpG site in a DNA sample can belong to one of \eqn{M} methylation states, there can be \eqn{K=M^R} methylation state changes between \eqn{R} DNA samples.
 #' The shape parameters vary for each DNA sample but are constrained to be equal for each patient. An initial clustering using k-means is performed to identify \eqn{K} clusters. The resulting clustering solution is provided as
 #' starting values to the Expectation-Maximisation algorithm. A digamma approximation is used to obtain the maximised
-#' parameters in the M-step instead of a computationally inefficient numerical optimisation step.
+#' parameters in the M-step.
 #' @return A list containing:
 #' \itemize{
-#'    \item cluster_size - the total number of CpG sites in each of the K clusters.
-#'    \item llk - a vector containing the log-likelihood value at each step of the EM algorithm.
-#'    \item data - this contains the methylation dataset along with the cluster label for each CpG site.
-#'    \item alpha - this contains the first shape parameter for the beta mixture model.
-#'    \item delta - this contains the second shape parameter for the beta mixture model.
-#'    \item tau - the proportion of CpG sites in each cluster.
-#'    \item z - a matrix of dimension \eqn{C*K} containing the posterior probability of each CpG site belonging to each of the \eqn{K} clusters.
-#'    \item uncertainty - the uncertainty of each CpG site's clustering.    }
+#'    \item cluster_size - The total number of CpG sites in each of the K clusters.
+#'    \item llk - A vector containing the log-likelihood value at each step of the EM algorithm.
+#'    \item alpha - The first shape parameter for the beta mixture model.
+#'    \item delta - The second shape parameter for the beta mixture model.
+#'    \item tau - The proportion of CpG sites in each cluster.
+#'    \item z - A matrix of dimension \eqn{C \times K} containing the posterior probability of each CpG site belonging to each of the \eqn{K} clusters.
+#'    \item classification - The classification corresponding to z, i.e. map(z).
+#'    \item uncertainty - The uncertainty of each CpG site's clustering.    }
 #'
 #' @examples
 #' \dontrun{
 #' data(pca.methylation.data)
-#' my.seed = 190
-#' M = 3
-#' N = 4
-#' R = 2
-#' data_output = beta_kr(pca.methylation.data[,2:5],M,N,R,seed = my.seed)
+#' my.seed <- 190
+#' M <- 3
+#' N <- 4
+#' R <- 2
+#' data_output = beta_kr(pca.methylation.data[,2:5], M, N, R, seed = my.seed)
 #' }
 #' @importFrom foreach %dopar%
 #' @importFrom stats C
@@ -319,6 +319,7 @@ beta_kr<-function(data,M=3,N,R,seed=NULL){
   data_final<-data_final[,-(N*R+1)]
   colnames(data_final)[(N*R+1)]<-"mem_final"
   data_final$mem_final<-as.factor(data_final$mem_final)
+  classification=as.factor(as.vector(data_final$mem_final))
   cert_final=apply(z_final,1,max)
   uc_final=1-cert_final
   cluster_count=table(data_final$mem_final)
@@ -326,8 +327,8 @@ beta_kr<-function(data,M=3,N,R,seed=NULL){
 
   #### Return data
   #return(list(cluster_count=cluster_count,llk=llk_iter,data=complete_data,alpha=alpha,delta=delta,tau=tau,z=z_new,uncertainty=uc))
-  return(list(cluster_size=cluster_count,llk=llk_iter,data=data_final,
+  return(list(cluster_size=cluster_count,llk=llk_iter,
               alpha=alpha_final,delta=delta_final,tau=tau_final,
-              z=z_final,uncertainty=uc_final))
+              z=z_final,classification=classification,uncertainty=uc_final))
 
 }

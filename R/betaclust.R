@@ -1,10 +1,12 @@
 #' @title The betaclust wrapper function
 #' @export
-#' @description A family of model based clustering techniques to identify methylation states in beta valued DNA methylation data.
+#' @description A family of model-based clustering techniques to identify methylation states in beta-valued DNA methylation data.
 #'
-#' @details This is a wrapper function which can be used to fit all three models (K.., KN., K.R) together.
-#' The K.. and KN. models are used to analyse a single DNA sample (\eqn{R = 1}) and cluster the \eqn{C} CpG sites into the \eqn{K} clusters which represent the different methylation states in a DNA sample. As each CpG site can belong to either of the \eqn{M=3} methylation states (hypomethylation, hemimethylation and hypermethylation), the default value for \eqn{K=M=3}.
+#' @details This is a wrapper function which can be used to fit all three models (K.., KN., K.R) within a single function.
+#'
+#' The K.. and KN. models are used to analyse a single DNA sample (\eqn{R = 1}) and cluster the \eqn{C} CpG sites into the \eqn{K} clusters which represent the different methylation states in a DNA sample. As each CpG site can belong to any of the \eqn{M=3} methylation states (hypomethylation, hemimethylation and hypermethylation), the default value for \eqn{K=M=3}.
 #' The thresholds between methylation states are objectively inferred from the clustering solution.
+#'
 #' The K.R model is used to analyse \eqn{R} independent samples collected from \eqn{N} patients, where each sample contains \eqn{C} CpG sites, and cluster
 #' the dataset into \eqn{K=M^R} clusters to identify the differentially methylated CpG (DMC) sites between the \eqn{R} DNA samples.
 #'
@@ -16,56 +18,56 @@
 #' @seealso \code{\link{summary.betaclust}}
 #' @seealso \code{\link{threshold}}
 #'
-#' @param data A dataframe of dimension \eqn{C*NR} containing methylation values for \eqn{C} CpG sites from \eqn{R} samples collected from \eqn{N} patients.
+#' @param data A dataframe of dimension \eqn{C \times NR} containing methylation values for \eqn{C} CpG sites from \eqn{R} samples collected from \eqn{N} patients.
 #' Samples are grouped together in the dataframe such that the columns are ordered as Sample1_Patient1, Sample1_Patient2, Sample2_Patient1, Sample2_Patient2, etc.
 #' @param M Number of methylation states to be identified in a DNA sample.
 #' @param N Number of patients in the study.
 #' @param R Number of samples collected from each patient for the study.
 #' @param model_names Models to run from the set of models, K.., KN. and K.R, default = K.. . See details.
-#' @param model_selection Information criterion used for model selection. Options are AIC/BIC/ICL/default = BIC.
+#' @param model_selection Information criterion used for model selection. Options are AIC, BIC or ICL (default = BIC).
 #' @param seed Seed to allow for reproducibility (default = NULL).
 #'
-#' @return The function returns an object of \code{\link[betaclust:betaclust]{betaclust}} class which contains the following values:
+#' @return The function returns an object of the \code{\link[betaclust:betaclust]{betaclust}} class which contains the following values:
 #' \itemize{
-#' \item information_criterion - the information criterion used to select the optimal model.
-#' \item ic_output - this stores the information criterion value calculated for each model.
-#' \item optimal_model - the model selected as optimal.
-#' \item function_call - the parameters passed as arguments to the function betaclust.
-#' \item K - the number of clusters identified using the beta mixture models.
-#' \item C - the number of CpG sites analysed using the beta mixture models.
-#' \item N - the number of patients analysed using the beta mixture models.
-#' \item R - the number of samples analysed using the beta mixture models.
-#' \item optimal_model_results - this contains information from the optimal model. Specifically,
+#' \item information_criterion - The information criterion used to select the optimal model.
+#' \item ic_output - The information criterion value calculated for each model.
+#' \item optimal_model - The model selected as optimal.
+#' \item function_call - The parameters passed as arguments to the function \code{\link[betaclust:betaclust]{betaclust}}.
+#' \item K - The number of clusters identified using the beta mixture models.
+#' \item C - The number of CpG sites analysed using the beta mixture models.
+#' \item N - The number of patients analysed using the beta mixture models.
+#' \item R - The number of samples analysed using the beta mixture models.
+#' \item optimal_model_results - Information from the optimal model. Specifically,
 #'    \itemize{
-#'    \item cluster_size - the total number of CpG sites in each of the K clusters.
-#'    \item llk - a vector containing the log-likelihood value at each step of the EM algorithm.
-#'    \item data - this contains the methylation dataset along with the cluster label for each CpG site.
-#'    \item alpha - this contains the first shape parameter for the beta mixture model.
-#'    \item delta - this contains the second shape parameter for the beta mixture model.
-#'    \item tau - the proportion of CpG sites in each cluster.
-#'    \item z - a matrix of dimension \eqn{C*K} containing the posterior probability of each CpG site belonging to each of the \eqn{K} clusters.
-#'    \item uncertainty - the uncertainty of each CpG site's clustering.
-#'    \item thresholds - threshold points calculated under the K.. or the KN. model.
+#'    \item cluster_size - The total number of CpG sites in each of the K clusters.
+#'    \item llk - A vector containing the log-likelihood value at each step of the EM algorithm.
+#'    \item alpha - This contains the first shape parameter for the beta mixture model.
+#'    \item delta - This contains the second shape parameter for the beta mixture model.
+#'    \item tau - The proportion of CpG sites in each cluster.
+#'    \item z - A matrix of dimension \eqn{C \times K} containing the posterior probability of each CpG site belonging to each of the \eqn{K} clusters.
+#'    \item classification - The classification corresponding to z, i.e. map(z).
+#'    \item uncertainty - The uncertainty of each CpG site's clustering.
+#'    \item thresholds - Threshold points calculated under the K.. or the KN. model.
 #'    }
 #' }
 #'
 #' @examples
 #' \dontrun{
 #' data(pca.methylation.data)
-#' my.seed = 190
-#' M = 3
-#' N = 4
-#' R = 2
-#' data_output = betaclust(pca.methylation.data[,2:9],M,N,R,
-#'             model_names = c("K..","KN.","K.R"),model_selection = "BIC",seed = my.seed)
+#' my.seed <- 190
+#' M <- 3
+#' N <- 4
+#' R <- 2
+#' data_output <- betaclust(pca.methylation.data[,2:9], M, N, R,
+#'             model_names = c("K..","KN.","K.R"), model_selection = "BIC", seed = my.seed)
 #' }
 #'
 #'
 #' @importFrom foreach %dopar%
 #' @importFrom stats C
 #' @importFrom utils txtProgressBar
-#' @references {Silva, R., Moran, B., Russell, N.M., Fahey, C., Vlajnic, T., Manecksha, R.P., Finn, S.P., Brennan, D.J., Gallagher, W.M., Perry, A.S.: Evaluating liquid biopsies for methylomic profiling of prostate cancer. Epigenetics 15(6-7), 715-727 (2020). doi:10.1080/15592294.2020.1712876.}
-#' @references {Majumdar, K., Silva, R., Perry, A.S., Watson, R.W., Murphy, T.B., Gormley, I.C.: betaclust: a family of mixture models for beta valued DNA methylation data.}
+#' @references {Silva, R., Moran, B., Russell, N.M., Fahey, C., Vlajnic, T., Manecksha, R.P., Finn, S.P., Brennan, D.J., Gallagher, W.M., Perry, A.S.: Evaluating liquid biopsies for methylomic profiling of prostate cancer. Epigenetics 15(6-7), 715-727 (2020). \doi{10.1080/15592294.2020.1712876}.}
+#' @references {Majumdar, K., Silva, R., Perry, A.S., Watson, R.W., Murphy, T.B., Gormley, I.C.: betaclust: a family of mixture models for beta valued DNA methylation data. arXiv [stat.ME] (2022). \doi{10.48550/ARXIV.2211.01938}.}
 
 
 betaclust<-function(data,M=3,N,R,model_names="K..",model_selection="BIC",seed=NULL){
@@ -81,12 +83,9 @@ betaclust<-function(data,M=3,N,R,model_names="K..",model_selection="BIC",seed=NU
 
   ## Progress bar
   cat("fitting ...\n")
-  #flush.console()
   pbar <- utils::txtProgressBar(min = 0, max = model_len, style = 3)
   on.exit(close(pbar))
 
-
-  #print(X[1:3,])
   if(length(model_names))
   {
     for(i in 1:len)
@@ -94,7 +93,6 @@ betaclust<-function(data,M=3,N,R,model_names="K..",model_selection="BIC",seed=NU
       ## Call for K.. function
       if(model_names[i] == "K..")
       {
-        #print(model_names[i])
         ## check if R>1
         if(R>1)
         {
@@ -103,13 +101,10 @@ betaclust<-function(data,M=3,N,R,model_names="K..",model_selection="BIC",seed=NU
         }
 
         call_data=X[,1:N]
-        #print(call_data[1:4,])
         k_out<-beta_k(call_data,M,seed)
         len_llk<-length(k_out$llk)
         llk<-c(llk,k_out$llk[len_llk])
         z[[i]]<-k_out$z
-        #print(c_out$alpha)
-        #print(c_out$beta)
       }
       ## Call for KN. function
       if(model_names[i] == "KN.")
@@ -123,8 +118,6 @@ betaclust<-function(data,M=3,N,R,model_names="K..",model_selection="BIC",seed=NU
         len_llk<-length(kn_out$llk)
         llk<-c(llk,kn_out$llk[len_llk])
         z[[i]]<-kn_out$z
-        #print(cn_out$alpha)
-        #print(cn_out$beta)
       }
       ## Call for K.R function
       if(model_names[i] == "K.R")
@@ -133,13 +126,14 @@ betaclust<-function(data,M=3,N,R,model_names="K..",model_selection="BIC",seed=NU
         if(R<=1){
           warning("K.R considers only multiple samples. Please pass DNA methylation values for more than 1 sample.", call. = FALSE)
           llk<-c(llk,NA)
-        }else {
+        }else if(ncol(X)<(N*R)){
+          warning("K.R considers only multiple samples. Please pass DNA methylation values for more than 1 sample.", call. = FALSE)
+          llk<-c(llk,NA)
+          }else{
           kr_out<-beta_kr(X,M,N,R,seed)
           len_llk<-length(kr_out$llk)
           llk<-c(llk,kr_out$llk[len_llk])
           z[[i]]<-kr_out$z
-          #print(cr_out$alpha)
-          #print(cr_out$beta)
         }
       }
       ##Set Progress bar
@@ -148,9 +142,7 @@ betaclust<-function(data,M=3,N,R,model_names="K..",model_selection="BIC",seed=NU
 
   }
 
-  # print(llk)
-  # print(model_names)
-  # print(model_selection)
+
   ### Optimal model selection and output
 
   if(model_selection=="BIC")
@@ -176,20 +168,20 @@ betaclust<-function(data,M=3,N,R,model_names="K..",model_selection="BIC",seed=NU
 
   call_function<-match.call()
 
-  #N=patients
+
   R_old=R
   K=0
   if(min_method=="K..")
   {
     final_output<-k_out
-    thresholds<-threshold(k_out,min_method)
+    thresholds<-threshold(k_out,call_data,min_method)
     final_output$thresholds<-thresholds
     K=M
     R=1
   }else if(min_method=="KN.")
   {
     final_output<-kn_out
-    thresholds<-threshold(kn_out,min_method)
+    thresholds<-threshold(kn_out,call_data,min_method)
     final_output$thresholds<-thresholds
     K=M
     R=1
@@ -200,9 +192,6 @@ betaclust<-function(data,M=3,N,R,model_names="K..",model_selection="BIC",seed=NU
     R=R_old
   }
 
-
-
-  #print("Execution is complete")
 
   beta_out<-list(information_criterion=model_selection,ic_output=ic_op,
                  optimal_model=min_method,function_call=call_function,K=K,C=C,N=N,R=R,

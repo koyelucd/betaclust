@@ -3,26 +3,26 @@
 #' @rdname summary.betaclust
 #' @export
 #' @param object A \code{\link[betaclust:betaclust]{betaclust}} object.
-#' @param ... Further arguments to be ignored.
-#' @return An object of class \code{\link[betaclust:summary.betaclust]{summary.betaclust}} which contains the following list of values:
+#' @param ... Further arguments passed to or from other methods.
+#' @return An object of class \code{\link[betaclust:summary.betaclust]{summary.betaclust}} which contains the following list:
 #' \itemize{
-#' \item C - the number of CpG sites analysed using the beta mixture models.
-#' \item N - the number of patients analysed using the beta mixture models.
-#' \item R - the number of samples analysed using the beta mixture models.
-#' \item K - the number of methylation states in R DNA samples.
-#' \item modelName - the optimal model selected.
-#' \item loglik - the log-likelihood value for the selected optimal model.
-#' \item information_criterion - the information criterion used to select the optimal model.
-#' \item ic_output - this stores the information criterion value calculated for each model.
-#' \item classification - the total number of CpG sites in each cluster.
-#' \item prop_data - the proportion of CpG sites in each cluster.}
+#' \item C - The number of CpG sites analysed using the beta mixture models.
+#' \item N - The number of patients analysed using the beta mixture models.
+#' \item R - The number of samples analysed using the beta mixture models.
+#' \item K - The number of methylation states in R DNA samples.
+#' \item modelName - The optimal model selected.
+#' \item loglik - The log-likelihood value for the selected optimal model.
+#' \item information_criterion - The information criterion used to select the optimal model.
+#' \item ic_output - This stores the information criterion value calculated for each model.
+#' \item classification - The total number of CpG sites in each cluster.
+#' \item prop_data - The proportion of CpG sites in each cluster.}
 #' @examples
 #' \dontrun{
-#' M=3
-#' N=4
-#' R=2
-#' data_output=betaclust(pca.methylation.data[,2:9],M,N,R,
-#'             model_names=c("K..","KN.","K.R"),model_selection="BIC",seed=my.seed)
+#' M <- 3
+#' N <- 4
+#' R <- 2
+#' data_output <- betaclust(pca.methylation.data[,2:9], M, N, R,
+#'             model_names=c("K..","KN.","K.R"), model_selection="BIC", seed=my.seed)
 #' summary(data_output)}
 #' @seealso \code{\link{betaclust}}
 
@@ -34,7 +34,8 @@ summary.betaclust<-function(object,...)
   loglik=object$optimal_model_results$llk[length(object$optimal_model_results$llk)]
   #classification<-as.factor(object$optimal_model_results$data[,ncol(object$optimal_model_results$data)])
   #clustering<-as.factor(object$optimal_model_results$data[,ncol(object$optimal_model_results$data)])
-  classification<-table(as.factor(object$optimal_model_results$data[,ncol(object$optimal_model_results$data)]))
+ # classification<-table(as.factor(object$optimal_model_results$data[,ncol(object$optimal_model_results$data)]))
+  classification<-table(as.factor(object$optimal_model_results$classification))
   prop_data<-round((as.numeric(object$optimal_model_results$cluster_size)/object$C),3)
   obj <- list(title = title,
               C=object$C,

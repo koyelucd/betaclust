@@ -1,42 +1,42 @@
 globalVariables(c("k"))
-#' @title The KN. model
-#' @description Fit the KN. model from the family of beta mixture models for DNA methylation data.
+#' @title Fit the KN. model
+#' @description Fit the KN. model from the \code{\link[betaclust:betaclust]{betaclust}} family of beta mixture models for DNA methylation data.
 #'              The KN. model analyses a single DNA sample and identifies the thresholds between the different methylation states.
 #'
 #' @export
 #'
 #' @details The KN. model clusters each of the \eqn{C} CpG sites into one of \eqn{K} methylation states, based on data from \eqn{N} patients for one DNA sample (i.e. \eqn{R = 1}).
-#' As each CpG site can belong to either of the \eqn{M = 3} methylation states (hypomethylated, hemimethylated or hypermethylated), the default value of \eqn{K = M = 3}.
-#' The KN. model differs from the C.. model as it is less parsimonious, allowing cluster and patient-specific shape parameters. The returned object from this function can be passed as an input parameter to the
+#' As each CpG site can belong to any of the \eqn{M = 3} methylation states (hypomethylated, hemimethylated or hypermethylated), the default value of \eqn{K = M = 3}.
+#' The KN. model differs from the K.. model as it is less parsimonious, allowing cluster and patient-specific shape parameters. The returned object can be passed as an input parameter to the
 #' \code{\link[betaclust:threshold]{threshold}} function available in this package to calculate the thresholds between the methylation states.
 #'
 #' @seealso \code{\link{beta_k}}
 #' @seealso \code{\link{betaclust}}
 #' @seealso \code{\link{threshold}}
 #'
-#' @param data A dataframe of dimension \eqn{C*N} containing methylation values for \eqn{C} CpG sites from \eqn{R = 1} samples collected from \eqn{N} patients.
+#' @param data A dataframe of dimension \eqn{C \times N} containing methylation values for \eqn{C} CpG sites from \eqn{R = 1} samples collected from \eqn{N} patients.
 #' Samples are grouped together in the dataframe such that the columns are ordered as Sample1_Patient1, Sample1_Patient2, etc.
 #' @param M Number of methylation states to be identified in a DNA sample.
 #' @param seed Seed to allow for reproducibility (default = NULL).
 #'
 #' @return A list containing:
 #' \itemize{
-#'    \item cluster_size - the total number of CpG sites in each of the K clusters.
-#'    \item llk - a vector containing the log-likelihood value at each step of the EM algorithm.
-#'    \item data - this contains the methylation dataset along with the cluster label for each CpG site.
-#'    \item alpha - this contains the first shape parameter for the beta mixture model.
-#'    \item delta - this contains the second shape parameter for the mixture model.
-#'    \item tau - the proportion of CpG sites in each cluster.
-#'    \item z - a matrix of dimension \eqn{C*K} containing the posterior probability of each CpG site belonging to each of the \eqn{K} clusters.
-#'    \item uncertainty - the uncertainty of each CpG site's clustering.    }
+#'    \item cluster_size - The total number of CpG sites in each of the K clusters.
+#'    \item llk - A vector containing the log-likelihood value at each step of the EM algorithm.
+#'    \item alpha - The first shape parameter for the beta mixture model.
+#'    \item delta - The second shape parameter for the mixture model.
+#'    \item tau - The proportion of CpG sites in each cluster.
+#'    \item z - A matrix of dimension \eqn{C \times K} containing the posterior probability of each CpG site belonging to each of the \eqn{K} clusters.
+#'    \item classification - The classification corresponding to z, i.e. map(z).
+#'    \item uncertainty - The uncertainty of each CpG site's clustering.    }
 #'
 #' @examples
 #' \dontrun{
 #' data(pca.methylation.data)
-#' my.seed = 190
-#' M = 3
-#' data_output = beta_kn(pca.methylation.data[,2:5],M,seed = my.seed)
-#' thresholds = threshold(data_output,"KN.")
+#' my.seed <- 190
+#' M <- 3
+#' data_output <- beta_kn(pca.methylation.data[,2:5], M, seed = my.seed)
+#' thresholds <- threshold(data_output, pca.methylation.data[,2:5], "KN.")
 #' }
 #' @importFrom foreach %dopar%
 #' @importFrom stats C
@@ -273,9 +273,10 @@ beta_kn<-function(data,M=3,seed=NULL){
 
   ## Clustering
   mem_final<-matrix(NA,C,1)
-  complete_data<-matrix(NA,C,(N+1))
+  #complete_data<-matrix(NA,C,(N+1))
   mem_final<-apply(z_new, 1, which.max)
-  complete_data<-cbind(x,mem_final)
+  classification=mem_final
+  #complete_data<-cbind(x,mem_final)
   cluster_count=table(mem_final)
 
   ### uncertainty
@@ -287,6 +288,6 @@ beta_kn<-function(data,M=3,seed=NULL){
 
   parallel::stopCluster(cl=my.cluster)
   #### Return data
-  return(list(cluster_size=cluster_count,llk=llk_iter,data=complete_data,alpha=alpha,delta=delta,tau=tau,z=z_new,uncertainty=uc))
+  return(list(cluster_size=cluster_count,llk=llk_iter,alpha=alpha,delta=delta,tau=tau,z=z_new,classification=classification,uncertainty=uc))
 
 }

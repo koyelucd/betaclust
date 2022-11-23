@@ -2,18 +2,17 @@ globalVariables(c("patients","samples"))
 #' @title Integrated Complete-data Likelihood (ICL) Criterion
 #' @description Compute the ICL value for the optimal model.
 #'
-#' @details Computes the ICL for a specified model given the log-likelihood, the dimension of the data, and the model specification. This criterion penalises the BIC by including an entropy term favouring the
-#' well separated clusters.
+#' @details Computes the ICL for a specified model given the log-likelihood, the dimension of the data, and the model names. This criterion penalises the BIC by including an entropy term favouring well separated clusters.
 #' @export
 #' @seealso \code{\link{em_aic}}
 #' @seealso  \code{\link{em_bic}}
-#' @param llk log-likelihood value.
-#' @param C number of CpG sites.
-#' @param M number of methylation states identified in a DNA sample.
-#' @param N number of patients.
-#' @param R number of DNA samples collected from each patient.
-#' @param model_name fitted mixture model (model_name = c("K..","KN.","K.R")).
-#' @param z a matrix of posterior probability of cluster membership, stored as z in the object from \code{\link[betaclust]{beta_k}}/\code{\link[betaclust]{beta_kn}}/\code{\link[betaclust]{beta_kr}} functions.
+#' @param llk Log-likelihood value.
+#' @param C Number of CpG sites.
+#' @param M Number of methylation states identified in a DNA sample.
+#' @param N Number of patients.
+#' @param R Number of DNA samples collected from each patient.
+#' @param model_name Fitted mixture model. Options are "K..", "KN." and/or "K.R" (default = "K..").
+#' @param z A matrix of posterior probabilities of cluster membership, stored as z in the object from \code{\link[betaclust]{beta_k}}, \code{\link[betaclust]{beta_kn}} and \code{\link[betaclust]{beta_kr}} functions.
 #' @return The ICL value for the selected model.
 
 em_icl<-function(llk,C,M,N,R,model_name="K..",z){

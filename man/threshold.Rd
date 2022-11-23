@@ -2,26 +2,28 @@
 % Please edit documentation in R/threshold.R
 \name{threshold}
 \alias{threshold}
-\title{Thresholds for the K.. and the KN. models}
+\title{Thresholds under the K.. and the KN. models}
 \usage{
-threshold(object, model_name)
+threshold(object, data, model_name)
 }
 \arguments{
 \item{object}{A \code{\link[betaclust:beta_k]{beta_k}} or \code{\link[betaclust:beta_kn]{beta_kn}} object.}
 
+\item{data}{A dataframe of dimension \eqn{C \times NR} containing methylation values for \eqn{C} CpG sites from \eqn{R} samples collected from \eqn{N} patients which was passed as an argument to the \code{\link[betaclust:betaclust]{betaclust}} function.}
+
 \item{model_name}{The name of the model for which the thresholds need to be calculated.}
 }
 \value{
-thresholds - the threshold points calculated for the selected model. A vector containing two threshold points are returned for the K.. model whereas a matrix containing two threshold points for each patient is returned for the KN. model.
+thresholds - The threshold points calculated for the selected model. A vector containing two threshold points are returned for the K.. model whereas a matrix containing two threshold points for each patient is returned for the KN. model.
 }
 \description{
 An objective method to calculate the threshold points for the clustering solution of the K.. and the KN. models.
 }
 \details{
 As the K.. model constrains the shape parameters to be equal for all patients, a single pair of threshold points are calculated for all patients. The KN. model allows patient-specific shape parameters which results in a pair of threshold points for each patient based on the shape parameters for that patient.
-The first threshold point denotes any beta value less than this value is likely to be hypomethylated.
-The second threshold point denotes any beta value greater than this is highly likely to be hypermethylated.
-A beta value lying between the two threshold points is likely to be hemimethylated.
+The first threshold point means that any CpG site with beta value less than this value is likely to be hypomethylated.
+The second threshold point means that any CpG site with beta value greater than this is highly likely to be hypermethylated.
+A CpG site with beta value lying between the two threshold points is likely to be hemimethylated.
 }
 \seealso{
 \code{\link{beta_k}}
