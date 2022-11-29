@@ -33,7 +33,7 @@ my.seed <- 190 ## set seed for reproducibility
 
 threshold_out <- betaclust(pca.methylation.data[,2:5], M, N, R,
                          model_names = c("K..","KN."),
-                         model_selection = "BIC",
+                         model_selection = "BIC", parallel_process = FALSE,
                          seed = my.seed)
 
 
@@ -60,7 +60,7 @@ R <- 2  ## No. of DNA samples
 my.seed <- 190 ## set seed for reproducibility
 
 dmc_output <- betaclust(pca.methylation.data[,2:9], M, N, R,
-                      model_names = "K.R",
+                      model_names = "K.R", parallel_process = FALSE,
                       seed = my.seed)
 
 ## ----dmcoutput1,include=TRUE, echo=TRUE---------------------------------------
@@ -121,7 +121,7 @@ ecdf.betaclust(ecdf_rarb[,2:9], R = 2, sample_name = c("Benign","Tumour"))
 ## ----wrapper,include=TRUE, echo=TRUE------------------------------------------
 wrapper_out <- betaclust(pca.methylation.data[,2:9], M, N, R,
                         model_names = c("K..","KN.","K.R"),
-                        model_selection = "BIC",
+                        model_selection = "BIC", parallel_process = FALSE,
                         seed = my.seed)
 
 ## ----wrapperoutput1,include=TRUE, echo=TRUE-----------------------------------

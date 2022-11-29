@@ -25,6 +25,7 @@
 #' @param R Number of samples collected from each patient for the study.
 #' @param model_names Models to run from the set of models, K.., KN. and K.R, default = K.. . See details.
 #' @param model_selection Information criterion used for model selection. Options are AIC, BIC or ICL (default = BIC).
+#' @param parallel_process The "TRUE" option results in parallel processing of the models for increased computational efficiency. The default option has been set as "FALSE" due to package testing limitations.
 #' @param seed Seed to allow for reproducibility (default = NULL).
 #'
 #' @return The function returns an object of the \code{\link[betaclust:betaclust]{betaclust}} class which contains the following values:
@@ -52,15 +53,14 @@
 #' }
 #'
 #' @examples
-#' \dontrun{
 #' data(pca.methylation.data)
 #' my.seed <- 190
 #' M <- 3
 #' N <- 4
 #' R <- 2
-#' data_output <- betaclust(pca.methylation.data[,2:9], M, N, R,
-#'             model_names = c("K..","KN.","K.R"), model_selection = "BIC", seed = my.seed)
-#' }
+#' data_output <- betaclust(pca.methylation.data[1:100,2:9], M, N, R,
+#'             model_names = c("K..","KN.","K.R"), model_selection = "BIC",
+#'             parallel_process = FALSE, seed = my.seed)
 #'
 #'
 #' @importFrom foreach %dopar%
@@ -70,7 +70,7 @@
 #' @references {Majumdar, K., Silva, R., Perry, A.S., Watson, R.W., Murphy, T.B., Gormley, I.C.: betaclust: a family of mixture models for beta valued DNA methylation data. arXiv [stat.ME] (2022). \doi{10.48550/ARXIV.2211.01938}.}
 
 
-betaclust<-function(data,M=3,N,R,model_names="K..",model_selection="BIC",seed=NULL){
+betaclust<-function(data,M=3,N,R,model_names="K..",model_selection="BIC",parallel_process=FALSE,seed=NULL){
 
   X=as.data.frame(data)
   len=length(model_names)
@@ -101,7 +101,7 @@ betaclust<-function(data,M=3,N,R,model_names="K..",model_selection="BIC",seed=NU
         }
 
         call_data=X[,1:N]
-        k_out<-beta_k(call_data,M,seed)
+        k_out<-beta_k(call_data,M,parallel_process,seed)
         len_llk<-length(k_out$llk)
         llk<-c(llk,k_out$llk[len_llk])
         z[[i]]<-k_out$z
@@ -114,7 +114,7 @@ betaclust<-function(data,M=3,N,R,model_names="K..",model_selection="BIC",seed=NU
           warning("KN. model only considers a single sample and not multiple samples.
                   Model is fitted to 1st sample only.", call. = FALSE)
         call_data<-X[,1:N]
-        kn_out<-beta_kn(call_data,M,seed)
+        kn_out<-beta_kn(call_data,M,parallel_process,seed)
         len_llk<-length(kn_out$llk)
         llk<-c(llk,kn_out$llk[len_llk])
         z[[i]]<-kn_out$z
@@ -130,7 +130,7 @@ betaclust<-function(data,M=3,N,R,model_names="K..",model_selection="BIC",seed=NU
           warning("K.R considers only multiple samples. Please pass DNA methylation values for more than 1 sample.", call. = FALSE)
           llk<-c(llk,NA)
           }else{
-          kr_out<-beta_kr(X,M,N,R,seed)
+          kr_out<-beta_kr(X,M,N,R,parallel_process,seed)
           len_llk<-length(kr_out$llk)
           llk<-c(llk,kr_out$llk[len_llk])
           z[[i]]<-kr_out$z

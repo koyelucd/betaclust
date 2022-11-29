@@ -4,7 +4,7 @@
 \alias{beta_kr}
 \title{Fit the K.R Model}
 \usage{
-beta_kr(data, M = 3, N, R, seed = NULL)
+beta_kr(data, M = 3, N, R, parallel_process = FALSE, seed = NULL)
 }
 \arguments{
 \item{data}{A dataframe of dimension \eqn{C \times NR} containing methylation values for \eqn{C} CpG sites from \eqn{R} samples collected from \eqn{N} patients.
@@ -15,6 +15,8 @@ Samples are grouped together in the dataframe such that the columns are ordered 
 \item{N}{Number of patients in the study.}
 
 \item{R}{Number of samples collected from each patient for study.}
+
+\item{parallel_process}{The "TRUE" option results in parallel processing of the models for increased computational efficiency. The default option has been set as "FALSE" due to package testing limitations.}
 
 \item{seed}{Seed to allow for reproducibility (default = NULL).}
 }
@@ -41,14 +43,13 @@ starting values to the Expectation-Maximisation algorithm. A digamma approximati
 parameters in the M-step.
 }
 \examples{
-\dontrun{
 data(pca.methylation.data)
 my.seed <- 190
 M <- 3
 N <- 4
 R <- 2
-data_output = beta_kr(pca.methylation.data[,2:5], M, N, R, seed = my.seed)
-}
+data_output = beta_kr(pca.methylation.data[1:100,2:9], M, N, R,
+                      parallel_process = FALSE, seed = my.seed)
 }
 \seealso{
 \code{\link{betaclust}}

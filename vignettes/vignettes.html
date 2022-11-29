@@ -441,13 +441,19 @@ the dataframe as follows:</p>
 used to analyse a single DNA sample (<em>R = 1</em>) and cluster the CpG
 sites into <em>K = M</em> groups, where <em>M</em> is the number of
 methylation states of a CpG site (typically the methylation state of a
-CpG site is either hypomethylated, hemimethylated or hypermethylated).
-The thresholds are objectively inferred from the clustering solution.
+CpG site is either hypomethylated, hemimethylated or
+hypermethylated).</p>
+<p>The thresholds are objectively inferred from the clustering solution.
 The optimal model can be selected using the AIC, BIC or ICL model
 selection criterion. The KN<span class="math inline">\(\cdot\)</span>
 model is selected by the BIC as the optimal model to cluster the CpG
 sites in the benign sample into 3 methylation states and objectively
 infer the thresholds.</p>
+<p>Due to package testing limitations, the default option for the
+parameter <code>parallel_process</code> is <code>FALSE</code>. The
+option needs to be set as <code>TRUE</code> for the parameter
+<code>parallel_process</code> to trigger parallel processing of the BMMs
+for increased computational efficiency.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>M <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="do">## No. of methylation states in a DNA sample</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">4</span> <span class="do">## No. of patients</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="do">## No. of DNA samples</span></span>
@@ -455,7 +461,7 @@ infer the thresholds.</p>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>threshold_out <span class="ot">&lt;-</span> <span class="fu">betaclust</span>(pca.methylation.data[,<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>], M, N, R,</span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>                         <span class="at">model_names =</span> <span class="fu">c</span>(<span class="st">&quot;K..&quot;</span>,<span class="st">&quot;KN.&quot;</span>),</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>                         <span class="at">model_selection =</span> <span class="st">&quot;BIC&quot;</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>                         <span class="at">model_selection =</span> <span class="st">&quot;BIC&quot;</span>, <span class="at">parallel_process =</span> <span class="cn">FALSE</span>,</span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>                         <span class="at">seed =</span> my.seed)</span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; fitting ...</span></span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
@@ -559,7 +565,7 @@ M<sup>R</sup> = 9</em> groups.</p>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>my.seed <span class="ot">&lt;-</span> <span class="dv">190</span> <span class="do">## set seed for reproducibility</span></span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>dmc_output <span class="ot">&lt;-</span> <span class="fu">betaclust</span>(pca.methylation.data[,<span class="dv">2</span><span class="sc">:</span><span class="dv">9</span>], M, N, R,</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">model_names =</span> <span class="st">&quot;K.R&quot;</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">model_names =</span> <span class="st">&quot;K.R&quot;</span>, <span class="at">parallel_process =</span> <span class="cn">FALSE</span>,</span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">seed =</span> my.seed)</span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; fitting ...</span></span>
 <span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
@@ -692,7 +698,7 @@ fit to a dataset and the optimal model can be selected using the AIC,
 BIC or ICL criterion.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>wrapper_out <span class="ot">&lt;-</span> <span class="fu">betaclust</span>(pca.methylation.data[,<span class="dv">2</span><span class="sc">:</span><span class="dv">9</span>], M, N, R,</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                        <span class="at">model_names =</span> <span class="fu">c</span>(<span class="st">&quot;K..&quot;</span>,<span class="st">&quot;KN.&quot;</span>,<span class="st">&quot;K.R&quot;</span>),</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                        <span class="at">model_selection =</span> <span class="st">&quot;BIC&quot;</span>,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                        <span class="at">model_selection =</span> <span class="st">&quot;BIC&quot;</span>, <span class="at">parallel_process =</span> <span class="cn">FALSE</span>,</span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">seed =</span> my.seed)</span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; fitting ...</span></span>
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
@@ -754,26 +760,26 @@ selection of the optimal model.</p>
 <p>Silva, R., Moran, B., Russell, N.M., Fahey, C., Vlajnic, T.,
 Manecksha, R.P., Finn, S.P., Brennan, D.J., Gallagher, W.M., Perry,
 A.S.: Evaluating liquid biopsies for methylomic profiling of prostate
-cancer. Epigenetics 15(6-7), 715-727 (2020). <a href="https://doi.org/10.1080/15592294.2020.1712876" class="uri">https://doi.org/10.1080/15592294.2020.1712876</a>.</p>
+cancer. Epigenetics 15(6-7), 715-727 (2020).</p>
 <p>Majumdar, K., Silva, R., Perry, A.S., Watson, R.W., Murphy, T.B.,
 Gormley, I.C.: betaclust: a family of mixture models for beta valued DNA
-methylation data. arXiv [stat.ME] (2022). <a href="https://doi.org/10.48550/ARXIV.2211.01938" class="uri">https://doi.org/10.48550/ARXIV.2211.01938</a>.</p>
+methylation data. arXiv [stat.ME] (2022).</p>
 <p>Mueller F, Scherer M, Assenov Y, Lutsik P, Walter J, Lengauer T, Bock
 C (2019): RnBeads 2.0: comprehensive analysis of DNA methylation data.
-Genome Biology, 20(55). <a href="https://doi.org/10.1186/s13059-019-1664-9" class="uri">https://doi.org/10.1186/s13059-019-1664-9</a>.</p>
+Genome Biology, 20(55).</p>
 <p>Ameri A, Alidoosti A, Hosseini SY, et al. Prognostic Value of
 Promoter Hypermethylation of Retinoic Acid Receptor Beta (RARB) and
 CDKN2 (p16/MTS1) in Prostate Cancer. Chinese journal of cancer research.
-2011;23(4):306-311. <a href="https://doi.org/10.1007/s11670-011-0306-x" class="uri">https://doi.org/10.1007/s11670-011-0306-x</a>.</p>
+2011;23(4):306-311.</p>
 <p>Fraley, C., Raftery, A.E.: How many clusters? which clustering
 method? answers via model-based cluster analysis. The Computer Journal
-41, 578-588 (1998). <a href="https://doi.org/10.1093/comjnl/41.8.578" class="uri">https://doi.org/10.1093/comjnl/41.8.578</a>.</p>
+41, 578-588 (1998).</p>
 <p>Dempster, A., Laird, N., Rubin, D.: Maximum likelihood from
 incomplete data via the EM algorithm. Journal of the Royal Statistical
-Society. Series B (Methodological), 39(1), 1–38 (1977). <a href="https://www.jstor.org/stable/2984875" class="uri">https://www.jstor.org/stable/2984875</a>.</p>
+Society. Series B (Methodological), 39(1), 1–38 (1977).</p>
 <p>Diamond, H.G., Straub, A.: Bounds for the logarithm of the Euler
 gamma function and its derivatives. Journal of Mathematical Analysis and
-Applications 433(2), 1072-1083 (2016). <a href="https://doi.org/10.1016/j.jmaa.2015.08.034" class="uri">https://doi.org/10.1016/j.jmaa.2015.08.034</a>.</p>
+Applications 433(2), 1072-1083 (2016).</p>
 </div>
 
 

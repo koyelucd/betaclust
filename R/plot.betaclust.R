@@ -12,17 +12,19 @@ globalVariables(c("Patient_Sample","label","Uncertainty","ModelName","IC_value")
 #' @rdname plot.betaclust
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
+#' my.seed <- 190
 #' M <- 3
 #' N <- 4
 #' R <- 2
-#' data_output <- betaclust(pca.methylation.data[,2:9], M, N, R,
-#'             model_names = c("K..","KN.","K.R"), model_selection = "BIC", seed = my.seed)
-#' plot(data_output, what = "fitted density", plot_type = "ggplot", data=pca.methylation.data[,2:9])
-#' plot(data_output, what = "kernel density", plot_type = "ggplot", data=pca.methylation.data[,2:9])
-#' plot(data_output, what = "kernel density", plot_type = "plotly", data=pca.methylation.data[,2:9])
+#' data_output <- betaclust(pca.methylation.data[1:100,2:9], M, N, R,
+#'             model_names = c("K..","KN.","K.R"), model_selection = "BIC",
+#'             parallel_process = FALSE, seed = my.seed)
+#' plot(data_output, what = "fitted density", plot_type = "ggplot",
+#'      data=pca.methylation.data[1:100,2:9])
 #' plot(data_output, what = "uncertainty", plot_type = "ggplot")
-#' plot(data_output, what = "information criterion", plot_type = "ggplot")}
+#' plot(data_output, what = "information criterion", plot_type = "ggplot")
+#' }
 #' @seealso \code{\link{betaclust}}
 #' @param x A \code{\link[betaclust:betaclust]{betaclust}} object.
 #' @param what The different plots that can be obtained are either "fitted density","kernel density","uncertainty" or "information criterion" (default = "fitted density").

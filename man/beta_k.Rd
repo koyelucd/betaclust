@@ -4,13 +4,15 @@
 \alias{beta_k}
 \title{Fit the K.. model}
 \usage{
-beta_k(data, M = 3, seed = NULL)
+beta_k(data, M = 3, parallel_process = FALSE, seed = NULL)
 }
 \arguments{
 \item{data}{A dataframe of dimension \eqn{C \times N} containing methylation values for \eqn{C} CpG sites from \eqn{R = 1} samples collected from \eqn{N} patients.
 Samples are grouped together in the dataframe such that the columns are ordered as Sample1_Patient1, Sample1_Patient2, etc.}
 
 \item{M}{Number of methylation states to be identified in a DNA sample.}
+
+\item{parallel_process}{The "TRUE" option results in parallel processing of the models for increased computational efficiency. The default option has been set as "FALSE" due to package testing limitations.}
 
 \item{seed}{Seed to allow for reproducibility (default = NULL).}
 }
@@ -37,13 +39,12 @@ Under the K.. model the shape parameters of each cluster are constrained to be e
 \code{\link[betaclust:threshold]{threshold}} function available in this package to calculate the thresholds between the methylation states.
 }
 \examples{
-\dontrun{
 data(pca.methylation.data)
 my.seed <- 190
 M <- 3
-data_output <- beta_k(pca.methylation.data[,2:5], M, seed = my.seed)
-thresholds <- threshold(data_output, pca.methylation.data[,2:5], "K..")
-}
+data_output <- beta_k(pca.methylation.data[1:100,2:5], M,
+                      parallel_process = FALSE, seed = my.seed)
+thresholds <- threshold(data_output, pca.methylation.data[1:100,2:5], "K..")
 }
 \seealso{
 \code{\link{beta_kn}}

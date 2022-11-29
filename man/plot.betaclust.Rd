@@ -53,17 +53,19 @@ Interactive plots can also be produced using plot_type = "plotly". The uncertain
 The information criterion values for all fitted models can be plotted using what = "information criterion".
 }
 \examples{
-\dontrun{
+\donttest{
+my.seed <- 190
 M <- 3
 N <- 4
 R <- 2
-data_output <- betaclust(pca.methylation.data[,2:9], M, N, R,
-            model_names = c("K..","KN.","K.R"), model_selection = "BIC", seed = my.seed)
-plot(data_output, what = "fitted density", plot_type = "ggplot", data=pca.methylation.data[,2:9])
-plot(data_output, what = "kernel density", plot_type = "ggplot", data=pca.methylation.data[,2:9])
-plot(data_output, what = "kernel density", plot_type = "plotly", data=pca.methylation.data[,2:9])
+data_output <- betaclust(pca.methylation.data[1:100,2:9], M, N, R,
+            model_names = c("K..","KN.","K.R"), model_selection = "BIC",
+            parallel_process = FALSE, seed = my.seed)
+plot(data_output, what = "fitted density", plot_type = "ggplot",
+     data=pca.methylation.data[1:100,2:9])
 plot(data_output, what = "uncertainty", plot_type = "ggplot")
-plot(data_output, what = "information criterion", plot_type = "ggplot")}
+plot(data_output, what = "information criterion", plot_type = "ggplot")
+}
 }
 \seealso{
 \code{\link{betaclust}}

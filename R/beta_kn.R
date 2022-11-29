@@ -17,6 +17,7 @@ globalVariables(c("k"))
 #' @param data A dataframe of dimension \eqn{C \times N} containing methylation values for \eqn{C} CpG sites from \eqn{R = 1} samples collected from \eqn{N} patients.
 #' Samples are grouped together in the dataframe such that the columns are ordered as Sample1_Patient1, Sample1_Patient2, etc.
 #' @param M Number of methylation states to be identified in a DNA sample.
+#' @param parallel_process The "TRUE" option results in parallel processing of the models for increased computational efficiency. The default option has been set as "FALSE" due to package testing limitations.
 #' @param seed Seed to allow for reproducibility (default = NULL).
 #'
 #' @return A list containing:
@@ -31,18 +32,17 @@ globalVariables(c("k"))
 #'    \item uncertainty - The uncertainty of each CpG site's clustering.    }
 #'
 #' @examples
-#' \dontrun{
 #' data(pca.methylation.data)
 #' my.seed <- 190
 #' M <- 3
-#' data_output <- beta_kn(pca.methylation.data[,2:5], M, seed = my.seed)
-#' thresholds <- threshold(data_output, pca.methylation.data[,2:5], "KN.")
-#' }
+#' data_output <- beta_kn(pca.methylation.data[1:100,2:5], M,
+#'                        parallel_process = FALSE, seed = my.seed)
+#' thresholds <- threshold(data_output, pca.methylation.data[1:100,2:5], "KN.")
 #' @importFrom foreach %dopar%
 #' @importFrom stats C
 #' @importFrom utils txtProgressBar
 
-beta_kn<-function(data,M=3,seed=NULL){
+beta_kn<-function(data,M=3,parallel_process=FALSE,seed=NULL){
 
   X=as.data.frame(data)
   ##### KN. Model #######
@@ -51,10 +51,9 @@ beta_kn<-function(data,M=3,seed=NULL){
   ## select the # of cores on which the parallel code is to run
   register=NULL
   if(is.null(register)){
-    ## Cores restricted to 2 for CRAN submission check
-    chk <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
 
-    if (nzchar(chk) && chk == "TRUE") {
+
+    if (parallel_process == FALSE) {
       # use 2 cores in CRAN/Travis/AppVeyor
       ncores <- 2L
     } else {

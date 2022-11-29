@@ -64,7 +64,10 @@ head(pca.methylation.data)
 ## Identifying methylation thresholds in a DNA sample
 
 The K$\cdot\cdot$ and KN$\cdot$ models (Majumdar et al. 2022) are used to analyse a single DNA sample (*R = 1*) and cluster the CpG sites into *K = M* groups, where *M* is the number of methylation states of a CpG site (typically the methylation state of a CpG site is either hypomethylated, hemimethylated or hypermethylated).
+
 The thresholds are objectively inferred from the clustering solution. The optimal model can be selected using the AIC, BIC or ICL model selection criterion. The KN$\cdot$ model is selected by the BIC as the optimal model to cluster the CpG sites in the benign sample into 3 methylation states and objectively infer the thresholds.
+
+Due to package testing limitations, the default option for the parameter `parallel_process` is `FALSE`. The option needs to be set as `TRUE` for the parameter `parallel_process` to trigger parallel processing of the BMMs for increased computational efficiency.
 
 ```{r thresholds,include=TRUE, echo=TRUE}
 M <- 3 ## No. of methylation states in a DNA sample
@@ -74,7 +77,7 @@ my.seed <- 190 ## set seed for reproducibility
 
 threshold_out <- betaclust(pca.methylation.data[,2:5], M, N, R,
                          model_names = c("K..","KN."),
-                         model_selection = "BIC",
+                         model_selection = "BIC", parallel_process = FALSE,
                          seed = my.seed)
 
 ```
@@ -135,7 +138,7 @@ R <- 2  ## No. of DNA samples
 my.seed <- 190 ## set seed for reproducibility
 
 dmc_output <- betaclust(pca.methylation.data[,2:9], M, N, R,
-                      model_names = "K.R",
+                      model_names = "K.R", parallel_process = FALSE,
                       seed = my.seed)
 ```
 
@@ -229,7 +232,7 @@ All the BMM models or a selection of BMM models can be fit using the wrapper fun
 ```{r wrapper,include=TRUE, echo=TRUE}
 wrapper_out <- betaclust(pca.methylation.data[,2:9], M, N, R,
                         model_names = c("K..","KN.","K.R"),
-                        model_selection = "BIC",
+                        model_selection = "BIC", parallel_process = FALSE,
                         seed = my.seed)
 ```
 
@@ -261,21 +264,21 @@ plot(wrapper_out, what = "information criterion", plot_type = "ggplot")
 
 
 # References
-Silva, R., Moran, B., Russell, N.M., Fahey, C., Vlajnic, T., Manecksha, R.P., Finn, S.P., Brennan, D.J., Gallagher, W.M., Perry, A.S.: Evaluating liquid biopsies for methylomic profiling of prostate cancer. Epigenetics 15(6-7), 715-727 (2020). https://doi.org/10.1080/15592294.2020.1712876.
+Silva, R., Moran, B., Russell, N.M., Fahey, C., Vlajnic, T., Manecksha, R.P., Finn, S.P., Brennan, D.J., Gallagher, W.M., Perry, A.S.: Evaluating liquid biopsies for methylomic profiling of prostate cancer. Epigenetics 15(6-7), 715-727 (2020).
 
-Majumdar, K., Silva, R., Perry, A.S., Watson, R.W., Murphy, T.B., Gormley, I.C.: betaclust: a family of mixture models for beta valued DNA methylation data. arXiv [stat.ME] (2022). https://doi.org/10.48550/ARXIV.2211.01938.
+Majumdar, K., Silva, R., Perry, A.S., Watson, R.W., Murphy, T.B., Gormley, I.C.: betaclust: a family of mixture models for beta valued DNA methylation data. arXiv [stat.ME] (2022).
 
-Mueller F, Scherer M, Assenov Y, Lutsik P, Walter J, Lengauer T, Bock C (2019): RnBeads 2.0: comprehensive analysis of DNA methylation data. Genome Biology, 20(55). https://doi.org/10.1186/s13059-019-1664-9.
+Mueller F, Scherer M, Assenov Y, Lutsik P, Walter J, Lengauer T, Bock C (2019): RnBeads 2.0: comprehensive analysis of DNA methylation data. Genome Biology, 20(55).
 
 Ameri A, Alidoosti A, Hosseini SY, et al. Prognostic Value of Promoter Hypermethylation of Retinoic
 Acid Receptor Beta (RARB) and CDKN2 (p16/MTS1) in Prostate Cancer. Chinese journal of cancer
-research. 2011;23(4):306-311. https://doi.org/10.1007/s11670-011-0306-x.
+research. 2011;23(4):306-311.
 
-Fraley, C., Raftery, A.E.: How many clusters? which clustering method? answers via model-based cluster analysis. The Computer Journal 41, 578-588 (1998). https://doi.org/10.1093/comjnl/41.8.578.
+Fraley, C., Raftery, A.E.: How many clusters? which clustering method? answers via model-based cluster analysis. The Computer Journal 41, 578-588 (1998).
 
-Dempster, A., Laird, N., Rubin, D.: Maximum likelihood from incomplete data via the EM algorithm. Journal of the Royal Statistical Society. Series B (Methodological), 39(1), 1–38 (1977). https://www.jstor.org/stable/2984875.
+Dempster, A., Laird, N., Rubin, D.: Maximum likelihood from incomplete data via the EM algorithm. Journal of the Royal Statistical Society. Series B (Methodological), 39(1), 1–38 (1977).
 
-Diamond, H.G., Straub, A.: Bounds for the logarithm of the Euler gamma function and its derivatives. Journal of Mathematical Analysis and Applications 433(2), 1072-1083 (2016). https://doi.org/10.1016/j.jmaa.2015.08.034.
+Diamond, H.G., Straub, A.: Bounds for the logarithm of the Euler gamma function and its derivatives. Journal of Mathematical Analysis and Applications 433(2), 1072-1083 (2016).
 
 
 

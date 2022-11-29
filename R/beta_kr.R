@@ -10,6 +10,7 @@ globalVariables(c("k"))
 #' @param M Number of methylation states to be identified.
 #' @param N Number of patients in the study.
 #' @param R Number of samples collected from each patient for study.
+#' @param parallel_process The "TRUE" option results in parallel processing of the models for increased computational efficiency. The default option has been set as "FALSE" due to package testing limitations.
 #' @param seed Seed to allow for reproducibility (default = NULL).
 #'
 #' @details
@@ -30,21 +31,20 @@ globalVariables(c("k"))
 #'    \item uncertainty - The uncertainty of each CpG site's clustering.    }
 #'
 #' @examples
-#' \dontrun{
 #' data(pca.methylation.data)
 #' my.seed <- 190
 #' M <- 3
 #' N <- 4
 #' R <- 2
-#' data_output = beta_kr(pca.methylation.data[,2:5], M, N, R, seed = my.seed)
-#' }
+#' data_output = beta_kr(pca.methylation.data[1:100,2:9], M, N, R,
+#'                       parallel_process = FALSE, seed = my.seed)
 #' @importFrom foreach %dopar%
 #' @importFrom stats C
 #' @importFrom utils txtProgressBar
 
 
 
-beta_kr<-function(data,M=3,N,R,seed=NULL){
+beta_kr<-function(data,M=3,N,R,parallel_process=FALSE,seed=NULL){
 
   X=data
   ##### K.R Model #######
@@ -54,10 +54,8 @@ beta_kr<-function(data,M=3,N,R,seed=NULL){
   ## select the # of cores on which the parallel code is to run
   register=NULL
   if(is.null(register)){
-    ## Cores restricted to 2 for CRAN submission check
-    chk <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
 
-    if (nzchar(chk) && chk == "TRUE") {
+    if (parallel_process == FALSE) {
       # use 2 cores in CRAN/Travis/AppVeyor
       ncores <- 2L
     } else {
