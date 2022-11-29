@@ -39,14 +39,12 @@ Under the K.. model the shape parameters of each cluster are constrained to be e
 \code{\link[betaclust:threshold]{threshold}} function available in this package to calculate the thresholds between the methylation states.
 }
 \examples{
-\donttest{
 data(pca.methylation.data)
 my.seed <- 190
 M <- 3
 data_output <- beta_k(pca.methylation.data[1:100,2:5], M,
                       parallel_process = FALSE, seed = my.seed)
 thresholds <- threshold(data_output, pca.methylation.data[1:100,2:5], "K..")
-}
 }
 \seealso{
 \code{\link{beta_kn}}
