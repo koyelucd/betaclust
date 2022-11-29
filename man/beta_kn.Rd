@@ -39,12 +39,13 @@ The KN. model differs from the K.. model as it is less parsimonious, allowing cl
 \code{\link[betaclust:threshold]{threshold}} function available in this package to calculate the thresholds between the methylation states.
 }
 \examples{
+\donttest{
 data(pca.methylation.data)
 my.seed <- 190
 M <- 3
 data_output <- beta_kn(pca.methylation.data[1:100,2:5], M,
                        parallel_process = FALSE, seed = my.seed)
-thresholds <- threshold(data_output, pca.methylation.data[1:100,2:5], "KN.")
+thresholds <- threshold(data_output, pca.methylation.data[1:100,2:5], "KN.")}
 }
 \seealso{
 \code{\link{beta_k}}

@@ -53,6 +53,7 @@
 #' }
 #'
 #' @examples
+#' \donttest{
 #' data(pca.methylation.data)
 #' my.seed <- 190
 #' M <- 3
@@ -61,7 +62,7 @@
 #' data_output <- betaclust(pca.methylation.data[1:100,2:9], M, N, R,
 #'             model_names = c("K..","KN.","K.R"), model_selection = "BIC",
 #'             parallel_process = FALSE, seed = my.seed)
-#'
+#' }
 #'
 #' @importFrom foreach %dopar%
 #' @importFrom stats C

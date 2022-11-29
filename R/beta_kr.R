@@ -31,13 +31,14 @@ globalVariables(c("k"))
 #'    \item uncertainty - The uncertainty of each CpG site's clustering.    }
 #'
 #' @examples
+#' \donttest{
 #' data(pca.methylation.data)
 #' my.seed <- 190
 #' M <- 3
 #' N <- 4
 #' R <- 2
 #' data_output = beta_kr(pca.methylation.data[1:100,2:9], M, N, R,
-#'                       parallel_process = FALSE, seed = my.seed)
+#'                       parallel_process = FALSE, seed = my.seed)}
 #' @importFrom foreach %dopar%
 #' @importFrom stats C
 #' @importFrom utils txtProgressBar
