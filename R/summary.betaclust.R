@@ -17,6 +17,7 @@
 #' \item classification - The total number of CpG sites in each cluster.
 #' \item prop_data - The proportion of CpG sites in each cluster.}
 #' @examples
+#' \donttest{
 #' my.seed <- 190
 #' M <- 3
 #' N <- 4
@@ -24,7 +25,7 @@
 #' data_output <- betaclust(pca.methylation.data[1:100,2:9], M, N, R,
 #'             model_names=c("K..","KN.","K.R"), model_selection="BIC",
 #'             parallel_process = FALSE, seed=my.seed)
-#' summary(data_output)
+#' summary(data_output)}
 #' @seealso \code{\link{betaclust}}
 
 summary.betaclust<-function(object,...)

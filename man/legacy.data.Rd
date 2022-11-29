@@ -5,7 +5,7 @@
 \alias{legacy.data}
 \title{MethylationEPIC manifest data.}
 \format{
-A data frame with 10,081 rows and 6 columns.
+A data frame with 5,080 rows and 6 columns.
 \itemize{
   \item{IlmnID: The unique identifier from the Illumina CG database, i.e. the probe ID.}
   \item{Genome_Build: The genome build referenced by the Infinium MethylationEPIC manifest.}
