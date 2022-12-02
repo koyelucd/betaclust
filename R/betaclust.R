@@ -53,6 +53,7 @@
 #' }
 #'
 #' @examples
+#' \donttest{
 #' my.seed <- 190
 #' M <- 3
 #' N <- 4
@@ -61,7 +62,7 @@
 #'             model_names = c("K..","KN.","K.R"), model_selection = "BIC",
 #'             parallel_process = FALSE, seed = my.seed)
 #'
-#'
+#'}
 #' @importFrom foreach %dopar%
 #' @importFrom stats C
 #' @importFrom utils flush.console

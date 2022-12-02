@@ -71,6 +71,7 @@ The K.R model is used to analyse \eqn{R} independent samples collected from \eqn
 the dataset into \eqn{K=M^R} clusters to identify the differentially methylated CpG (DMC) sites between the \eqn{R} DNA samples.
 }
 \examples{
+\donttest{
 my.seed <- 190
 M <- 3
 N <- 4
@@ -79,7 +80,7 @@ data_output <- betaclust(pca.methylation.data[1:30,2:9], M, N, R,
             model_names = c("K..","KN.","K.R"), model_selection = "BIC",
             parallel_process = FALSE, seed = my.seed)
 
-
+}
 }
 \references{
 {Silva, R., Moran, B., Russell, N.M., Fahey, C., Vlajnic, T., Manecksha, R.P., Finn, S.P., Brennan, D.J., Gallagher, W.M., Perry, A.S.: Evaluating liquid biopsies for methylomic profiling of prostate cancer. Epigenetics 15(6-7), 715-727 (2020). \doi{10.1080/15592294.2020.1712876}.}
