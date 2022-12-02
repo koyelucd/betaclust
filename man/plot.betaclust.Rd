@@ -39,6 +39,15 @@ The data is not required as an input when generating "uncertainty" or "informati
 
 \item{...}{Other graphics parameters.}
 }
+\value{
+This function displays the following plots as requested by the user:
+\itemize{
+\item fitted density estimates - Plot showing the fitted density estimates of the clustering solution under the optimal model selected.
+\item kernel density estimates - Plot showing the kernel density estimates of the clustering solution under the optimal model selected.
+\item uncertainty -  A boxplot showing the uncertainties in the optimal clustering solution.
+\item information criterion - Plot showing the information criterion values for all models fitted to support the selection of the optimal model.
+}
+}
 \description{
 Visualise a \code{\link[betaclust:betaclust]{betaclust}} clustering solution by plotting the fitted and kernel density estimates, the uncertainty and the information criterion.
 }

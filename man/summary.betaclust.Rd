@@ -29,15 +29,14 @@ An object of class \code{\link[betaclust:summary.betaclust]{summary.betaclust}} 
 Summary method for a \code{\link[betaclust:betaclust]{betaclust}} object containing the results under the optimal model selected.
 }
 \examples{
-\donttest{
 my.seed <- 190
 M <- 3
 N <- 4
 R <- 2
-data_output <- betaclust(pca.methylation.data[1:100,2:9], M, N, R,
+data_output <- betaclust(pca.methylation.data[1:30,2:9], M, N, R,
             model_names=c("K..","KN.","K.R"), model_selection="BIC",
             parallel_process = FALSE, seed=my.seed)
-summary(data_output)}
+summary(data_output)
 }
 \seealso{
 \code{\link{betaclust}}

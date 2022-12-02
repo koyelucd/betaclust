@@ -53,19 +53,18 @@
 #' }
 #'
 #' @examples
-#' \donttest{
-#' data(pca.methylation.data)
 #' my.seed <- 190
 #' M <- 3
 #' N <- 4
 #' R <- 2
-#' data_output <- betaclust(pca.methylation.data[1:100,2:9], M, N, R,
+#' data_output <- betaclust(pca.methylation.data[1:30,2:9], M, N, R,
 #'             model_names = c("K..","KN.","K.R"), model_selection = "BIC",
 #'             parallel_process = FALSE, seed = my.seed)
-#'}
+#'
 #'
 #' @importFrom foreach %dopar%
 #' @importFrom stats C
+#' @importFrom utils flush.console
 #' @importFrom utils txtProgressBar
 #' @references {Silva, R., Moran, B., Russell, N.M., Fahey, C., Vlajnic, T., Manecksha, R.P., Finn, S.P., Brennan, D.J., Gallagher, W.M., Perry, A.S.: Evaluating liquid biopsies for methylomic profiling of prostate cancer. Epigenetics 15(6-7), 715-727 (2020). \doi{10.1080/15592294.2020.1712876}.}
 #' @references {Majumdar, K., Silva, R., Perry, A.S., Watson, R.W., Murphy, T.B., Gormley, I.C.: betaclust: a family of mixture models for beta valued DNA methylation data. arXiv [stat.ME] (2022). \doi{10.48550/ARXIV.2211.01938}.}
@@ -83,9 +82,12 @@ betaclust<-function(data,M=3,N,R,model_names="K..",model_selection="BIC",paralle
   model_len=length(model_names)
 
   ## Progress bar
-  cat("fitting ...\n")
-  pbar <- utils::txtProgressBar(min = 0, max = model_len, style = 3)
-  on.exit(close(pbar))
+
+    #cat("fitting ...\n")
+  message("fitting ...\n")
+  flush.console()
+    pbar <- utils::txtProgressBar(min = 0, max = model_len, style = 3)
+    on.exit(close(pbar))
 
   if(length(model_names))
   {

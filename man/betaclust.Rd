@@ -71,16 +71,14 @@ The K.R model is used to analyse \eqn{R} independent samples collected from \eqn
 the dataset into \eqn{K=M^R} clusters to identify the differentially methylated CpG (DMC) sites between the \eqn{R} DNA samples.
 }
 \examples{
-\donttest{
-data(pca.methylation.data)
 my.seed <- 190
 M <- 3
 N <- 4
 R <- 2
-data_output <- betaclust(pca.methylation.data[1:100,2:9], M, N, R,
+data_output <- betaclust(pca.methylation.data[1:30,2:9], M, N, R,
             model_names = c("K..","KN.","K.R"), model_selection = "BIC",
             parallel_process = FALSE, seed = my.seed)
-}
+
 
 }
 \references{

@@ -37,6 +37,16 @@ globalVariables(c("Patient_Sample","label","Uncertainty","ModelName","IC_value")
 #' @param threshold The "TRUE" option displays the threshold points in the graph for the K.. and the KN. model (default = "FALSE").
 #' @param scale_param The position scales can be fixed or allowed to vary between different panels generated for the density estimate plots for visualizing the K.R clustering solution. Options are "fixed", "free_y","free_x" or "free" (default = "free_y"). The option "fixed" results in the x and y scales being fixed across all panels, "free" varies the x and y scales across the panels, "free_x" fixes the y scale and lets the x scale vary across all panels and "free_y" fixes the x scale and lets the y scale vary across all panels.
 #' @param ... Other graphics parameters.
+#'
+#' @return This function displays the following plots as requested by the user:
+#' \itemize{
+#' \item fitted density estimates - Plot showing the fitted density estimates of the clustering solution under the optimal model selected.
+#' \item kernel density estimates - Plot showing the kernel density estimates of the clustering solution under the optimal model selected.
+#' \item uncertainty -  A boxplot showing the uncertainties in the optimal clustering solution.
+#' \item information criterion - Plot showing the information criterion values for all models fitted to support the selection of the optimal model.
+#' }
+#'
+#'
 #' @importFrom ggplot2 ggplot aes
 #' @importFrom  plotly ggplotly
 #' @importFrom stats C
