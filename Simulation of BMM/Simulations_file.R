@@ -1,489 +1,285 @@
-library(devtools)
-install_github('koyelucd/betaclust',force = TRUE)
 library(betaclust)
-install.packages("e1071")
 library(e1071)
+library(pROC)
 
+### Simulation study
+set.seed(03082023) ## setting seed as a whole before generating random numbers
+seed_vec=runif(100,1,999)
 
-## Hypomethylated generated from Beta(2,20)
-## Hemimethylated generated from Beta(4,3)
-## Hypermethylated generated from Beta(20,2)
-
-
-## 10 Simulated dataset 
-
-## simulation study by changing seed
-## 190,200,210,2200,1500,3000,100,9156,8237,172
-set.seed(190)
-C=20000
-probs=c(0.1,0.15,0.3,0.4,0.45,0.6,0.75,0.90)
-index=runif(C)
-R=8
-df=matrix(NA,ncol = R,nrow = C)
-sd10_og1=vector(length = C)
-sd10_og2=vector(length = C)
-for(c in 1:C)
+## Simulation study for K.. and KN. model
+df_threshold_list=list()
+beta_threshold_out=list()
+ari_threshold=vector()
+og_group=vector()
+for(i in 1:length(seed_vec))
 {
-  if(index[c]<probs[1])
+  set.seed(seed_vec[i])
+  C=600000
+  probs=c(0.35,0.7)
+  index=runif(C)
+  R=4
+  df=matrix(NA,ncol = R,nrow = C)
+  og_group=vector(length = C)
+  true_dmc=vector(length = C)
+  for(c in 1:C)
   {
-    df[c,1:4]=rbeta(4,20,2) #hyper
-    df[c,5:8]=rbeta(4,4,3) #hemimethylated
-    sd10_og1[c]=1
-    sd10_og2[c]=1
-  }else if(index[c]<probs[2])
-  {
-    df[c,]=rbeta(R,20,2) #hypermethylated-hypermethylated
-    sd10_og1[c]=1
-    sd10_og2[c]=2
-  }else if(index[c]<probs[3])
-  {
-    df[c,1:4]=rbeta(4,20,2) #hypermethylated
-    df[c,5:8]=rbeta(4,2,20) #hypomethylated
-    sd10_og1[c]=1
-    sd10_og2[c]=3
-  }else if(index[c]<probs[4])
-  {
-    df[c,1:4]=rbeta(4,4,3) #hemimethylated
-    df[c,5:8]=rbeta(4,2,20) #hypomethylated
-    sd10_og1[c]=2
-    sd10_og2[c]=4
-  }else if(index[c]<probs[5])
-  {
-    df[c,1:4]=rbeta(4,2,20) #hypomethylated
-    df[c,5:8]=rbeta(4,4,3) #hemimethylated
-    sd10_og1[c]=3
-    sd10_og2[c]=5
-  }else if(index[c]<probs[6])
-  {
-    df[c,]=rbeta(R,4,3) #hemimethylated-hemimethylated
-    sd10_og1[c]=2
-    sd10_og2[c]=6
-  }else if(index[c]<probs[7])
-  {
-    df[c,]=rbeta(R,2,20) #hypomethylated - hypomethylated
-    sd10_og1[c]=3
-    sd10_og2[c]=7
-  }else if(index[c]<probs[8])
-  {
-    df[c,1:4]=rbeta(4,2,20) #hypomethylated
-    df[c,5:8]=rbeta(4,20,2) #hypermethylated
-    sd10_og1[c]=3
-    sd10_og2[c]=8
-  }else
-  {
-    df[c,1:4]=rbeta(4,4,3) #hemimethylated
-    df[c,5:8]=rbeta(4,20,2) #hypermethylated
-    sd10_og1[c]=2
-    sd10_og2[c]=9
+    if(index[c]<probs[1])
+    {
+      df[c,]=rbeta(4,2,20) #hypomethylated
+      og_group[c]=1
+    }else if(index[c]<probs[2])
+    {
+      df[c,]=rbeta(R,4,3) #hemimethylated
+      og_group[c]=2
+    }else 
+    {
+      df[c,]=rbeta(4,20,2) #hypermethylated
+      og_group[c]=3
+    }
   }
+  
+  df=cbind(df,og_group)
+  df=as.data.frame(df)
+  colnames(df)<-c("P_Sam1_1","P_Sam1_2","P_Sam1_3","P_Sam1_4","Original_Group")
+  
+  df_threshold_list[[i]]=df
+  beta_sim<-betaclust(df,3,4,1,c("K..","KN."),parallel_process = TRUE)
+  beta_threshold_out[[i]]=beta_sim
+  ari_threshold[i]<-unlist(
+    classAgreement(table(og_group,
+                         beta_sim$optimal_model_results$classification))[4])
 }
 
+ari_threshold_mean=mean(ari_threshold)
+ari_threshold_sd=sd(ari_threshold)
 
-df=as.data.frame(df)
-colnames(df)<-c("P_Sam1_1","P_Sam1_2","P_Sam1_3","P_Sam1_4","P_Sam2_1","P_Sam2_2","P_Sam2_3","P_Sam2_4")
-
-df1=df
-
-
-M=3
-patients=4
-samples=1
-my.seed=190
-out_c1<-betaclust(df1[,1:4],M,patients,samples,model_names = c("K.."),model_selection = "BIC",seed=my.seed)
-out_c2<-betaclust(df2[,1:4],M,patients,samples,model_names = c("K.."),model_selection = "BIC",seed=my.seed)
-out_c3<-betaclust(df3[,1:4],M,patients,samples,model_names = c("K.."),model_selection = "BIC",seed=my.seed)
-out_c4<-betaclust(df4[,1:4],M,patients,samples,model_names = c("K.."),model_selection = "BIC",seed=my.seed)
-out_c5<-betaclust(df5[,1:4],M,patients,samples,model_names = c("K.."),model_selection = "BIC",seed=my.seed)
-out_c6<-betaclust(df6[,1:4],M,patients,samples,model_names = c("K.."),model_selection = "BIC",seed=my.seed)
-out_c7<-betaclust(df7[,1:4],M,patients,samples,model_names = c("K.."),model_selection = "BIC",seed=my.seed)
-out_c8<-betaclust(df8[,1:4],M,patients,samples,model_names = c("K.."),model_selection = "BIC",seed=my.seed)
-out_c9<-betaclust(df9[,1:4],M,patients,samples,model_names = c("K.."),model_selection = "BIC",seed=my.seed)
-out_c10<-betaclust(df10[,1:4],M,patients,samples,model_names = c("K.."),model_selection = "BIC",seed=my.seed)
-
-M=3
-patients=4
-samples=1
-my.seed=190
-out_cn1<-betaclust(df1[,1:4],M,patients,samples,model_names = c("KN."),model_selection = "BIC",seed=my.seed)
-out_cn2<-betaclust(df2[,1:4],M,patients,samples,model_names = c("KN."),model_selection = "BIC",seed=my.seed)
-out_cn3<-betaclust(df3[,1:4],M,patients,samples,model_names = c("KN."),model_selection = "BIC",seed=my.seed)
-out_cn4<-betaclust(df4[,1:4],M,patients,samples,model_names = c("KN."),model_selection = "BIC",seed=my.seed)
-out_cn5<-betaclust(df5[,1:4],M,patients,samples,model_names = c("KN."),model_selection = "BIC",seed=my.seed)
-out_cn6<-betaclust(df6[,1:4],M,patients,samples,model_names = c("KN."),model_selection = "BIC",seed=my.seed)
-out_cn7<-betaclust(df7[,1:4],M,patients,samples,model_names = c("KN."),model_selection = "BIC",seed=my.seed)
-out_cn8<-betaclust(df8[,1:4],M,patients,samples,model_names = c("KN."),model_selection = "BIC",seed=my.seed)
-out_cn9<-betaclust(df9[,1:4],M,patients,samples,model_names = c("KN."),model_selection = "BIC",seed=my.seed)
-out_cn10<-betaclust(df10[,1:4],M,patients,samples,model_names = c("KN."),model_selection = "BIC",seed=my.seed)
-
-
-M=3
-patients=4
-samples=2
-my.seed=190
-out_cr1<-betaclust(df1[,1:8],M,patients,samples,model_names = c("K.R"),model_selection = "BIC",seed=my.seed)
-out_cr2<-betaclust(df2[,1:8],M,patients,samples,model_names = c("K.R"),model_selection = "BIC",seed=my.seed)
-out_cr3<-betaclust(df3[,1:8],M,patients,samples,model_names = c("K.R"),model_selection = "BIC",seed=my.seed)
-out_cr4<-betaclust(df4[,1:8],M,patients,samples,model_names = c("K.R"),model_selection = "BIC",seed=my.seed)
-out_cr5<-betaclust(df5[,1:8],M,patients,samples,model_names = c("K.R"),model_selection = "BIC",seed=my.seed)
-out_cr6<-betaclust(df6[,1:8],M,patients,samples,model_names = c("K.R"),model_selection = "BIC",seed=my.seed)
-out_cr7<-betaclust(df7[,1:8],M,patients,samples,model_names = c("K.R"),model_selection = "BIC",seed=my.seed)
-out_cr8<-betaclust(df8[,1:8],M,patients,samples,model_names = c("K.R"),model_selection = "BIC",seed=my.seed)
-out_cr9<-betaclust(df9[,1:8],M,patients,samples,model_names = c("K.R"),model_selection = "BIC",seed=my.seed)
-out_cr10<-betaclust(df10[,1:8],M,patients,samples,model_names = c("K.R"),model_selection = "BIC",seed=my.seed)
-
-## Calculating adjusted Rand index for comparing
-# K.. and KN. models
-ari_k_kn<-vector()
-
-# K.. model and true membership
-ari_k_og<-vector()
-
-# KN. model and true membership
-ari_kn_og<-vector()
-
-# K.R and true membership
-ari_kr_og<-vector()
-
-
-tab1<-table(out_c1$optimal_model_results$data[,5],sd1_og1)
-ari_k_og[1]=classAgreement(tab1)[[4]]
-tab2<-table(out_c2$optimal_model_results$data[,5],sd2_og1)
-ari_k_og[2]=classAgreement(tab2)[[4]]
-tab3<-table(out_c3$optimal_model_results$data[,5],sd3_og1)
-ari_k_og[3]=classAgreement(tab3)[[4]]
-tab4<-table(out_c4$optimal_model_results$data[,5],sd4_og1)
-ari_k_og[4]=classAgreement(tab4)[[4]]
-tab5<-table(out_c5$optimal_model_results$data[,5],sd5_og1)
-ari_k_og[5]=classAgreement(tab5)[[4]]
-tab6<-table(out_c6$optimal_model_results$data[,5],sd6_og1)
-ari_k_og[6]=classAgreement(tab6)[[4]]
-tab7<-table(out_c7$optimal_model_results$data[,5],sd7_og1)
-ari_k_og[7]=classAgreement(tab7)[[4]]
-tab8<-table(out_c8$optimal_model_results$data[,5],sd8_og1)
-ari_k_og[8]=classAgreement(tab8)[[4]]
-tab9<-table(out_c9$optimal_model_results$data[,5],sd9_og1)
-ari_k_og[9]=classAgreement(tab9)[[4]]
-tab10<-table(out_c10$optimal_model_results$data[,5],sd10_og1)
-ari_k_og[10]=classAgreement(tab10)[[4]]
-
-tab1<-table(out_cr1$optimal_model_results$data[,9],sd1_og2)
-ari_kr_og[1]=classAgreement(tab1)[[4]]
-tab2<-table(out_cr2$optimal_model_results$data[,9],sd2_og2)
-ari_kr_og[2]=classAgreement(tab2)[[4]]
-tab3<-table(out_cr3$optimal_model_results$data[,9],sd3_og2)
-ari_kr_og[3]=classAgreement(tab3)[[4]]
-tab4<-table(out_cr4$optimal_model_results$data[,9],sd4_og2)
-ari_kr_og[4]=classAgreement(tab4)[[4]]
-tab5<-table(out_cr5$optimal_model_results$data[,9],sd5_og2)
-ari_kr_og[5]=classAgreement(tab5)[[4]]
-tab6<-table(out_cr6$optimal_model_results$data[,9],sd6_og2)
-ari_kr_og[6]=classAgreement(tab6)[[4]]
-tab7<-table(out_cr7$optimal_model_results$data[,9],sd7_og2)
-ari_kr_og[7]=classAgreement(tab7)[[4]]
-tab8<-table(out_cr8$optimal_model_results$data[,9],sd8_og2)
-ari_kr_og[8]=classAgreement(tab8)[[4]]
-tab9<-table(out_cr9$optimal_model_results$data[,9],sd9_og2)
-ari_kr_og[9]=classAgreement(tab9)[[4]]
-tab10<-table(out_cr10$optimal_model_results$data[,9],sd10_og2)
-ari_kr_og[10]=classAgreement(tab10)[[4]]
-
-tab1<-table(out_cn1$optimal_model_results$data[,5],sd1_og1)
-ari_kn_og[1]=classAgreement(tab1)[[4]]
-tab2<-table(out_cn2$optimal_model_results$data[,5],sd2_og1)
-ari_kn_og[2]=classAgreement(tab2)[[4]]
-tab3<-table(out_cn3$optimal_model_results$data[,5],sd3_og1)
-ari_kn_og[3]=classAgreement(tab3)[[4]]
-tab4<-table(out_cn4$optimal_model_results$data[,5],sd4_og1)
-ari_kn_og[4]=classAgreement(tab4)[[4]]
-tab5<-table(out_cn5$optimal_model_results$data[,5],sd5_og1)
-ari_kn_og[5]=classAgreement(tab5)[[4]]
-tab6<-table(out_cn6$optimal_model_results$data[,5],sd6_og1)
-ari_kn_og[6]=classAgreement(tab6)[[4]]
-tab7<-table(out_cn7$optimal_model_results$data[,5],sd7_og1)
-ari_kn_og[7]=classAgreement(tab7)[[4]]
-tab8<-table(out_cn8$optimal_model_results$data[,5],sd8_og1)
-ari_kn_og[8]=classAgreement(tab8)[[4]]
-tab9<-table(out_cn9$optimal_model_results$data[,5],sd9_og1)
-ari_kn_og[9]=classAgreement(tab9)[[4]]
-tab10<-table(out_cn10$optimal_model_results$data[,5],sd10_og1)
-ari_kn_og[10]=classAgreement(tab10)[[4]]
-
-tab1<-table(out_c1$optimal_model_results$data[,5],out_cn1$optimal_model_results$data[,5])
-ari_k_kn[1]=classAgreement(tab1)[[4]]
-tab2<-table(out_c2$optimal_model_results$data[,5],out_cn2$optimal_model_results$data[,5])
-ari_k_kn[2]=classAgreement(tab2)[[4]]
-tab3<-table(out_c3$optimal_model_results$data[,5],out_cn3$optimal_model_results$data[,5])
-ari_k_kn[3]=classAgreement(tab3)[[4]]
-tab4<-table(out_c4$optimal_model_results$data[,5],out_cn4$optimal_model_results$data[,5])
-ari_k_kn[4]=classAgreement(tab4)[[4]]
-tab5<-table(out_c5$optimal_model_results$data[,5],out_cn5$optimal_model_results$data[,5])
-ari_k_kn[5]=classAgreement(tab5)[[4]]
-tab6<-table(out_c6$optimal_model_results$data[,5],out_cn6$optimal_model_results$data[,5])
-ari_k_kn[6]=classAgreement(tab6)[[4]]
-tab7<-table(out_c7$optimal_model_results$data[,5],out_cn7$optimal_model_results$data[,5])
-ari_k_kn[7]=classAgreement(tab7)[[4]]
-tab8<-table(out_c8$optimal_model_results$data[,5],out_cn8$optimal_model_results$data[,5])
-ari_k_kn[8]=classAgreement(tab8)[[4]]
-tab9<-table(out_c9$optimal_model_results$data[,5],out_cn9$optimal_model_results$data[,5])
-ari_k_kn[9]=classAgreement(tab9)[[4]]
-tab10<-table(out_c10$optimal_model_results$data[,5],out_cn10$optimal_model_results$data[,5])
-ari_k_kn[10]=classAgreement(tab10)[[4]]
-
-
-
-## 10 Simulated dataset
-
-## simulation study by changing seed
-# ##  140, 3987,6543,8632,3456,4567,5678,1076,5555,4444
-set.seed(4444)
-C=20000
-probs=c(0.1,0.15,0.3,0.4,0.45,0.6,0.75,0.90)
-index=runif(C)
-R=8
-df=matrix(NA,ncol = R,nrow = C)
-set2_sd10_og1=vector(length = C)
-set2_sd10_og2=vector(length = C)
-for(c in 1:C)
+## Simulation study for just KN. model as K.. model is 
+## selected as the optimal model each time.
+df_threshold_list_kn=list()
+beta_threshold_out_kn=list()
+ari_threshold_kn=vector()
+og_group_kn=vector()
+for(i in 1:length(seed_vec))
 {
-  if(index[c]<probs[1])
+  set.seed(seed_vec[i])
+  C=600000
+  probs=c(0.35,0.7)
+  index=runif(C)
+  R=4
+  df=matrix(NA,ncol = R,nrow = C)
+  og_group_kn=vector(length = C)
+  true_dmc_kn=vector(length = C)
+  for(c in 1:C)
   {
-    df[c,1:4]=rbeta(4,20,2) #hypermethylated
-    df[c,5:8]=rbeta(4,4,3) #hemimethylated
-    set2_sd10_og1[c]=1
-    set2_sd10_og2[c]=1
-  }else if(index[c]<probs[2])
-  {
-    df[c,]=rbeta(R,20,2) #hypermethylated-hypermethylated
-    set2_sd10_og1[c]=1
-    set2_sd10_og2[c]=2
-  }else if(index[c]<probs[3])
-  {
-    df[c,1:4]=rbeta(4,20,2) #hypermethylated
-    df[c,5:8]=rbeta(4,2,20) #hypomethylated
-    set2_sd10_og1[c]=1
-    set2_sd10_og2[c]=3
-  }else if(index[c]<probs[4])
-  {
-    df[c,1:4]=rbeta(4,4,3) #hemimethylated
-    df[c,5:8]=rbeta(4,2,20) #hypomethylated
-    set2_sd10_og1[c]=2
-    set2_sd10_og2[c]=4
-  }else if(index[c]<probs[5])
-  {
-    df[c,1:4]=rbeta(4,2,20) #hypomethylated
-    df[c,5:8]=rbeta(4,4,3) #hemimethylated
-    set2_sd10_og1[c]=3
-    set2_sd10_og2[c]=5
-  }else if(index[c]<probs[6])
-  {
-    df[c,]=rbeta(R,4,3) #hemimethylated-hemimethylated
-    set2_sd10_og1[c]=2
-    set2_sd10_og2[c]=6
-  }else if(index[c]<probs[7])
-  {
-    df[c,]=rbeta(R,2,20) #hypomethylated - hypomethylated
-    set2_sd10_og1[c]=3
-    set2_sd10_og2[c]=7
-  }else if(index[c]<probs[8])
-  {
-    df[c,1:4]=rbeta(4,2,20) #hypomethylated
-    df[c,5:8]=rbeta(4,20,2) #hypermethylated
-    set2_sd10_og1[c]=3
-    set2_sd10_og2[c]=8
-  }else
-  {
-    df[c,1:4]=rbeta(4,4,3) #hemimethylated
-    df[c,5:8]=rbeta(4,20,2) #hypermethylated
-    set2_sd10_og1[c]=2
-    set2_sd10_og2[c]=9
+    if(index[c]<probs[1])
+    {
+      df[c,]=rbeta(4,2,20) #hypomethylated
+      og_group_kn[c]=1
+    }else if(index[c]<probs[2])
+    {
+      df[c,]=rbeta(R,4,3) #hemimethylated
+      og_group_kn[c]=2
+    }else 
+    {
+      df[c,]=rbeta(4,20,2) #hypermethylated
+      og_group_kn[c]=3
+    }
   }
+  
+  df=cbind(df,og_group_kn)
+  df=as.data.frame(df)
+  colnames(df)<-c("P_Sam1_1","P_Sam1_2","P_Sam1_3","P_Sam1_4","Original_Group")
+  
+  df_threshold_list_kn[[i]]=df
+  beta_sim_kn<-betaclust(df,3,4,1,c("KN."),parallel_process = TRUE)
+  beta_threshold_out_kn[[i]]=beta_sim_kn
+  ari_threshold_kn[i]<-unlist(
+    classAgreement(table(og_group_kn,
+                         beta_sim_kn$optimal_model_results$classification))[4])
 }
 
+ari_threshold_mean_kn=mean(ari_threshold_kn)
+ari_threshold_sd_kn=sd(ari_threshold_kn)
 
-df=as.data.frame(df)
-colnames(df)<-c("P_Sam1_1","P_Sam1_2","P_Sam1_3","P_Sam1_4","P_Sam2_1","P_Sam2_2","P_Sam2_3","P_Sam2_4")
-
-df10_set2=df
-
-M=3
-patients=4
-samples=1
-my.seed=190
-out1_set2<-betaclust(df1_set2[,1:4],M,patients,samples,model_names = c("K..","KN."),model_selection = "BIC",seed=my.seed)
-out2_set2<-betaclust(df2_set2[,1:4],M,patients,samples,model_names = c("K..","KN."),model_selection = "BIC",seed=my.seed)
-out3_set2<-betaclust(df3_set2[,1:4],M,patients,samples,model_names = c("K..","KN."),model_selection = "BIC",seed=my.seed)
-out4_set2<-betaclust(df4_set2[,1:4],M,patients,samples,model_names = c("K..","KN."),model_selection = "BIC",seed=my.seed)
-out5_set2<-betaclust(df5_set2[,1:4],M,patients,samples,model_names = c("K..","KN."),model_selection = "BIC",seed=my.seed)
-out6_set2<-betaclust(df6_set2[,1:4],M,patients,samples,model_names = c("K..","KN."),model_selection = "BIC",seed=my.seed)
-out7_set2<-betaclust(df7_set2[,1:4],M,patients,samples,model_names = c("K..","KN."),model_selection = "BIC",seed=my.seed)
-out8_set2<-betaclust(df8_set2[,1:4],M,patients,samples,model_names = c("K..","KN."),model_selection = "BIC",seed=my.seed)
-out9_set2<-betaclust(df9_set2[,1:4],M,patients,samples,model_names = c("K..","KN."),model_selection = "BIC",seed=my.seed)
-out10_set2<-betaclust(df10_set2[,1:4],M,patients,samples,model_names = c("K..","KN."),model_selection = "BIC",seed=my.seed)
+ari_threshold_k_kn=vector()
+for(i in 1:100)
+{
+  k=beta_threshold_out[[i]]$optimal_model_results$classification
+  kn=beta_threshold_out_kn[[i]]$optimal_model_results$classification
+  ari_threshold_k_kn[i]<-unlist(classAgreement(table(k,kn))[4])
+}
+ari_threshold_mean_k_kn=mean(ari_threshold_k_kn)
+ari_threshold_sd_k_kn=sd(ari_threshold_k_kn)
 
 
-M=3
-patients=4
-samples=1
-my.seed=190
-out_set2_c1<-betaclust(df1_set2[,1:4],M,patients,samples,model_names = c("K.."),model_selection = "BIC",seed=my.seed)
-out_set2_c2<-betaclust(df2_set2[,1:4],M,patients,samples,model_names = c("K.."),model_selection = "BIC",seed=my.seed)
-out_set2_c3<-betaclust(df3_set2[,1:4],M,patients,samples,model_names = c("K.."),model_selection = "BIC",seed=my.seed)
-out_set2_c4<-betaclust(df4_set2[,1:4],M,patients,samples,model_names = c("K.."),model_selection = "BIC",seed=my.seed)
-out_set2_c5<-betaclust(df5_set2[,1:4],M,patients,samples,model_names = c("K.."),model_selection = "BIC",seed=my.seed)
-out_set2_c6<-betaclust(df6_set2[,1:4],M,patients,samples,model_names = c("K.."),model_selection = "BIC",seed=my.seed)
-out_set2_c7<-betaclust(df7_set2[,1:4],M,patients,samples,model_names = c("K.."),model_selection = "BIC",seed=my.seed)
-out_set2_c8<-betaclust(df8_set2[,1:4],M,patients,samples,model_names = c("K.."),model_selection = "BIC",seed=my.seed)
-out_set2_c9<-betaclust(df9_set2[,1:4],M,patients,samples,model_names = c("K.."),model_selection = "BIC",seed=my.seed)
-out_set2_c10<-betaclust(df10_set2[,1:4],M,patients,samples,model_names = c("K.."),model_selection = "BIC",seed=my.seed)
+## Simulation study for K.R model
+### simulation checking
 
-M=3
-patients=4
-samples=1
-my.seed=190
-out_set2_cn1<-betaclust(df1_set2[,1:4],M,patients,samples,model_names = c("KN."),model_selection = "BIC",seed=my.seed)
-out_set2_cn2<-betaclust(df2_set2[,1:4],M,patients,samples,model_names = c("KN."),model_selection = "BIC",seed=my.seed)
-out_set2_cn3<-betaclust(df3_set2[,1:4],M,patients,samples,model_names = c("KN."),model_selection = "BIC",seed=my.seed)
-out_set2_cn4<-betaclust(df4_set2[,1:4],M,patients,samples,model_names = c("KN."),model_selection = "BIC",seed=my.seed)
-out_set2_cn5<-betaclust(df5_set2[,1:4],M,patients,samples,model_names = c("KN."),model_selection = "BIC",seed=my.seed)
-out_set2_cn6<-betaclust(df6_set2[,1:4],M,patients,samples,model_names = c("KN."),model_selection = "BIC",seed=my.seed)
-out_set2_cn7<-betaclust(df7_set2[,1:4],M,patients,samples,model_names = c("KN."),model_selection = "BIC",seed=my.seed)
-out_set2_cn8<-betaclust(df8_set2[,1:4],M,patients,samples,model_names = c("KN."),model_selection = "BIC",seed=my.seed)
-out_set2_cn9<-betaclust(df9_set2[,1:4],M,patients,samples,model_names = c("KN."),model_selection = "BIC",seed=my.seed)
-out_set2_cn10<-betaclust(df10_set2[,1:4],M,patients,samples,model_names = c("KN."),model_selection = "BIC",seed=my.seed)
+df_list=list()
+auc_df=matrix(NA,nrow=100,ncol=9)
+wd_df=matrix(NA,nrow=100,ncol=9)
+fdr=vector()
+sens=vector()
+spec=vector()
+ppv=vector()
+ari=vector()
+beta_out=list()
+beta_out_dmc=list()
 
+for(i in 1:length(seed_vec))
+{
+  #i=1
+  set.seed(seed_vec[i])
+  C=600000
+  probs=c(0.1,0.15,0.3,0.4,0.45,0.6,0.75,0.90)
+  index=runif(C)
+  R=8
+  df=matrix(NA,ncol = R,nrow = C)
+  og_group=vector(length = C)
+  true_dmc=vector(length = C)
+  for(c in 1:C)
+  {
+    if(index[c]<probs[1])
+    {
+      df[c,1:4]=rbeta(4,20,2) #hyper
+      df[c,5:8]=rbeta(4,4,3) #hemimethylated
+      og_group[c]=1
+      true_dmc[c]=1
+    }else if(index[c]<probs[2])
+    {
+      df[c,]=rbeta(R,20,2) #hypermethylated-hypermethylated
+      og_group[c]=2
+      true_dmc[c]=0
+    }else if(index[c]<probs[3])
+    {
+      df[c,1:4]=rbeta(4,20,2) #hypermethylated
+      df[c,5:8]=rbeta(4,2,20) #hypomethylated
+      og_group[c]=3
+      true_dmc[c]=1
+    }else if(index[c]<probs[4])
+    {
+      df[c,1:4]=rbeta(4,4,3) #hemimethylated
+      df[c,5:8]=rbeta(4,2,20) #hypomethylated
+      og_group[c]=4
+      true_dmc[c]=1
+    }else if(index[c]<probs[5])
+    {
+      df[c,1:4]=rbeta(4,2,20) #hypomethylated
+      df[c,5:8]=rbeta(4,4,3) #hemimethylated
+      og_group[c]=5
+      true_dmc[c]=1
+    }else if(index[c]<probs[6])
+    {
+      df[c,]=rbeta(R,4,3) #hemimethylated-hemimethylated
+      og_group[c]=6
+      true_dmc[c]=0
+    }else if(index[c]<probs[7])
+    {
+      df[c,]=rbeta(R,2,20) #hypomethylated - hypomethylated
+      og_group[c]=7
+      true_dmc[c]=0
+    }else if(index[c]<probs[8])
+    {
+      df[c,1:4]=rbeta(4,2,20) #hypomethylated
+      df[c,5:8]=rbeta(4,20,2) #hypermethylated
+      og_group[c]=8
+      true_dmc[c]=1
+    }else
+    {
+      df[c,1:4]=rbeta(4,4,3) #hemimethylated
+      df[c,5:8]=rbeta(4,20,2) #hypermethylated
+      og_group[c]=9
+      true_dmc[c]=1
+    }
+  }
+  
+  df=cbind(df,og_group,true_dmc)
+  df=as.data.frame(df)
+  colnames(df)<-c("P_Sam1_1","P_Sam1_2","P_Sam1_3","P_Sam1_4","P_Sam2_1",
+                  "P_Sam2_2","P_Sam2_3","P_Sam2_4","Original_Group","True_DMC")
+  
+  df_list[[i]]=df
+  beta_sim<-betaclust(df[,1:8],3,4,2,"K.R",parallel_process = TRUE)
+  beta_out[[i]]=beta_sim
+  
+  ## Using AUC and WD metric for finding similarity in the distributions 
+  ## estimated in each cluster
+  alpha=beta_sim$optimal_model_results$alpha
+  delta=beta_sim$optimal_model_results$delta
+  n <- 1000
+  auc_vec_sim=vector()
+  L <- 1001
+  d_vec_sim=vector()
+  z <- seq(0, 1, length = L)
+  for(j in 1:beta_sim$K)
+  {
+    shape1_1 = alpha[j,1]
+    shape1_2 = delta[j,1];
+    shape2_1 = alpha[j,2];
+    shape2_2 = delta[j,2];
+    group_1 <- rbeta(n, shape1 = shape1_1, shape2 = shape1_2)
+    group_2 <- rbeta(n, shape1 = shape2_1, shape2 = shape2_2)
+    auc_dat <- data.frame(predictor=c(group_1, group_2), 
+                          response=factor(c(rep(0,n), rep(1,n))))
+    auc_value <- auc(predictor = auc_dat$predictor, 
+                     response  = auc_dat$response)
+    auc_vec_sim[j]=unlist(auc_value)
+    
+    
+    alpha1 = alpha[j,1]
+    delta1 = delta[j,1];
+    alpha2 = alpha[j,2];
+    delta2 = delta[j,2];
+    
+    d <- sum(abs(pbeta(z, alpha1, delta1)- pbeta(z, alpha2, delta2))) / L
+    d_vec_sim[j]=d
+    
+  }
+  auc_df[i,]=auc_vec_sim
+  wd_df[i,]=d_vec_sim
+  auc_th=which(auc_vec_sim>0.85)
+  beta_sim_true_dmc=ifelse(beta_sim$optimal_model_results$classification %in% 
+                             auc_th,1,0)
+  beta_out_dmc[[i]]=beta_sim_true_dmc
+  ## FDR
+  conf_matrix<-table(true_dmc,beta_sim_true_dmc)
+  tn <- conf_matrix[1, 1]
+  fp <- conf_matrix[1, 2]
+  fn <- conf_matrix[2, 1]
+  tp <- conf_matrix[2, 2]
+  
+  # Calculate the false discovery rate
+  fdr[i] <- fp / (fp + tp)
+  spec[i] <-tn/(fp+tn)
+  sens[i] <-tp/(tp+fn)
+  ppv[i] <-tp/(fp + tp)
+  ari[i]<-unlist(classAgreement(
+    table(og_group,beta_sim$optimal_model_results$classification))[4])
 
-M=3
-patients=4
-samples=2
-my.seed=190
-out_set2_cr1<-betaclust(df1_set2[,1:8],M,patients,samples,model_names = c("K.R"),model_selection = "BIC",seed=my.seed)
-out_set2_cr2<-betaclust(df2_set2[,1:8],M,patients,samples,model_names = c("K.R"),model_selection = "BIC",seed=my.seed)
-out_set2_cr3<-betaclust(df3_set2[,1:8],M,patients,samples,model_names = c("K.R"),model_selection = "BIC",seed=my.seed)
-out_set2_cr4<-betaclust(df4_set2[,1:8],M,patients,samples,model_names = c("K.R"),model_selection = "BIC",seed=my.seed)
-out_set2_cr5<-betaclust(df5_set2[,1:8],M,patients,samples,model_names = c("K.R"),model_selection = "BIC",seed=my.seed)
-out_set2_cr6<-betaclust(df6_set2[,1:8],M,patients,samples,model_names = c("K.R"),model_selection = "BIC",seed=my.seed)
-out_set2_cr7<-betaclust(df7_set2[,1:8],M,patients,samples,model_names = c("K.R"),model_selection = "BIC",seed=my.seed)
-out_set2_cr8<-betaclust(df8_set2[,1:8],M,patients,samples,model_names = c("K.R"),model_selection = "BIC",seed=my.seed)
-out_set2_cr9<-betaclust(df9_set2[,1:8],M,patients,samples,model_names = c("K.R"),model_selection = "BIC",seed=my.seed)
-out_set2_cr10<-betaclust(df10_set2[,1:8],M,patients,samples,model_names = c("K.R"),model_selection = "BIC",seed=my.seed)
+  
+}
+auc_mean=colMeans(auc_df)
+auc_sd=sapply(auc_df[1:100,],sd)
+auc_df=rbind(auc_df,auc_mean)
+auc_df=as.data.frame(auc_df)
+wd_mean=colMeans(wd_df)
+wd_sd=sapply(wd_df[1:100,],sd)
+wd_df=rbind(wd_df,wd_mean)
+wd_df=as.data.frame(wd_df)
 
-## Calculating adjusted Rand index for comparing
-# K.. and KN. models
-ari_set2_k_kn<-vector()
+## Mean of each performance metric
+perf_metric_bmm=vector()
+perf_metric_bmm[1]=mean(fdr)
+perf_metric_bmm[2]=mean(sens)
+perf_metric_bmm[3]=mean(spec)
+perf_metric_bmm[4]=mean(ppv)
+perf_metric_bmm[5]=mean(ari)
 
-# K.. model and true membership
-ari_set2_k_og<-vector()
-
-# KN. model and true membership
-ari_set2_kn_og<-vector()
-
-# K.R and true membership
-ari_set2_kr_og<-vector()
-
-tab1<-table(out1_set2$optimal_model_results$data[,5],set2_sd1_og1)
-ari_set2_k_og[1]=classAgreement(tab1)[[4]]
-tab2<-table(out2_set2$optimal_model_results$data[,5],set2_sd2_og1)
-ari_set2_k_og[2]=classAgreement(tab2)[[4]]
-tab3<-table(out3_set2$optimal_model_results$data[,5],set2_sd3_og1)
-ari_set2_k_og[3]=classAgreement(tab3)[[4]]
-tab4<-table(out4_set2$optimal_model_results$data[,5],set2_sd4_og1)
-ari_set2_k_og[4]=classAgreement(tab4)[[4]]
-tab5<-table(out5_set2$optimal_model_results$data[,5],set2_sd5_og1)
-ari_set2_k_og[5]=classAgreement(tab5)[[4]]
-tab6<-table(out6_set2$optimal_model_results$data[,5],set2_sd6_og1)
-ari_set2_k_og[6]=classAgreement(tab6)[[4]]
-tab7<-table(out7_set2$optimal_model_results$data[,5],set2_sd7_og1)
-ari_set2_k_og[7]=classAgreement(tab7)[[4]]
-tab8<-table(out8_set2$optimal_model_results$data[,5],set2_sd8_og1)
-ari_set2_k_og[8]=classAgreement(tab8)[[4]]
-tab9<-table(out9_set2$optimal_model_results$data[,5],set2_sd9_og1)
-ari_set2_k_og[9]=classAgreement(tab9)[[4]]
-tab10<-table(out10_set2$optimal_model_results$data[,5],set2_sd10_og1)
-ari_set2_k_og[10]=classAgreement(tab10)[[4]]
-
-tab1<-table(out_set2_cr1$optimal_model_results$data[,9],set2_sd1_og2)
-ari_set2_kr_og[1]=classAgreement(tab1)[[4]]
-tab2<-table(out_set2_cr2$optimal_model_results$data[,9],set2_sd2_og2)
-ari_set2_kr_og[2]=classAgreement(tab2)[[4]]
-tab3<-table(out_set2_cr3$optimal_model_results$data[,9],set2_sd3_og2)
-ari_set2_kr_og[3]=classAgreement(tab3)[[4]]
-tab4<-table(out_set2_cr4$optimal_model_results$data[,9],set2_sd4_og2)
-ari_set2_kr_og[4]=classAgreement(tab4)[[4]]
-tab5<-table(out_set2_cr5$optimal_model_results$data[,9],set2_sd5_og2)
-ari_set2_kr_og[5]=classAgreement(tab5)[[4]]
-tab6<-table(out_set2_cr6$optimal_model_results$data[,9],set2_sd6_og2)
-ari_set2_kr_og[6]=classAgreement(tab6)[[4]]
-tab7<-table(out_set2_cr7$optimal_model_results$data[,9],set2_sd7_og2)
-ari_set2_kr_og[7]=classAgreement(tab7)[[4]]
-tab8<-table(out_set2_cr8$optimal_model_results$data[,9],set2_sd8_og2)
-ari_set2_kr_og[8]=classAgreement(tab8)[[4]]
-tab9<-table(out_set2_cr9$optimal_model_results$data[,9],set2_sd9_og2)
-ari_set2_kr_og[9]=classAgreement(tab9)[[4]]
-tab10<-table(out_set2_cr10$optimal_model_results$data[,9],set2_sd10_og2)
-ari_set2_kr_og[10]=classAgreement(tab10)[[4]]
-
-tab1<-table(out_set2_cn1$optimal_model_results$data[,5],set2_sd1_og1)
-ari_set2_kn_og[1]=classAgreement(tab1)[[4]]
-tab2<-table(out_set2_cn2$optimal_model_results$data[,5],set2_sd2_og1)
-ari_set2_kn_og[2]=classAgreement(tab2)[[4]]
-tab3<-table(out_set2_cn3$optimal_model_results$data[,5],set2_sd3_og1)
-ari_set2_kn_og[3]=classAgreement(tab3)[[4]]
-tab4<-table(out_set2_cn4$optimal_model_results$data[,5],set2_sd4_og1)
-ari_set2_kn_og[4]=classAgreement(tab4)[[4]]
-tab5<-table(out_set2_cn5$optimal_model_results$data[,5],set2_sd5_og1)
-ari_set2_kn_og[5]=classAgreement(tab5)[[4]]
-tab6<-table(out_set2_cn6$optimal_model_results$data[,5],set2_sd6_og1)
-ari_set2_kn_og[6]=classAgreement(tab6)[[4]]
-tab7<-table(out_set2_cn7$optimal_model_results$data[,5],set2_sd7_og1)
-ari_set2_kn_og[7]=classAgreement(tab7)[[4]]
-tab8<-table(out_set2_cn8$optimal_model_results$data[,5],set2_sd8_og1)
-ari_set2_kn_og[8]=classAgreement(tab8)[[4]]
-tab9<-table(out_set2_cn9$optimal_model_results$data[,5],set2_sd9_og1)
-ari_set2_kn_og[9]=classAgreement(tab9)[[4]]
-tab10<-table(out_set2_cn10$optimal_model_results$data[,5],set2_sd10_og1)
-ari_set2_kn_og[10]=classAgreement(tab10)[[4]]
-
-tab1<-table(out_set2_c1$optimal_model_results$data[,5],out_set2_cn1$optimal_model_results$data[,5])
-ari_set2_k_kn[1]=classAgreement(tab1)[[4]]
-tab2<-table(out_set2_c2$optimal_model_results$data[,5],out_set2_cn2$optimal_model_results$data[,5])
-ari_set2_k_kn[2]=classAgreement(tab2)[[4]]
-tab3<-table(out_set2_c3$optimal_model_results$data[,5],out_set2_cn3$optimal_model_results$data[,5])
-ari_set2_k_kn[3]=classAgreement(tab3)[[4]]
-tab4<-table(out_set2_c4$optimal_model_results$data[,5],out_set2_cn4$optimal_model_results$data[,5])
-ari_set2_k_kn[4]=classAgreement(tab4)[[4]]
-tab5<-table(out_set2_c5$optimal_model_results$data[,5],out_set2_cn5$optimal_model_results$data[,5])
-ari_set2_k_kn[5]=classAgreement(tab5)[[4]]
-tab6<-table(out_set2_c6$optimal_model_results$data[,5],out_set2_cn6$optimal_model_results$data[,5])
-ari_set2_k_kn[6]=classAgreement(tab6)[[4]]
-tab7<-table(out_set2_c7$optimal_model_results$data[,5],out_set2_cn7$optimal_model_results$data[,5])
-ari_set2_k_kn[7]=classAgreement(tab7)[[4]]
-tab8<-table(out_set2_c8$optimal_model_results$data[,5],out_set2_cn8$optimal_model_results$data[,5])
-ari_set2_k_kn[8]=classAgreement(tab8)[[4]]
-tab9<-table(out_set2_c9$optimal_model_results$data[,5],out_set2_cn9$optimal_model_results$data[,5])
-ari_set2_k_kn[9]=classAgreement(tab9)[[4]]
-tab10<-table(out_set2_c10$optimal_model_results$data[,5],out_set2_cn10$optimal_model_results$data[,5])
-ari_set2_k_kn[10]=classAgreement(tab10)[[4]]
-
-
-
-# Mean ARI and its standard deviation for comparing K.. and KN. models
-m1=c(ari_k_kn,ari_set2_k_kn) 
-mean(m1)
-sd(m1)
-
-# Mean ARI and its standard deviation for comparing K.. model solution and true membership
-m2=c(ari_k_og,ari_set2_k_og)
-mean(m2)
-sd(m2)
-
-# Mean ARI and its standard deviation for comparing KN. model solution and true membership
-m3=c(ari_kn_og,ari_set2_kn_og)
-mean(m3)
-sd(m3)
-
-# Mean ARI and its standard deviation for comparing K.R model solution and true membership
-m4=c(ari_kr_og,ari_set2_kr_og)
-mean(m4)
-sd(m4)
-
+## SD of each performance metric
+perf_metric_sd_bmm=vector()
+perf_metric_sd_bmm[1]=sd(fdr)
+perf_metric_sd_bmm[2]=sd(sens)
+perf_metric_sd_bmm[3]=sd(spec)
+perf_metric_sd_bmm[4]=sd(ppv)
+perf_metric_sd_bmm[5]=sd(ari)
 
