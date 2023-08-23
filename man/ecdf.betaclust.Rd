@@ -10,14 +10,14 @@ ecdf.betaclust(x, R = 2, sample_name = NULL, title = NULL)
 \item{x}{A dataframe containing methylation values of identified differentially methylated regions related to a gene.
 Samples are grouped together in the dataframe such that the columns are ordered as Sample1_Patient1, Sample1_Patient2, Sample2_Patient1, Sample2_Patient2, etc.}
 
-\item{R}{Number of tissue samples from which DNA methylation data are collected (default R = 2).}
+\item{R}{Number of tissue sample types from which DNA methylation data are collected (default R = 2).}
 
-\item{sample_name}{The order in which the samples are grouped in the dataframe. If no value is specified then default values of sample names, e.g. Sample 1, Sample 2, etc are used (default = NULL).}
+\item{sample_name}{The order in which the sample types are grouped in the dataframe. If no value is specified then default values of sample names, e.g. Sample 1, Sample 2, etc are used (default = NULL).}
 
 \item{title}{The title that the user wants to display on the graph. The default is "NULL".}
 }
 \value{
-The ECDF plot for the selected CpG sites for all patients and their DNA samples.
+The ECDF plot for the selected CpG sites for all patients and their DNA sample types.
 }
 \description{
 An empirical cumulative distribution function (ECDF) plot for a \code{\link[betaclust:betaclust]{betaclust}} object.

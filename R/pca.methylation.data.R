@@ -1,6 +1,6 @@
 #' @title DNA methylation data from patients with prostate cancer
 #'
-#' @description A dataset containing pre-processed beta methylation values from \eqn{R=2} samples, collected from \eqn{N=4} patients with prostate cancer.
+#' @description A dataset containing pre-processed beta methylation values from \eqn{R=2} sample types, collected from \eqn{N=4} patients with prostate cancer.
 #'
 #' @details The raw methylation array data was first quality controlled and preprocessed using the \href{https://rnbeads.org/}{RnBeads} package. The array data were then normalized and and probes located outside of CpG sites and on the sex chromosome were filtered out. The CpG sites with missing values were removed from the resulting dataset. A subset of the complete dataset has been uploaded in the package for testing purposes. The complete dataset is available on \href{https://github.com/koyelucd/betaclust}{GitHub}.
 #' @seealso \code{\link{legacy.data}}

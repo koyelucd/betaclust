@@ -9,7 +9,7 @@ threshold(object, data, model_name)
 \arguments{
 \item{object}{A \code{\link[betaclust:beta_k]{beta_k}} or \code{\link[betaclust:beta_kn]{beta_kn}} object.}
 
-\item{data}{A dataframe of dimension \eqn{C \times NR} containing methylation values for \eqn{C} CpG sites from \eqn{R} samples collected from \eqn{N} patients which was passed as an argument to the \code{\link[betaclust:betaclust]{betaclust}} function.}
+\item{data}{A dataframe of dimension \eqn{C \times NR} containing methylation values for \eqn{C} CpG sites from \eqn{R} sample types collected from \eqn{N} patients which was passed as an argument to the \code{\link[betaclust:betaclust]{betaclust}} function.}
 
 \item{model_name}{The name of the model for which the thresholds need to be calculated.}
 }

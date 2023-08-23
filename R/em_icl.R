@@ -10,7 +10,7 @@ globalVariables(c("patients","samples"))
 #' @param C Number of CpG sites.
 #' @param M Number of methylation states identified in a DNA sample.
 #' @param N Number of patients.
-#' @param R Number of DNA samples collected from each patient.
+#' @param R Number of DNA sample types collected from each patient.
 #' @param model_name Fitted mixture model. Options are "K..", "KN." and/or "K.R" (default = "K..").
 #' @param z A matrix of posterior probabilities of cluster membership, stored as z in the object from \code{\link[betaclust]{beta_k}}, \code{\link[betaclust]{beta_kn}} and \code{\link[betaclust]{beta_kr}} functions.
 #' @return The ICL value for the selected model.

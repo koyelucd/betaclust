@@ -16,7 +16,7 @@ An object of class \code{\link[betaclust:summary.betaclust]{summary.betaclust}} 
 \itemize{
 \item C - The number of CpG sites analysed using the beta mixture models.
 \item N - The number of patients analysed using the beta mixture models.
-\item R - The number of samples analysed using the beta mixture models.
+\item R - The number of sample types analysed using the beta mixture models.
 \item K - The number of methylation states in R DNA samples.
 \item modelName - The optimal model selected.
 \item loglik - The log-likelihood value for the selected optimal model.

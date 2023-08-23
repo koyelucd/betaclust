@@ -31,7 +31,7 @@ globalVariables(c("Patient_Sample","label","Uncertainty","ModelName","IC_value")
 #' @param plot_type The plot type to be displayed are either "ggplot" or "plotly" (default = "ggplot").
 #' @param data A dataframe of dimension \eqn{C \times NR} containing methylation values for \eqn{C} CpG sites from \eqn{R} samples collected from \eqn{N} patients which was passed as an argument to the \code{\link[betaclust:betaclust]{betaclust}} function.
 #' The data is not required as an input when generating "uncertainty" or "information criterion" plots and the default has been set as "NULL". The data needs to be passed as an argument to this function when generating either "fitted density" or "kernel density" plots.
-#' @param sample_name The names of DNA samples in the dataset analysed by the K.R model. If no value is passed then default values of sample names, e.g. Sample 1, Sample 2, etc are used as legend text (default = NULL).
+#' @param sample_name The names of DNA sample types in the dataset analysed by the K.R model. If no value is passed then default values of sample names, e.g. Sample 1, Sample 2, etc are used as legend text (default = NULL).
 #' @param title The title that the user wants to display. If no title is to be displayed the default is "NULL".
 #' @param patient_number The column number representing the patient in the patient-wise ordered dataset selected for visualizing the clustering solution of the K.. or KN. model (default = 1).
 #' @param threshold The "TRUE" option displays the threshold points in the graph for the K.. and the KN. model (default = "FALSE").
@@ -140,7 +140,7 @@ plot.betaclust <- function(x,what = "fitted density",
         if(is.null(call_data))
         {
           plot_graph=NULL
-          warning("K.R considers only multiple samples. Please pass DNA methylation values for more than 1 sample.", call. = FALSE)
+          warning("K.R considers only multiple sample types. Please pass DNA methylation values for more than 1 sample type.", call. = FALSE)
         }
         else{
         data_ggplot<-as.data.frame(call_data)
@@ -170,10 +170,10 @@ plot.betaclust <- function(x,what = "fitted density",
         colours<-scales::seq_gradient_pal(low="#FFC20A",high="#0C7BDC",space = "Lab")(1:color_length/color_length)
 
         plot_graph<-ggplot2::ggplot(data_plot)+
-          ggplot2::geom_density(aes(x=beta_value,color=Patient_Sample))+
+          ggplot2::geom_density(ggplot2::aes(x=beta_value,color=Patient_Sample))+
           ggplot2::xlab("Beta Value")+
           ggplot2::ylab("Density")+
-          ggplot2::scale_color_manual("DNA sample",values=colours)+
+          ggplot2::scale_color_manual("DNA sample type",values=colours)+
           ggplot2::facet_wrap(~Cluster,scales = scale_param
                               # ,labeller = ggplot2::labeller(Cluster= cluster_count_label)
           )+
@@ -182,9 +182,15 @@ plot.betaclust <- function(x,what = "fitted density",
           ggplot2::ggtitle(txt)
         #ggplot2::ggtitle("Density estimates for K.R clustering solution")
 
-        f_labels<-data.frame(Cluster=seq(1,length(object$optimal_model_results$cluster_size),by=1),label=as.vector(round((object$optimal_model_results$cluster_size/object$C),3)))
+        # f_labels<-data.frame(Cluster=seq(1,length(object$optimal_model_results$cluster_size),by=1),label=as.vector(round(object$optimal_model_results$tau,3)))
+        # plot_graph<-plot_graph+
+        #   ggplot2::geom_text(x = 0.2, y = 1, ggplot2::aes(label = label), data = f_labels)
+        y=vector()
+        for(i in 1:object$K){y[i]=max(density(data_plot[data_plot$Cluster==i,1])[["y"]])}
+        f_labels<-data.frame(Cluster=seq(1,length(object$optimal_model_results$cluster_size),by=1),label=as.vector(round(object$optimal_model_results$tau,3)),x=0.8,
+                             y=y)
         plot_graph<-plot_graph+
-          ggplot2::geom_text(x = 0.2, y = 1, ggplot2::aes(label = label), data = f_labels)
+          ggplot2::geom_text(data = f_labels, ggplot2::aes(x=x,y=y,label = label,color=NA),show.legend = F,fontface="bold" )
 
         }
       }
@@ -310,11 +316,14 @@ plot.betaclust <- function(x,what = "fitted density",
           ggplot2::geom_line()+
           ggplot2::scale_color_manual(values=colours)+
           ggplot2::facet_wrap(~cluster_vec,scales = scale_param
-          )+ ggplot2::labs(color="DNA sample", x="Beta value", y="Density")+
+          )+ ggplot2::labs(color="DNA sample type", x="Beta value", y="Density")+
           ggplot2::ggtitle(txt)
-        f_labels<-data.frame(cluster_vec=as.factor(seq(1,K,by=1)),label=as.vector(round((object$optimal_model_results$cluster_size/object$C),3)))
+        y=vector()
+        for(i in 1:K){y[i]=max(df_new_tmp[df_new_tmp$cluster_vec==i,2])}
+        f_labels<-data.frame(cluster_vec=as.factor(seq(1,K,by=1)),label=as.vector(round(object$optimal_model_results$tau,3)),x=0.8,
+                             y=y)
         plot_graph<-plot_graph+
-          ggplot2::geom_text(data = f_labels, ggplot2::aes(x = 0.2, y = 0.1,label = label,color=NA),show.legend = F,fontface="bold" )
+          ggplot2::geom_text(data = f_labels, ggplot2::aes(x=x,y=y,label = label,color=NA),show.legend = F,fontface="bold" )
 
       }
 
@@ -326,8 +335,8 @@ plot.betaclust <- function(x,what = "fitted density",
     if(!is.null(plot_graph)){
       if(object$optimal_model == "K..")
       {
-        th_plot<-object$optimal_model_results$thresholds
-        ano_th<-object$optimal_model_results$thresholds-.02
+        th_plot<-object$optimal_model_results$thresholds$threholds
+        ano_th<-object$optimal_model_results$thresholds$threholds-.02
       }else{
         th_plot<-object$optimal_model_results$thresholds$threholds[,pn]
         ano_th<-object$optimal_model_results$thresholds$threholds[,pn]-.02

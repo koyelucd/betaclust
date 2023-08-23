@@ -8,7 +8,7 @@
 #' @param C Number of CpG sites.
 #' @param M Number of methylation states identified in a DNA sample.
 #' @param N Number of patients.
-#' @param R Number of DNA samples collected from each patient.
+#' @param R Number of DNA sample types collected from each patient.
 #' @param model_name Fitted mixture model. Options are "K..", "KN." and/or "K.R" (default = "K..").
 #' @return The BIC value for the selected model.
 

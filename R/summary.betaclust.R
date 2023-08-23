@@ -8,7 +8,7 @@
 #' \itemize{
 #' \item C - The number of CpG sites analysed using the beta mixture models.
 #' \item N - The number of patients analysed using the beta mixture models.
-#' \item R - The number of samples analysed using the beta mixture models.
+#' \item R - The number of sample types analysed using the beta mixture models.
 #' \item K - The number of methylation states in R DNA samples.
 #' \item modelName - The optimal model selected.
 #' \item loglik - The log-likelihood value for the selected optimal model.
@@ -38,7 +38,8 @@ summary.betaclust<-function(object,...)
   #clustering<-as.factor(object$optimal_model_results$data[,ncol(object$optimal_model_results$data)])
  # classification<-table(as.factor(object$optimal_model_results$data[,ncol(object$optimal_model_results$data)]))
   classification<-table(as.factor(object$optimal_model_results$classification))
-  prop_data<-round((as.numeric(object$optimal_model_results$cluster_size)/object$C),3)
+  #prop_data<-round((as.numeric(object$optimal_model_results$cluster_size)/object$C),3)
+  prop_data<-round(as.numeric(object$optimal_model_results$tau),3)
   obj <- list(title = title,
               C=object$C,
               N=object$N,

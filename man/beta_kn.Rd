@@ -7,10 +7,10 @@
 beta_kn(data, M = 3, parallel_process = FALSE, seed = NULL)
 }
 \arguments{
-\item{data}{A dataframe of dimension \eqn{C \times N} containing methylation values for \eqn{C} CpG sites from \eqn{R = 1} samples collected from \eqn{N} patients.
+\item{data}{A dataframe of dimension \eqn{C \times N} containing methylation values for \eqn{C} CpG sites from \eqn{R = 1} sample type collected from \eqn{N} patients.
 Samples are grouped together in the dataframe such that the columns are ordered as Sample1_Patient1, Sample1_Patient2, etc.}
 
-\item{M}{Number of methylation states to be identified in a DNA sample.}
+\item{M}{Number of methylation states to be identified in a DNA sample type.}
 
 \item{parallel_process}{The "TRUE" option results in parallel processing of the models for increased computational efficiency. The default option has been set as "FALSE" due to package testing limitations.}
 
@@ -30,10 +30,10 @@ A list containing:
 }
 \description{
 Fit the KN. model from the \code{\link[betaclust:betaclust]{betaclust}} family of beta mixture models for DNA methylation data.
-             The KN. model analyses a single DNA sample and identifies the thresholds between the different methylation states.
+             The KN. model analyses a single DNA sample type and identifies the thresholds between the different methylation states.
 }
 \details{
-The KN. model clusters each of the \eqn{C} CpG sites into one of \eqn{K} methylation states, based on data from \eqn{N} patients for one DNA sample (i.e. \eqn{R = 1}).
+The KN. model clusters each of the \eqn{C} CpG sites into one of \eqn{K} methylation states, based on data from \eqn{N} patients for one DNA sample type (i.e. \eqn{R = 1}).
 As each CpG site can belong to any of the \eqn{M = 3} methylation states (hypomethylated, hemimethylated or hypermethylated), the default value of \eqn{K = M = 3}.
 The KN. model differs from the K.. model as it is less parsimonious, allowing cluster and patient-specific shape parameters. The returned object can be passed as an input parameter to the
 \code{\link[betaclust:threshold]{threshold}} function available in this package to calculate the thresholds between the methylation states.

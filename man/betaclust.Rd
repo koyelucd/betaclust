@@ -16,14 +16,14 @@ betaclust(
 )
 }
 \arguments{
-\item{data}{A dataframe of dimension \eqn{C \times NR} containing methylation values for \eqn{C} CpG sites from \eqn{R} samples collected from \eqn{N} patients.
+\item{data}{A dataframe of dimension \eqn{C \times NR} containing methylation values for \eqn{C} CpG sites from \eqn{R} sample types collected from \eqn{N} patients.
 Samples are grouped together in the dataframe such that the columns are ordered as Sample1_Patient1, Sample1_Patient2, Sample2_Patient1, Sample2_Patient2, etc.}
 
-\item{M}{Number of methylation states to be identified in a DNA sample.}
+\item{M}{Number of methylation states to be identified in a DNA sample type.}
 
 \item{N}{Number of patients in the study.}
 
-\item{R}{Number of samples collected from each patient for the study.}
+\item{R}{Number of sample types collected from each patient for the study.}
 
 \item{model_names}{Models to run from the set of models, K.., KN. and K.R, default = K.. . See details.}
 
@@ -43,7 +43,7 @@ The function returns an object of the \code{\link[betaclust:betaclust]{betaclust
 \item K - The number of clusters identified using the beta mixture models.
 \item C - The number of CpG sites analysed using the beta mixture models.
 \item N - The number of patients analysed using the beta mixture models.
-\item R - The number of samples analysed using the beta mixture models.
+\item R - The number of sample types analysed using the beta mixture models.
 \item optimal_model_results - Information from the optimal model. Specifically,
    \itemize{
    \item cluster_size - The total number of CpG sites in each of the K clusters.
@@ -55,6 +55,7 @@ The function returns an object of the \code{\link[betaclust:betaclust]{betaclust
    \item classification - The classification corresponding to z, i.e. map(z).
    \item uncertainty - The uncertainty of each CpG site's clustering.
    \item thresholds - Threshold points calculated under the K.. or the KN. model.
+   \item DM - The AUC and WD metric for distribution similarity in each cluster.
    }
 }
 }
@@ -64,11 +65,11 @@ A family of model-based clustering techniques to identify methylation states in 
 \details{
 This is a wrapper function which can be used to fit all three models (K.., KN., K.R) within a single function.
 
-The K.. and KN. models are used to analyse a single DNA sample (\eqn{R = 1}) and cluster the \eqn{C} CpG sites into the \eqn{K} clusters which represent the different methylation states in a DNA sample. As each CpG site can belong to any of the \eqn{M=3} methylation states (hypomethylation, hemimethylation and hypermethylation), the default value for \eqn{K=M=3}.
+The K.. and KN. models are used to analyse a single DNA sample type (\eqn{R = 1}) and cluster the \eqn{C} CpG sites into the \eqn{K} clusters which represent the different methylation states in a DNA sample type. As each CpG site can belong to any of the \eqn{M=3} methylation states (hypomethylation, hemimethylation and hypermethylation), the default value for \eqn{K=M=3}.
 The thresholds between methylation states are objectively inferred from the clustering solution.
 
-The K.R model is used to analyse \eqn{R} independent samples collected from \eqn{N} patients, where each sample contains \eqn{C} CpG sites, and cluster
-the dataset into \eqn{K=M^R} clusters to identify the differentially methylated CpG (DMC) sites between the \eqn{R} DNA samples.
+The K.R model is used to analyse \eqn{R} independent sample types collected from \eqn{N} patients, where each sample contains \eqn{C} CpG sites, and cluster
+the dataset into \eqn{K=M^R} clusters to identify the differentially methylated CpG (DMC) sites between the \eqn{R} DNA sample types.
 }
 \examples{
 \donttest{

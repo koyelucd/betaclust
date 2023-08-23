@@ -89,6 +89,13 @@ Summary statistics can then be obtained using the `summary()` function (see `hel
 ```{r output0,include=TRUE, echo=TRUE}
 summary(threshold_out)
 ```
+### Plotting the information criterion values of all models
+
+The information criterion specified in the wrapper function provides values for all models fitted and can be visualised to support the selection of the optimal model between "K.." and "KN." models.
+
+```{r wrapperoutput3,include=TRUE, echo=TRUE,fig.width = 4, fig.height = 4,dev = 'png'}
+plot(threshold_out, what = "information criterion", plot_type = "ggplot")
+```
 
 ### Thresholds objectively inferred from the clustering solution
 
@@ -174,6 +181,18 @@ The uncertainties in the clustering solution can be plotted as follows:
 plot(dmc_output, what = "uncertainty", plot_type = "ggplot")
 ```
 
+### AUC and WD metrics for finding similarities in the *R* cumulative distributions in each of the *K* clusters
+The area-uner-curve (AUC) and the Wasserstein distance (WD) methods are employeed to find the level of dissimilarity between the *R=2* cumulative distributions estimated for each of the *K=9* clusters. As there are only 2 sample types for differential methylation analysis only a single dissimilarity is obtained for each of the 9 clusters.
+
+We then employed a threshold of 0.65 for the AUC metric and/or a threshold of 0.06 for the WD metric for identifying the clusters
+1,2 and 3 as the most differentially methylated clusters.
+```{r dmcoutput4b, include=TRUE, echo=TRUE}
+print(dmc_output$optimal_model_results$DM$AUC)
+print(dmc_output$optimal_model_results$DM$WD)
+
+## the dataframe containing methylation data for the CpG sites identified as the most differentially methylated ones
+dmc_df=DMC_identification(dmc_output,data = pca.methylation.data[,2:9],pca.methylation.data[,1],threshold = 0.06,metric="WD")
+```
 
 ### Plotting the empirical cumulative distribution function
 
@@ -181,16 +200,6 @@ Hypermethylation of RARB genes is an important biomarker in prostate cancer stud
 The MethylationEPIC annotated data (see `help("legacy.data")`) available in the package **betaclust** can be used to obtain information on the genes to which the selected DMCs are related. The differentially methylated CpG sites related to RARB genes are selected and passed to the `ecdf.betaclust()` function to visualise the empirical distribution functions (see `help("ecdf.betaclust")`). From the plot it is visible that the CpG sites in the tumour samples have increased beta values compared to those in the benign samples, suggesting hypermethylation of the CpG sites.
 
 ```{r dmcoutput5,include=TRUE, echo=TRUE,fig.width = 6, fig.height = 5,dev = 'png'}
-## save the clustering solution in a dataframe
-dmc_df <- dmc_output$optimal_model_results$classification
-
-## merge the IlmnID and methylation values to the classification and change the final column name to classification
-dmc_df <- as.data.frame(cbind(pca.methylation.data[,1:9],dmc_df))
-colnames(dmc_df)[ncol(dmc_df)] <- "classification"
-
-## select the differentially methylated CpG sites identified using the K.R model
-dmc_df <- dmc_df[dmc_df$classification == "1" |dmc_df$classification == "2" |dmc_df$classification == "3"|
-                 dmc_df$classification == "4" , ]
 
 ##read the legacy data
 data(legacy.data)
@@ -253,14 +262,6 @@ The fitted density estimates of the clustering solution of the optimal model can
 plot(wrapper_out, what = "fitted density", plot_type = "ggplot", data = pca.methylation.data[,2:9], sample_name = c("Benign","Tumour"))
 ```
 
-
-### Plotting the information criterion values of all models
-
-The information criterion specified in the wrapper function provides values for all models fitted and can be visualised to support the selection of the optimal model.
-
-```{r wrapperoutput3,include=TRUE, echo=TRUE,fig.width = 4, fig.height = 4,dev = 'png'}
-plot(wrapper_out, what = "information criterion", plot_type = "ggplot")
-```
 
 
 # References

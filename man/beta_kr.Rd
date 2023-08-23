@@ -7,14 +7,14 @@
 beta_kr(data, M = 3, N, R, parallel_process = FALSE, seed = NULL)
 }
 \arguments{
-\item{data}{A dataframe of dimension \eqn{C \times NR} containing methylation values for \eqn{C} CpG sites from \eqn{R} samples collected from \eqn{N} patients.
+\item{data}{A dataframe of dimension \eqn{C \times NR} containing methylation values for \eqn{C} CpG sites from \eqn{R} sample types collected from \eqn{N} patients.
 Samples are grouped together in the dataframe such that the columns are ordered as Sample1_Patient1, Sample1_Patient2, Sample2_Patient1, Sample2_Patient2, etc.}
 
 \item{M}{Number of methylation states to be identified.}
 
 \item{N}{Number of patients in the study.}
 
-\item{R}{Number of samples collected from each patient for study.}
+\item{R}{Number of sample types collected from each patient for study.}
 
 \item{parallel_process}{The "TRUE" option results in parallel processing of the models for increased computational efficiency. The default option has been set as "FALSE" due to package testing limitations.}
 
@@ -33,12 +33,12 @@ A list containing:
    \item uncertainty - The uncertainty of each CpG site's clustering.    }
 }
 \description{
-A beta mixture model for identifying differentially methylated CpG sites between \eqn{R} DNA samples collected from \eqn{N} patients.
+A beta mixture model for identifying differentially methylated CpG sites between \eqn{R} DNA sample types collected from \eqn{N} patients.
 }
 \details{
-The K.R model allows identification of the differentially methylated CpG sites between the \eqn{R} DNA samples collected from each of \eqn{N} patients.
-As each CpG site in a DNA sample can belong to one of \eqn{M} methylation states, there can be \eqn{K=M^R} methylation state changes between \eqn{R} DNA samples.
-The shape parameters vary for each DNA sample but are constrained to be equal for each patient. An initial clustering using k-means is performed to identify \eqn{K} clusters. The resulting clustering solution is provided as
+The K.R model allows identification of the differentially methylated CpG sites between the \eqn{R} DNA sample types collected from each of \eqn{N} patients.
+As each CpG site in a DNA sample can belong to one of \eqn{M} methylation states, there can be \eqn{K=M^R} methylation state changes between \eqn{R} DNA sample types.
+The shape parameters vary for each DNA sample type but are constrained to be equal for each patient. An initial clustering using k-means is performed to identify \eqn{K} clusters. The resulting clustering solution is provided as
 starting values to the Expectation-Maximisation algorithm. A digamma approximation is used to obtain the maximised
 parameters in the M-step.
 }

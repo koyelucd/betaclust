@@ -6,7 +6,7 @@
 #' A CpG site with beta value lying between the two threshold points is likely to be hemimethylated.
 #' @export
 #' @param object A \code{\link[betaclust:beta_k]{beta_k}} or \code{\link[betaclust:beta_kn]{beta_kn}} object.
-#' @param data A dataframe of dimension \eqn{C \times NR} containing methylation values for \eqn{C} CpG sites from \eqn{R} samples collected from \eqn{N} patients which was passed as an argument to the \code{\link[betaclust:betaclust]{betaclust}} function.
+#' @param data A dataframe of dimension \eqn{C \times NR} containing methylation values for \eqn{C} CpG sites from \eqn{R} sample types collected from \eqn{N} patients which was passed as an argument to the \code{\link[betaclust:betaclust]{betaclust}} function.
 #' @param model_name The name of the model for which the thresholds need to be calculated.
 #' @return thresholds - The threshold points calculated for the selected model. A vector containing two threshold points are returned for the K.. model whereas a matrix containing two threshold points for each patient is returned for the KN. model.
 #'

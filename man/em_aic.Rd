@@ -15,7 +15,7 @@ em_aic(llk, C, M, N, R, model_name = "K..")
 
 \item{N}{Number of patients.}
 
-\item{R}{Number of DNA samples collected from each patient.}
+\item{R}{Number of DNA sample types collected from each patient.}
 
 \item{model_name}{Fitted mixture model. Options are "K..", "KN." and/or "K.R" (default = "K..").}
 }
