@@ -143,6 +143,22 @@ plot.betaclust <- function(x,what = "fitted density",
           warning("K.R considers only multiple sample types. Please pass DNA methylation values for more than 1 sample type.", call. = FALSE)
         }
         else{
+          ## get AUC
+          auc<-vector()
+          auc_cluster<-vector()
+          cluster=vector()
+          AUC_all<-as.matrix(object$optimal_model_results$DM$AUC)
+          for(i in 1:object$K)
+          {
+            cluster[i]=i
+            auc_cluster[i]<-paste("Cluster",i,sep = " ")
+            auc[i]<-max(AUC_all[i,])
+          }
+          auc_label<-data.frame(cluster,auc_cluster,auc)
+          colnames(auc_label)<-c("cluster_label","Cluster","AUC")
+          auc_label=auc_label[order(auc_label$AUC,decreasing = TRUE),]
+          auc_label$label <- paste(auc_label$Cluster, ", AUC = ", round(auc_label$AUC, 2), sep = "")
+
         data_ggplot<-as.data.frame(call_data)
         #data_ggplot$mem_final<-as.factor(data_ggplot$mem_final)
         data_ggplot$mem_final<-as.factor(object$optimal_model_results$classification)
@@ -166,6 +182,11 @@ plot.betaclust <- function(x,what = "fitted density",
         data_plot<-as.data.frame(data_plot)
         colnames(data_plot)<-c("beta_value","Cluster","Patient_Sample")
         data_plot$beta_value<-as.numeric(data_plot$beta_value)
+        data_plot$Cluster<-factor(data_plot$Cluster,levels=auc_label$cluster_label)
+        #levels(df_new_tmp$cluster_vec)<-auc_label$cluster_label
+        data_plot$cluster_full<-as.factor(data_plot$Cluster)
+        #levels(df_new_tmp$cluster_full)<-auc_label$cluster_label
+        levels(data_plot$cluster_full) <- auc_label$label
         color_length<-col_len-1
         colours<-scales::seq_gradient_pal(low="#FFC20A",high="#0C7BDC",space = "Lab")(1:color_length/color_length)
 
@@ -174,7 +195,8 @@ plot.betaclust <- function(x,what = "fitted density",
           ggplot2::xlab("Beta Value")+
           ggplot2::ylab("Density")+
           ggplot2::scale_color_manual("DNA sample type",values=colours)+
-          ggplot2::facet_wrap(~Cluster,scales = scale_param
+          # ggplot2::facet_wrap(~Cluster,scales = scale_param
+          ggplot2::facet_wrap(~factor(cluster_full,levels=auc_label$label),scales = scale_param
                               # ,labeller = ggplot2::labeller(Cluster= cluster_count_label)
           )+
           ggplot2::theme(axis.title.x = ggplot2::element_text(size=10),
@@ -187,7 +209,11 @@ plot.betaclust <- function(x,what = "fitted density",
         #   ggplot2::geom_text(x = 0.2, y = 1, ggplot2::aes(label = label), data = f_labels)
         y=vector()
         for(i in 1:object$K){y[i]=max(density(data_plot[data_plot$Cluster==i,1])[["y"]])}
-        f_labels<-data.frame(Cluster=seq(1,length(object$optimal_model_results$cluster_size),by=1),label=as.vector(round(object$optimal_model_results$tau,3)),x=0.8,
+        y=y[order(auc_label$cluster_label)]
+        # f_labels<-data.frame(Cluster=seq(1,length(object$optimal_model_results$cluster_size),by=1),label=as.vector(round(object$optimal_model_results$tau,3)),x=0.8,
+        #                      y=y)
+        f_labels<-data.frame(cluster_full=levels(data_plot$cluster_full),
+                             label=as.vector(round(object$optimal_model_results$tau,3)),x=0.8,
                              y=y)
         plot_graph<-plot_graph+
           ggplot2::geom_text(data = f_labels, ggplot2::aes(x=x,y=y,label = label,color=NA),show.legend = F,fontface="bold" )
@@ -290,6 +316,22 @@ plot.betaclust <- function(x,what = "fitted density",
         vec_x<-seq(0.001, 0.999, length=vec_C)
         #sample_name<-c("Sample A","Sample B")
 
+        ## get AUC
+        auc<-vector()
+        auc_cluster<-vector()
+        cluster=vector()
+        AUC_all<-as.matrix(object$optimal_model_results$DM$AUC)
+        for(i in 1:object$K)
+        {
+          cluster[i]=i
+          auc_cluster[i]<-paste("Cluster",i,sep = " ")
+          auc[i]<-max(AUC_all[i,])
+        }
+        auc_label<-data.frame(cluster,auc_cluster,auc)
+        colnames(auc_label)<-c("cluster_label","Cluster","AUC")
+        auc_label=auc_label[order(auc_label$AUC,decreasing = TRUE),]
+        auc_label$label <- paste(auc_label$Cluster, ", AUC = ", round(auc_label$AUC, 2), sep = "")
+
         for(i in 1:R)
         {
           for(j in 1:K)
@@ -306,21 +348,31 @@ plot.betaclust <- function(x,what = "fitted density",
 
         df_new_tmp<-as.data.frame(cbind(beta_vec,density_vec,cluster_vec,sample_vec))
         df_new_tmp$sample_vec<-as.factor(df_new_tmp$sample_vec)
-        df_new_tmp$cluster_vec<-as.factor(df_new_tmp$cluster_vec)
+        #df_new_tmp$cluster_vec<-as.factor(df_new_tmp$cluster_vec)
         df_new_tmp$beta_vec<-as.numeric(df_new_tmp$beta_vec)
         df_new_tmp$density_vec<-as.numeric(df_new_tmp$density_vec)
+        df_new_tmp$cluster_vec<-factor(df_new_tmp$cluster_vec,levels=auc_label$cluster_label)
+        #levels(df_new_tmp$cluster_vec)<-auc_label$cluster_label
+        df_new_tmp$cluster_full<-as.factor(df_new_tmp$cluster_vec)
+        #levels(df_new_tmp$cluster_full)<-auc_label$cluster_label
+        levels(df_new_tmp$cluster_full) <- auc_label$label
         color_length<-R
         colours<-scales::seq_gradient_pal(low="#FFC20A",high="#0C7BDC",space = "Lab")(1:color_length/color_length)
 
         plot_graph<-ggplot2::ggplot(df_new_tmp,ggplot2::aes(x=beta_vec,y=density_vec,color=sample_vec))+
           ggplot2::geom_line()+
           ggplot2::scale_color_manual(values=colours)+
-          ggplot2::facet_wrap(~cluster_vec,scales = scale_param
+         # ggplot2::facet_wrap(~cluster_vec,scales = scale_param
+          ggplot2::facet_wrap(~factor(cluster_full,levels=auc_label$label),scales = scale_param
           )+ ggplot2::labs(color="DNA sample type", x="Beta value", y="Density")+
           ggplot2::ggtitle(txt)
         y=vector()
         for(i in 1:K){y[i]=max(df_new_tmp[df_new_tmp$cluster_vec==i,2])}
-        f_labels<-data.frame(cluster_vec=as.factor(seq(1,K,by=1)),label=as.vector(round(object$optimal_model_results$tau,3)),x=0.8,
+        y=y[order(auc_label$cluster_label)]
+        # f_labels<-data.frame(cluster_vec=as.factor(seq(1,K,by=1)),label=as.vector(round(object$optimal_model_results$tau,3)),x=0.8,
+        #                      y=y)
+        f_labels<-data.frame(cluster_full=levels(df_new_tmp$cluster_full),
+                             label=as.vector(round(object$optimal_model_results$tau,3)),x=0.8,
                              y=y)
         plot_graph<-plot_graph+
           ggplot2::geom_text(data = f_labels, ggplot2::aes(x=x,y=y,label = label,color=NA),show.legend = F,fontface="bold" )
