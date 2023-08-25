@@ -4,10 +4,12 @@
 \alias{AUC_WD_metric}
 \title{AUC and WD function}
 \usage{
-AUC_WD_metric(object, K, R)
+AUC_WD_metric(alpha, delta, K, R)
 }
 \arguments{
-\item{object}{A beta_kr object}
+\item{alpha}{Shape parameter 1}
+
+\item{delta}{Shape parameter 2}
 
 \item{K}{The number of clusters estimated}
 

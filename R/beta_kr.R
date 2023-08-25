@@ -28,7 +28,8 @@ globalVariables(c("k"))
 #'    \item tau - The proportion of CpG sites in each cluster.
 #'    \item z - A matrix of dimension \eqn{C \times K} containing the posterior probability of each CpG site belonging to each of the \eqn{K} clusters.
 #'    \item classification - The classification corresponding to z, i.e. map(z).
-#'    \item uncertainty - The uncertainty of each CpG site's clustering.    }
+#'    \item uncertainty - The uncertainty of each CpG site's clustering.
+#'    \item DM - The AUC and WD metric for distribution similarity in each cluster. }
 #'
 #' @examples
 #' my.seed <- 190
@@ -291,10 +292,21 @@ beta_kr<-function(data,M=3,N,R,parallel_process=FALSE,seed=NULL){
   parallel::stopCluster(cl=my.cluster)
 
   #### Sorting the clusters as per interest
-  mean_delta=as.data.frame(alpha/(alpha+delta))
-  mean_delta$diff<-abs(mean_delta$V1-mean_delta$V2)
-  mean_sorted<-mean_delta[order(mean_delta$diff,decreasing = T),]
-  mean_row<-row.names(mean_sorted)
+  # mean_delta=as.data.frame(alpha/(alpha+delta))
+  # mean_delta$diff<-abs(mean_delta$V1-mean_delta$V2)
+  # mean_sorted<-mean_delta[order(mean_delta$diff,decreasing = T),]
+  # mean_row<-row.names(mean_sorted)
+
+  auc_wd<-AUC_WD_metric(alpha,delta,K,R)
+  auc=apply(auc_wd$AUC, 1, max)
+  wd=apply(auc_wd$WD, 1, max)
+  clust_order<-data.frame(seq(1:K),auc,wd)
+  colnames(clust_order)<-c("clust","auc","wd")
+  clust_order<-clust_order[order(clust_order$auc,clust_order$wd,decreasing = T),]
+  auc_wd$AUC<-clust_order$auc
+  auc_wd$WD<-clust_order$wd
+  mean_row=clust_order$clust
+
   data_final=as.data.frame(complete_data)
   data_final$mem_final<-as.numeric(data_final$mem_final)
   data_final$new_mem_final<-NA
@@ -316,16 +328,18 @@ beta_kr<-function(data,M=3,N,R,parallel_process=FALSE,seed=NULL){
   data_final<-data_final[,-(N*R+1)]
   colnames(data_final)[(N*R+1)]<-"mem_final"
   data_final$mem_final<-as.factor(data_final$mem_final)
-  classification=as.factor(as.vector(data_final$mem_final))
+  #classification=as.factor(as.vector(data_final$mem_final))
   cert_final=apply(z_final,1,max)
+  classification=as.factor(apply(z_final, 1, which.max))
   uc_final=1-cert_final
   cluster_count=table(data_final$mem_final)
-  tau_final=round((as.numeric(cluster_count)/C),3)
+  #tau_final=round((as.numeric(cluster_count)/C),3)
 
   #### Return data
   #return(list(cluster_count=cluster_count,llk=llk_iter,data=complete_data,alpha=alpha,delta=delta,tau=tau,z=z_new,uncertainty=uc))
   return(list(cluster_size=cluster_count,llk=llk_iter,
               alpha=alpha_final,delta=delta_final,tau=tau_final,
-              z=z_final,classification=classification,uncertainty=uc_final))
+              z=z_final,classification=classification,uncertainty=uc_final,
+              DM=auc_wd))
 
 }

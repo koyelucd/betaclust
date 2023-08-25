@@ -195,8 +195,8 @@ betaclust<-function(data,M=3,N,R,model_names="K..",model_selection="BIC",paralle
     final_output<-kr_out
     K=M^R_old
     R=R_old
-    auc_wd=AUC_WD_metric(kr_out,K,R)
-    final_output$DM=auc_wd
+    # auc_wd=AUC_WD_metric(kr_out,K,R)
+    # final_output$DM=auc_wd
   }
 
 

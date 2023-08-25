@@ -30,7 +30,8 @@ A list containing:
    \item tau - The proportion of CpG sites in each cluster.
    \item z - A matrix of dimension \eqn{C \times K} containing the posterior probability of each CpG site belonging to each of the \eqn{K} clusters.
    \item classification - The classification corresponding to z, i.e. map(z).
-   \item uncertainty - The uncertainty of each CpG site's clustering.    }
+   \item uncertainty - The uncertainty of each CpG site's clustering.
+   \item DM - The AUC and WD metric for distribution similarity in each cluster. }
 }
 \description{
 A beta mixture model for identifying differentially methylated CpG sites between \eqn{R} DNA sample types collected from \eqn{N} patients.

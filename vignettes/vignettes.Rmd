@@ -1,6 +1,6 @@
 ---
 title: "betaclust: a family of beta mixture models for beta-valued DNA methylation data"
-author: "Koyel Majumdar, Thomas Brendan Murphy and Isobel Claire Gormley"
+author: "Koyel Majumdar, Andrea Rau, Florence Jaffrezic, Thomas Brendan Murphy and Isobel Claire Gormley"
 output: rmarkdown::html_vignette
 always_allow_html: true
 vignette: >

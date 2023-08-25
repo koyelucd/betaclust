@@ -147,12 +147,12 @@ plot.betaclust <- function(x,what = "fitted density",
           auc<-vector()
           auc_cluster<-vector()
           cluster=vector()
-          AUC_all<-as.matrix(object$optimal_model_results$DM$AUC)
+          AUC_all<-object$optimal_model_results$DM$AUC
           for(i in 1:object$K)
           {
             cluster[i]=i
             auc_cluster[i]<-paste("Cluster",i,sep = " ")
-            auc[i]<-max(AUC_all[i,])
+            auc[i]<-AUC_all[i]
           }
           auc_label<-data.frame(cluster,auc_cluster,auc)
           colnames(auc_label)<-c("cluster_label","Cluster","AUC")
@@ -178,10 +178,11 @@ plot.betaclust <- function(x,what = "fitted density",
           Patient_sample<-c(Patient_sample,ps_names)
           Cluster<-c(Cluster,data_ggplot[,cols])
         }
-        data_plot<-cbind(data_new,Cluster,Patient_sample)
-        data_plot<-as.data.frame(data_plot)
+        #data_plot<-cbind(data_new,Cluster,Patient_sample)
+        data_plot=data.frame(data_new=data_new,Cluster=Cluster,Patient_sample=Patient_sample)
+        #data_plot<-as.data.frame(data_plot)
         colnames(data_plot)<-c("beta_value","Cluster","Patient_Sample")
-        data_plot$beta_value<-as.numeric(data_plot$beta_value)
+        #data_plot$beta_value<-as.numeric(data_plot$beta_value)
         data_plot$Cluster<-factor(data_plot$Cluster,levels=auc_label$cluster_label)
         #levels(df_new_tmp$cluster_vec)<-auc_label$cluster_label
         data_plot$cluster_full<-as.factor(data_plot$Cluster)
@@ -196,7 +197,8 @@ plot.betaclust <- function(x,what = "fitted density",
           ggplot2::ylab("Density")+
           ggplot2::scale_color_manual("DNA sample type",values=colours)+
           # ggplot2::facet_wrap(~Cluster,scales = scale_param
-          ggplot2::facet_wrap(~factor(cluster_full,levels=auc_label$label),scales = scale_param
+          #ggplot2::facet_wrap(~factor(cluster_full,levels=auc_label$label),scales = scale_param
+          ggplot2::facet_wrap(~cluster_full,scales = scale_param
                               # ,labeller = ggplot2::labeller(Cluster= cluster_count_label)
           )+
           ggplot2::theme(axis.title.x = ggplot2::element_text(size=10),
@@ -320,12 +322,12 @@ plot.betaclust <- function(x,what = "fitted density",
         auc<-vector()
         auc_cluster<-vector()
         cluster=vector()
-        AUC_all<-as.matrix(object$optimal_model_results$DM$AUC)
+        AUC_all<-object$optimal_model_results$DM$AUC
         for(i in 1:object$K)
         {
           cluster[i]=i
           auc_cluster[i]<-paste("Cluster",i,sep = " ")
-          auc[i]<-max(AUC_all[i,])
+          auc[i]<-AUC_all[i]
         }
         auc_label<-data.frame(cluster,auc_cluster,auc)
         colnames(auc_label)<-c("cluster_label","Cluster","AUC")
@@ -346,11 +348,11 @@ plot.betaclust <- function(x,what = "fitted density",
           }
         }
 
-        df_new_tmp<-as.data.frame(cbind(beta_vec,density_vec,cluster_vec,sample_vec))
-        df_new_tmp$sample_vec<-as.factor(df_new_tmp$sample_vec)
+        df_new_tmp<-data.frame(beta_vec=beta_vec,density_vec=density_vec,cluster_vec=cluster_vec,sample_vec=sample_vec)
+        #df_new_tmp$sample_vec<-as.factor(df_new_tmp$sample_vec)
         #df_new_tmp$cluster_vec<-as.factor(df_new_tmp$cluster_vec)
-        df_new_tmp$beta_vec<-as.numeric(df_new_tmp$beta_vec)
-        df_new_tmp$density_vec<-as.numeric(df_new_tmp$density_vec)
+        #df_new_tmp$beta_vec<-as.numeric(df_new_tmp$beta_vec)
+       # df_new_tmp$density_vec<-as.numeric(df_new_tmp$density_vec)
         df_new_tmp$cluster_vec<-factor(df_new_tmp$cluster_vec,levels=auc_label$cluster_label)
         #levels(df_new_tmp$cluster_vec)<-auc_label$cluster_label
         df_new_tmp$cluster_full<-as.factor(df_new_tmp$cluster_vec)
@@ -363,7 +365,8 @@ plot.betaclust <- function(x,what = "fitted density",
           ggplot2::geom_line()+
           ggplot2::scale_color_manual(values=colours)+
          # ggplot2::facet_wrap(~cluster_vec,scales = scale_param
-          ggplot2::facet_wrap(~factor(cluster_full,levels=auc_label$label),scales = scale_param
+         # ggplot2::facet_wrap(~factor(cluster_full,levels=auc_label$label),scales = scale_param
+          ggplot2::facet_wrap(~cluster_full,scales = scale_param
           )+ ggplot2::labs(color="DNA sample type", x="Beta value", y="Density")+
           ggplot2::ggtitle(txt)
         y=vector()
