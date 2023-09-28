@@ -115,3 +115,85 @@ Notes:
   
   - The second note in rhub Linux only occurs in the 2 default rhub Linux environments (Ubuntu and Fedora). It doesn't happen on Windows, Debian Linux or Mac builders, and this behavior is not being replicated locally, so this note can be related to rhub and not the code itself.  
   
+## Resubmission 2023-10-02
+This is the third submission of betaclust to CRAN.
+In this submission I have:
+  - Added function for AUC and WD metrics calculation for identifying DMCs as per manuscript resubmission corrections.  
+ 
+ ## Test environments  
+ 
+- R-hub windows-x86_64-devel (r-devel)  
+
+- devtools macOS 13.3.1 
+
+- R-hub Debian Linux, R-release, GCC   
+
+- R-hub ubuntu-gcc-release (r-release)  
+
+- R-hub fedora-clang-devel (r-devel)   
+
+
+## R CMD check results
+### Local check
+`devtools::check()` result:  
+
+  0 errors ✓ | 0 warnings ✓ | 0 notes ✓
+
+### Online check
+`devtools::check_rhub()` Windows result:  
+
+  Status: OK
+  
+  0 errors ✔ | 0 warnings ✔ | 3 notes ✖
+  
+  ❯ checking HTML version of manual ... NOTE
+  Skipping checking math rendering: package 'V8' unavailable
+
+❯ checking for non-standard things in the check directory ... NOTE
+  Found the following files/directories:
+    ''NULL''
+
+❯ checking for detritus in the temp directory ... NOTE
+  Found the following files/directories:
+    'lastMiKTeXException'
+    
+`rhub::check_on_debian()` Debian Linux result:  
+
+  Status: OK  
+  
+  0 errors ✔ | 0 warnings ✔ | 0 notes ✔  
+  
+`devtools::check_mac_release()` macOS result:  
+  Status: OK  
+  
+  0 errors ✔ | 0 warnings ✔ | 0 notes ✔  
+  
+`rhub::check_rhub()` Ubuntu Linux result:  
+
+* checking examples ... [4s/26s] NOTE
+Examples with CPU (user + system) or elapsed time > 5s
+         user system elapsed
+beta_kr 1.238  0.018   9.350
+beta_k  0.274  0.008   5.204
+beta_kn 0.180  0.004   5.071
+
+* checking HTML version of manual ... NOTE
+Skipping checking HTML validation: no command 'tidy' found
+Skipping checking math rendering: package 'V8' unavailable
+  
+`rhub::check_rhub()` Fedora Linux result:  
+
+* checking examples ... [4s/24s] NOTE
+Examples with CPU (user + system) or elapsed time > 5s
+         user system elapsed
+beta_kr 1.271  0.018   9.032
+
+* checking HTML version of manual ... NOTE
+Skipping checking HTML validation: no command 'tidy' found
+Skipping checking math rendering: package 'V8' unavailable
+  
+  
+Notes:  
+  
+  - The notes in rhub only occurs in the rhub Windows environment. They are mentioned in the open issues of the rhub package.
+  - The note for both Ubuntu and Fedora ('tidy' and 'V8'), which, as far as I undertood, is caused by some promlem on the side of the testing platform.
