@@ -23,7 +23,7 @@ An object of class \code{\link[betaclust:summary.betaclust]{summary.betaclust}} 
 \item information_criterion - The information criterion used to select the optimal model.
 \item ic_output - This stores the information criterion value calculated for each model.
 \item classification - The total number of CpG sites in each cluster.
-\item prop_data - The proportion of CpG sites in each cluster.}
+\item prop_data - The estimated mixing proportion for each cluster.}
 }
 \description{
 Summary method for a \code{\link[betaclust:betaclust]{betaclust}} object containing the results under the optimal model selected.

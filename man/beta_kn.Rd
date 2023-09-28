@@ -23,7 +23,7 @@ A list containing:
    \item llk - A vector containing the log-likelihood value at each step of the EM algorithm.
    \item alpha - The first shape parameter for the beta mixture model.
    \item delta - The second shape parameter for the mixture model.
-   \item tau - The proportion of CpG sites in each cluster.
+   \item tau - The estimated mixing proportion for each cluster.
    \item z - A matrix of dimension \eqn{C \times K} containing the posterior probability of each CpG site belonging to each of the \eqn{K} clusters.
    \item classification - The classification corresponding to z, i.e. map(z).
    \item uncertainty - The uncertainty of each CpG site's clustering.    }

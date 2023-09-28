@@ -3,19 +3,17 @@
 #' @details Function to find the level of similarities between the \eqn{R} cumulative distributions estimated in each of the \eqn{K} clusters.
 #' @export
 #' @seealso \code{\link{betaclust}}
-#' @param alpha Shape parameter 1
-#' @param delta Shape parameter 2
-#' @param K The number of clusters estimated
-#' @param R The number of sample types in the dataset
-#' @return The list with AUC and WD values
+#' @param alpha The first shape parameter estimated for the beta mixture model.
+#' @param delta The second shape parameter estimated for the beta mixture model.
+#' @param K The number of clusters estimated.
+#' @param R The number of sample types in the dataset.
+#' @return The list with AUC and WD values.
 #' @importFrom pROC auc
 #' @importFrom stats rbeta pbeta
 
 #AUC_WD_metric<-function(object,K,R){
   AUC_WD_metric<-function(alpha,delta,K,R){
 
-  #alpha=object$alpha
-  #delta=object$delta
   comb=factorial(R) / (factorial(2) * factorial(R - 2))
   n <- 1000
   auc_mat=matrix(NA,nrow=K,ncol=comb)

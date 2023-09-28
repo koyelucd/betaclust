@@ -58,13 +58,11 @@ DMC_identification<-function(object, data,CpG_site_list, threshold = 0.65, metri
   {
     for(j in 1:object$K)
     {
-      #dmc_cluster[j]=ifelse(any(AUC[j,]>=threshold),1,0)
       dmc_cluster[j]=ifelse(AUC[j]>=threshold,1,0)
     }
   }else{
     for(j in 1:object$K)
     {
-      #dmc_cluster[j]=ifelse(any(WD[j,]>=threshold),1,0)
       dmc_cluster[j]=ifelse(WD[j]>=threshold,1,0)
     }
   }

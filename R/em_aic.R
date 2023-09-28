@@ -14,8 +14,6 @@
 
 em_aic<-function(llk,C,M,N,R,model_name="K.."){
 
-  #R=samples
-  #N=patients
   mod_len=length(model_name)
   aic=vector("numeric",mod_len)
 

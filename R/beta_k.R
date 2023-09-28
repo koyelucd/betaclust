@@ -27,7 +27,7 @@ globalVariables(c("k"))
 #'    \item llk - A vector containing the log-likelihood value at each step of the EM algorithm.
 #'    \item alpha - The first shape parameter for the beta mixture model.
 #'    \item delta - The second shape parameter for the beta mixture model.
-#'    \item tau - The proportion of CpG sites in each cluster.
+#'    \item tau - The estimated mixing proportion for each cluster.
 #'    \item z - A matrix of dimension \eqn{C \times K} containing the posterior probability of each CpG site belonging to each of the \eqn{K} clusters.
 #'    \item classification - The classification corresponding to z, i.e. map(z).
 #'    \item uncertainty - The uncertainty of each CpG site's clustering.    }
@@ -259,21 +259,18 @@ beta_k<-function(data,M=3,parallel_process=FALSE,seed = NULL){
 
   ## Clustering
   mem_final<-matrix(NA,C,1)
-  #complete_data<-matrix(NA,C,(N+1))
   mem_final<-apply(z_new, 1, which.max)
   classification=mem_final
-  #complete_data<-cbind(x,mem_final)
   cluster_count=table(mem_final)
 
   ### Uncertainty
   cert=apply(z_new,1,max)
   uc=1-cert
 
-  tau=round((as.numeric(cluster_count)/C),3)
-
   parallel::stopCluster(cl=my.cluster)
 
   #### Return data
-  return(list(cluster_size=cluster_count,llk=llk_iter,alpha=alpha,delta=delta,tau=tau,z=z_new,classification=classification,uncertainty=uc))
+  return(list(cluster_size=cluster_count,llk=llk_iter,alpha=alpha,delta=delta,
+              tau=tau,z=z_new,classification=classification,uncertainty=uc))
 
 }

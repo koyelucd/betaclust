@@ -17,8 +17,7 @@ globalVariables(c("patients","samples"))
 
 em_icl<-function(llk,C,M,N,R,model_name="K..",z){
 
-  #R=samples
-  #N=patients
+
   K=M
   mod_len=length(model_name)
   icl=vector("numeric",mod_len)

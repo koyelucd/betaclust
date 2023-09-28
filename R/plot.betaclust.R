@@ -91,13 +91,11 @@ plot.betaclust <- function(x,what = "fitted density",
           call_data=data
         }
         data_ggplot<-as.data.frame(call_data)
-        #data_ggplot$mem_final<-as.factor(data_ggplot$mem_final)
         data_ggplot$mem_final<-as.factor(object$optimal_model_results$classification)
         colnames(data_ggplot)[length(data_ggplot)]<-"Cluster"
         plot_graph<-ggplot2::ggplot(data_ggplot,ggplot2::aes(x=data_ggplot[,pn], fill=Cluster))+
           ggplot2::geom_density(alpha=0.6)+
           ggplot2::labs(x="Beta value", y="Density",
-                        #title=paste0("Density estimates for ",object$optimal_model,"  clustering solution"),
                         title=txt,
                         fill ="Cluster")
         if(object$K==3)
@@ -156,11 +154,9 @@ plot.betaclust <- function(x,what = "fitted density",
           }
           auc_label<-data.frame(cluster,auc_cluster,auc)
           colnames(auc_label)<-c("cluster_label","Cluster","AUC")
-          auc_label=auc_label[order(auc_label$AUC,decreasing = TRUE),]
           auc_label$label <- paste(auc_label$Cluster, ", AUC = ", round(auc_label$AUC, 2), sep = "")
 
         data_ggplot<-as.data.frame(call_data)
-        #data_ggplot$mem_final<-as.factor(data_ggplot$mem_final)
         data_ggplot$mem_final<-as.factor(object$optimal_model_results$classification)
         colnames(data_ggplot)[length(data_ggplot)]<-"Cluster"
         cols=ncol(data_ggplot)
@@ -178,15 +174,10 @@ plot.betaclust <- function(x,what = "fitted density",
           Patient_sample<-c(Patient_sample,ps_names)
           Cluster<-c(Cluster,data_ggplot[,cols])
         }
-        #data_plot<-cbind(data_new,Cluster,Patient_sample)
         data_plot=data.frame(data_new=data_new,Cluster=Cluster,Patient_sample=Patient_sample)
-        #data_plot<-as.data.frame(data_plot)
         colnames(data_plot)<-c("beta_value","Cluster","Patient_Sample")
-        #data_plot$beta_value<-as.numeric(data_plot$beta_value)
         data_plot$Cluster<-factor(data_plot$Cluster,levels=auc_label$cluster_label)
-        #levels(df_new_tmp$cluster_vec)<-auc_label$cluster_label
         data_plot$cluster_full<-as.factor(data_plot$Cluster)
-        #levels(df_new_tmp$cluster_full)<-auc_label$cluster_label
         levels(data_plot$cluster_full) <- auc_label$label
         color_length<-col_len-1
         colours<-scales::seq_gradient_pal(low="#FFC20A",high="#0C7BDC",space = "Lab")(1:color_length/color_length)
@@ -196,24 +187,13 @@ plot.betaclust <- function(x,what = "fitted density",
           ggplot2::xlab("Beta Value")+
           ggplot2::ylab("Density")+
           ggplot2::scale_color_manual("DNA sample type",values=colours)+
-          # ggplot2::facet_wrap(~Cluster,scales = scale_param
-          #ggplot2::facet_wrap(~factor(cluster_full,levels=auc_label$label),scales = scale_param
           ggplot2::facet_wrap(~cluster_full,scales = scale_param
-                              # ,labeller = ggplot2::labeller(Cluster= cluster_count_label)
           )+
           ggplot2::theme(axis.title.x = ggplot2::element_text(size=10),
                          axis.title.y = ggplot2::element_text(size=10)) +
           ggplot2::ggtitle(txt)
-        #ggplot2::ggtitle("Density estimates for K.R clustering solution")
-
-        # f_labels<-data.frame(Cluster=seq(1,length(object$optimal_model_results$cluster_size),by=1),label=as.vector(round(object$optimal_model_results$tau,3)))
-        # plot_graph<-plot_graph+
-        #   ggplot2::geom_text(x = 0.2, y = 1, ggplot2::aes(label = label), data = f_labels)
         y=vector()
         for(i in 1:object$K){y[i]=max(density(data_plot[data_plot$Cluster==i,1])[["y"]])}
-        y=y[order(auc_label$cluster_label)]
-        # f_labels<-data.frame(Cluster=seq(1,length(object$optimal_model_results$cluster_size),by=1),label=as.vector(round(object$optimal_model_results$tau,3)),x=0.8,
-        #                      y=y)
         f_labels<-data.frame(cluster_full=levels(data_plot$cluster_full),
                              label=as.vector(round(object$optimal_model_results$tau,3)),x=0.8,
                              y=y)
@@ -236,8 +216,6 @@ plot.betaclust <- function(x,what = "fitted density",
     {
       if(object$optimal_model == "K.." || object$optimal_model == "KN.")
       {
-
-        #data_x=sort(object$optimal_model_results$data[,pn])
         data_x=sort(data[,pn])
         K=object$K
         prop=object$optimal_model_results$tau
@@ -270,15 +248,11 @@ plot.betaclust <- function(x,what = "fitted density",
         data_th_plot<-as.data.frame(data_th_plot)
         data_th_plot<-data_th_plot[-1,]
         data_th_plot$Cluster<-as.factor(data_th_plot$Cluster)
-        #txt=""
-        #colours<-c("chartreuse3","magenta","cyan3")
         plot_graph<-ggplot2::ggplot(data_th_plot)+
           ggplot2::geom_line(ggplot2::aes(beta_value,density,color=Cluster),
                              linetype = "solid")+
           ggplot2::labs(x="Beta value",y="Density",title=txt,
                         color ="Cluster")
-        # +
-        #   ggplot2::scale_color_manual(values=colours)
         if(K==3)
         {
           colours<-c("chartreuse3","magenta","cyan3")
@@ -316,7 +290,6 @@ plot.betaclust <- function(x,what = "fitted density",
         sample_vec<-vector()
         beta_vec<-vector()
         vec_x<-seq(0.001, 0.999, length=vec_C)
-        #sample_name<-c("Sample A","Sample B")
 
         ## get AUC
         auc<-vector()
@@ -331,7 +304,6 @@ plot.betaclust <- function(x,what = "fitted density",
         }
         auc_label<-data.frame(cluster,auc_cluster,auc)
         colnames(auc_label)<-c("cluster_label","Cluster","AUC")
-        auc_label=auc_label[order(auc_label$AUC,decreasing = TRUE),]
         auc_label$label <- paste(auc_label$Cluster, ", AUC = ", round(auc_label$AUC, 2), sep = "")
 
         for(i in 1:R)
@@ -349,14 +321,8 @@ plot.betaclust <- function(x,what = "fitted density",
         }
 
         df_new_tmp<-data.frame(beta_vec=beta_vec,density_vec=density_vec,cluster_vec=cluster_vec,sample_vec=sample_vec)
-        #df_new_tmp$sample_vec<-as.factor(df_new_tmp$sample_vec)
-        #df_new_tmp$cluster_vec<-as.factor(df_new_tmp$cluster_vec)
-        #df_new_tmp$beta_vec<-as.numeric(df_new_tmp$beta_vec)
-       # df_new_tmp$density_vec<-as.numeric(df_new_tmp$density_vec)
         df_new_tmp$cluster_vec<-factor(df_new_tmp$cluster_vec,levels=auc_label$cluster_label)
-        #levels(df_new_tmp$cluster_vec)<-auc_label$cluster_label
         df_new_tmp$cluster_full<-as.factor(df_new_tmp$cluster_vec)
-        #levels(df_new_tmp$cluster_full)<-auc_label$cluster_label
         levels(df_new_tmp$cluster_full) <- auc_label$label
         color_length<-R
         colours<-scales::seq_gradient_pal(low="#FFC20A",high="#0C7BDC",space = "Lab")(1:color_length/color_length)
@@ -364,16 +330,11 @@ plot.betaclust <- function(x,what = "fitted density",
         plot_graph<-ggplot2::ggplot(df_new_tmp,ggplot2::aes(x=beta_vec,y=density_vec,color=sample_vec))+
           ggplot2::geom_line()+
           ggplot2::scale_color_manual(values=colours)+
-         # ggplot2::facet_wrap(~cluster_vec,scales = scale_param
-         # ggplot2::facet_wrap(~factor(cluster_full,levels=auc_label$label),scales = scale_param
           ggplot2::facet_wrap(~cluster_full,scales = scale_param
           )+ ggplot2::labs(color="DNA sample type", x="Beta value", y="Density")+
           ggplot2::ggtitle(txt)
         y=vector()
         for(i in 1:K){y[i]=max(df_new_tmp[df_new_tmp$cluster_vec==i,2])}
-        y=y[order(auc_label$cluster_label)]
-        # f_labels<-data.frame(cluster_vec=as.factor(seq(1,K,by=1)),label=as.vector(round(object$optimal_model_results$tau,3)),x=0.8,
-        #                      y=y)
         f_labels<-data.frame(cluster_full=levels(df_new_tmp$cluster_full),
                              label=as.vector(round(object$optimal_model_results$tau,3)),x=0.8,
                              y=y)
@@ -405,7 +366,6 @@ plot.betaclust <- function(x,what = "fitted density",
   if(what == "uncertainty")
   {
     labels<-c(max_uc="Maximum uncertainty")
-    #unc_df<-cbind(object$optimal_model_results$uncertainty,object$optimal_model_results$data[,"mem_final"])
     unc_df<-cbind(object$optimal_model_results$uncertainty,object$optimal_model_results$classification)
     unc_df<-as.data.frame(unc_df)
     colnames(unc_df)<-c("Uncertainty","Cluster")
@@ -420,9 +380,7 @@ plot.betaclust <- function(x,what = "fitted density",
                      axis.ticks.x=ggplot2::element_blank()
       )+ggplot2::labs(color="Cluster number")+
       ggplot2::xlab("Cluster number")+
-      #ggplot2::theme(legend.position = "none")+
       ggplot2::ggtitle(txt)+
-      #ggplot2::ggtitle("Boxplot for uncertainties in clustering solution")+
       ggplot2::coord_cartesian(ylim = c(0, 1))+
       ggplot2::geom_hline(ggplot2::aes(yintercept=max_unc, linetype="Maximum uncertainty"),color="black")+
       ggplot2::scale_linetype_manual(name="", values = 2,guide = ggplot2::guide_legend(override.aes = list(color = "black")))
@@ -454,12 +412,10 @@ plot.betaclust <- function(x,what = "fitted density",
       ic_df2<-ic_df[order(-ic_df$IC_value),]
       ic_df2$ModelName<-factor(ic_df2$ModelName,levels = ic_df2$ModelName)
       plot_graph<-ggplot2::ggplot(data=ic_df2,ggplot2::aes(x=ModelName,y=IC_value))+
-        #ggplot2::geom_line()+
         ggplot2::geom_bar(stat="identity",fill="lightgreen")+
         ggplot2::geom_text(ggplot2::aes(label = sprintf("%.1f", IC_value), y= IC_value),  vjust = -1)+
         ggplot2::guides(fill="none")+
         ggplot2::ggtitle(txt)+
-        #ggplot2::ggtitle(paste0(object$information_criterion," Information Criterion Plot for optimal model selection"))+
         ggplot2::xlab("Model Name")+
         ggplot2::ylab("Information criterion value")
 

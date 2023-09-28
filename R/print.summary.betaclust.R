@@ -29,10 +29,9 @@ print.summary.betaclust <- function(x, digits = getOption("digits"), ...)
   print(tab)
   #
   cat("\nClustering table:")
-  #print(table(x$classification))
   print(x$classification)
 
-  cat("\nProportion of CpG sites in each cluster: \n")
+  cat("\nEstimated mixing proportions: \n")
   cat(x$prop_data)
   #
   invisible(x)

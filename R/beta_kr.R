@@ -25,7 +25,7 @@ globalVariables(c("k"))
 #'    \item llk - A vector containing the log-likelihood value at each step of the EM algorithm.
 #'    \item alpha - The first shape parameter for the beta mixture model.
 #'    \item delta - The second shape parameter for the beta mixture model.
-#'    \item tau - The proportion of CpG sites in each cluster.
+#'    \item tau - The estimated mixing proportion for each cluster.
 #'    \item z - A matrix of dimension \eqn{C \times K} containing the posterior probability of each CpG site belonging to each of the \eqn{K} clusters.
 #'    \item classification - The classification corresponding to z, i.e. map(z).
 #'    \item uncertainty - The uncertainty of each CpG site's clustering.
@@ -101,8 +101,6 @@ beta_kr<-function(data,M=3,N,R,parallel_process=FALSE,seed=NULL){
     data_full=x
     x=x[,-ncol(x)]
     C=nrow(x)
-    #R=samples
-    #N=patients
 
     ##  starting values from initial clustering
     mu=matrix(NA,ncol=R,nrow = K)
@@ -282,20 +280,10 @@ beta_kr<-function(data,M=3,N,R,parallel_process=FALSE,seed=NULL){
   complete_data<-matrix(NA,C,(N*R+1))
   mem_final<-apply(z_new, 1, which.max)
   complete_data<-cbind(x,mem_final)
- # cluster_count=table(mem_final)
-
-
-  ### uncertainty
-  #cert=apply(z_new,1,max)
-  #uc=1-cert
 
   parallel::stopCluster(cl=my.cluster)
 
-  #### Sorting the clusters as per interest
-  # mean_delta=as.data.frame(alpha/(alpha+delta))
-  # mean_delta$diff<-abs(mean_delta$V1-mean_delta$V2)
-  # mean_sorted<-mean_delta[order(mean_delta$diff,decreasing = T),]
-  # mean_row<-row.names(mean_sorted)
+  #### Sorting the clusters as per AUC and WD
 
   auc_wd<-AUC_WD_metric(alpha,delta,K,R)
   auc=apply(auc_wd$AUC, 1, max)
@@ -328,15 +316,12 @@ beta_kr<-function(data,M=3,N,R,parallel_process=FALSE,seed=NULL){
   data_final<-data_final[,-(N*R+1)]
   colnames(data_final)[(N*R+1)]<-"mem_final"
   data_final$mem_final<-as.factor(data_final$mem_final)
-  #classification=as.factor(as.vector(data_final$mem_final))
   cert_final=apply(z_final,1,max)
   classification=as.factor(apply(z_final, 1, which.max))
   uc_final=1-cert_final
-  cluster_count=table(data_final$mem_final)
-  #tau_final=round((as.numeric(cluster_count)/C),3)
+  cluster_count=table(classification)
 
   #### Return data
-  #return(list(cluster_count=cluster_count,llk=llk_iter,data=complete_data,alpha=alpha,delta=delta,tau=tau,z=z_new,uncertainty=uc))
   return(list(cluster_size=cluster_count,llk=llk_iter,
               alpha=alpha_final,delta=delta_final,tau=tau_final,
               z=z_final,classification=classification,uncertainty=uc_final,

@@ -1,6 +1,6 @@
 ---
 title: "betaclust: a family of beta mixture models for beta-valued DNA methylation data"
-author: "Koyel Majumdar, Andrea Rau, Florence Jaffrezic, Thomas Brendan Murphy and Isobel Claire Gormley"
+author: "Koyel Majumdar, Romina Silva, Antoinette Sabrina Perry, Ronald William Watson, Andrea Rau, Florence Jaffrezic, Thomas Brendan Murphy and Isobel Claire Gormley"
 output: rmarkdown::html_vignette
 always_allow_html: true
 vignette: >
@@ -65,7 +65,7 @@ head(pca.methylation.data)
 
 The K$\cdot\cdot$ and KN$\cdot$ models (Majumdar et al. 2022) are used to analyse a single DNA sample (*R = 1*) and cluster the CpG sites into *K = M* groups, where *M* is the number of methylation states of a CpG site (typically the methylation state of a CpG site is either hypomethylated, hemimethylated or hypermethylated).
 
-The thresholds are objectively inferred from the clustering solution. The optimal model can be selected using the AIC, BIC or ICL model selection criterion. The KN$\cdot$ model is selected by the BIC as the optimal model to cluster the CpG sites in the benign sample into 3 methylation states and objectively infer the thresholds.
+These BMM models or a selection of these BMM models can be fit using the wrapper function `betaclust()`. The thresholds are objectively inferred from the clustering solution. The optimal model can be selected using the AIC, BIC or ICL model selection criterion. The KN$\cdot$ model is selected by the BIC as the optimal model to cluster the CpG sites in the benign sample into 3 methylation states and objectively infer the thresholds.
 
 Due to package testing limitations, the default option for the parameter `parallel_process` is `FALSE`. The option needs to be set as `TRUE` for the parameter `parallel_process` to trigger parallel processing of the BMMs for increased computational efficiency.
 
@@ -109,7 +109,7 @@ threshold_points$threholds
 ### Plotting the density estimates of the clustering solution
 The clustering solution can be visualized using the `plot()` function. The fitted and kernel density estimates, uncertainty and model selection plots can be obtained using the `what` parameter in this function. To generate the fitted and kernel density estimates, the data that has been used for analysis in the previous section, needs to be passed as an input using the `data` argument. Apart from static plots using `plot_type = "ggplot"` interactive plots are also available using `plot_type = "plotly"`.
 
-The fitted densities and the proportion of data in each cluster is displayed in the plots. The thresholds for the methylation states can be displayed using `threshold = TRUE`. As the K$\cdot\cdot$ model constrains the shape parameters to be equal for each patient, a single pair of threshold points is calculated for all patients, and this results in the same fitted density for all patients. In the KN$\cdot$ model, a pair of thresholds is independently determined for each patient based on the estimated shape parameters since the shape parameters differ for each patient. The parameter `patient_number` can be used to choose the patient for whom the fitted density and thresholds need to be visualized. For visualization, the parameter `patient_number` accepts the patient's column number as a value.
+The fitted densities and the estimated mixing proportions are displayed in the plots. The thresholds for the methylation states can be displayed using `threshold = TRUE`. As the K$\cdot\cdot$ model constrains the shape parameters to be equal for each patient, a single pair of threshold points is calculated for all patients, and this results in the same fitted density for all patients. In the KN$\cdot$ model, a pair of thresholds is independently determined for each patient based on the estimated shape parameters since the shape parameters differ for each patient. The parameter `patient_number` can be used to choose the patient for whom the fitted density and thresholds need to be visualized. For visualization, the parameter `patient_number` accepts the patient's column number as a value.
 
 The fitted density and threshold points for the first patient in the dataset can be visualized as shown below:
 
@@ -133,9 +133,9 @@ plot(threshold_out, what = "uncertainty")
 
 ## Identifying DMCs between *R = 2* samples
 
-The methylation values in multiple samples can be analysed and the differentially methylated CpG sites between these samples can be identified. The K$\cdot$R model (Majumdar et al. 2022) clusters the $C \times (NR)$ data into *K = M^R^* groups.
+The methylation values in multiple samples can be analysed and the most differentially methylated CpG sites between these samples can be identified. The K$\cdot$R model (Majumdar et al. 2022) clusters the $C \times (NR)$ data into *K = M^R^* groups.
 
-A total of *R = 2* DNA samples were collected from each patient (Silva et al. 2020). Each DNA sample has CpG sites that belong to one of the *M* methylation states, typically *M = 3*. As a result, the *C* CpG sites are clustered into *K = M^R^ = 9* groups.
+A total of *R = 2* DNA samples were collected from each patient (Silva et al. 2020). Each DNA sample has CpG sites that belong to one of the *M* methylation states, typically *M = 3*. As a result, the *C* CpG sites are clustered into *K = M^R^ = 9* biologically motivated groups.
 
 
 ```{r dmc,include=TRUE, echo=TRUE}
@@ -150,6 +150,15 @@ dmc_output <- betaclust(pca.methylation.data[,2:9], M, N, R,
 ```
 
 
+### AUC and WD metrics for finding similarities in the *R* cumulative distributions in each of the *K* clusters
+
+The area-under-curve (AUC) and the Wasserstein distance (WD) methods are used to compute the disparity between cumulative distributions, and are also utilised to quantify the degree of differential methylation of CpG sites between sample types in each cluster. The clusters are presented in descending order of their degree of differential methylation, based on decreasing AUC and, in the case of ties, WD values.
+
+```{r dmcoutput4b, include=TRUE, echo=TRUE}
+print(dmc_output$optimal_model_results$DM$AUC)
+print(dmc_output$optimal_model_results$DM$WD)
+```
+
 ### Summary statistics of the clustering solution
 
 Summary statistics of the clustering solution can then be obtained as follows:
@@ -158,10 +167,9 @@ Summary statistics of the clustering solution can then be obtained as follows:
 summary(dmc_output)
 ```
 
-
 ### Plotting the density estimates of the clustering solution
 
-The fitted density estimates of the clustering solution can be visualised. The names of the DNA samples used in the analysis are passed to the function using `sample_name`. If no input is provided in `sample_name` then default values of sample names, for e.g. Sample 1, Sample 2, etc. are used. The proportion of CpG sites belonging to each cluster is also displayed in each panel. From the plot it can be observed that clusters 1--4 identify the CpG sites where the methylation state tends to change between the two samples whereas clusters 5--9 identify CpG sites which tend to have the same methylation states in both samples.
+The fitted density estimates of the clustering solution can be visualised. The names of the DNA samples used in the analysis are passed to the function using `sample_name`. If no input is provided in `sample_name` then default values of sample names, for e.g. Sample 1, Sample 2, etc. are used. The estimated mixing proportions are also displayed in each panel.
 
 ```{r dmcoutput2,include=TRUE, echo=TRUE,fig.width = 6.5, fig.height = 5,dev = 'png'}
 plot(dmc_output, what = "fitted density", plot_type = "ggplot", data = pca.methylation.data[,2:9], sample_name = c("Benign","Tumour"))
@@ -170,7 +178,7 @@ plot(dmc_output, what = "fitted density", plot_type = "ggplot", data = pca.methy
 The kernel density estimates of the clustering solution are obtained as below:
 
 ```{r dmcoutput3,include=TRUE, echo=TRUE,fig.width = 6.5, fig.height = 5,dev = 'png'}
-plot(dmc_output, what = "kernel density",plot_type = "ggplot", data = pca.methylation.data[,2:9])
+plot(dmc_output, what = "kernel density", plot_type = "ggplot", data = pca.methylation.data[,2:9])
 ```
 
 ### Plotting the uncertainty in the clustering solution
@@ -181,17 +189,19 @@ The uncertainties in the clustering solution can be plotted as follows:
 plot(dmc_output, what = "uncertainty", plot_type = "ggplot")
 ```
 
-### AUC and WD metrics for finding similarities in the *R* cumulative distributions in each of the *K* clusters
-The area-uner-curve (AUC) and the Wasserstein distance (WD) methods are employeed to find the level of dissimilarity between the *R=2* cumulative distributions estimated for each of the *K=9* clusters. As there are only 2 sample types for differential methylation analysis only a single dissimilarity is obtained for each of the 9 clusters.
+#### Retrieving the most differentially methylated CpG sites
 
-We then employed a threshold of 0.65 for the AUC metric and/or a threshold of 0.06 for the WD metric for identifying the clusters
-1,2 and 3 as the most differentially methylated clusters.
-```{r dmcoutput4b, include=TRUE, echo=TRUE}
-print(dmc_output$optimal_model_results$DM$AUC)
-print(dmc_output$optimal_model_results$DM$WD)
+The AUC and WD metric along with the density estimates suggests cluster 1, 2 and 3 
+as the mostly differentially methylated clusters. We then use the function `DMC_identification()`
+and pass the value of 0.65 to the parameter `threshold` and the value "AUC" to the parameter `metric`.
+The function then selects the clusters having AUC value higher than the value mentioned and retrieves the CpG sites clustered in those clusters as the most differentially methylated CpG sites.
+
+```{r dmcoutput6,include=TRUE, echo=TRUE,fig.width = 6, fig.height = 5, dev = 'png'}
 
 ## the dataframe containing methylation data for the CpG sites identified as the most differentially methylated ones
-dmc_df=DMC_identification(dmc_output,data = pca.methylation.data[,2:9],pca.methylation.data[,1],threshold = 0.06,metric="WD")
+dmc_df <- DMC_identification(dmc_output, data = pca.methylation.data[,2:9],
+                             pca.methylation.data[,1], threshold = 0.06,
+                             metric="WD")
 ```
 
 ### Plotting the empirical cumulative distribution function
@@ -231,35 +241,6 @@ ecdf_rarb <- dmc_df[dmc_df$IlmnID %in% cpg_rarb$IlmnID,]
 
 ## Plot the ecdf of the selected DMCs
 ecdf.betaclust(ecdf_rarb[,2:9], R = 2, sample_name = c("Benign","Tumour"))
-```
-
-
-## Wrapper function to fit all models in the family of beta mixture models
-
-All the BMM models or a selection of BMM models can be fit using the wrapper function `betaclust()`. All three BMM models can be fit to a dataset and the optimal model can be selected using the AIC, BIC or ICL criterion.
-
-```{r wrapper,include=TRUE, echo=TRUE}
-wrapper_out <- betaclust(pca.methylation.data[,2:9], M, N, R,
-                        model_names = c("K..","KN.","K.R"),
-                        model_selection = "BIC", parallel_process = FALSE,
-                        seed = my.seed)
-```
-
-### Summary statistics of the clustering solution
-
-Summary statistics of the clustering solution of the optimal model can then be obtained. The K$\cdot$R model has been selected as the optimal model to identify the DMCs between the benign and tumour samples. The proportion of data belonging to each group has been displayed below.
-
-```{r wrapperoutput1,include=TRUE, echo=TRUE}
-summary(wrapper_out)
-```
-
-
-### Plotting the density estimates of the clustering solution
-
-The fitted density estimates of the clustering solution of the optimal model can be visualised.
-
-```{r wrapperoutput2,include=TRUE, echo=TRUE,fig.width = 6.5, fig.height = 5,dev = 'png'}
-plot(wrapper_out, what = "fitted density", plot_type = "ggplot", data = pca.methylation.data[,2:9], sample_name = c("Benign","Tumour"))
 ```
 
 

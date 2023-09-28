@@ -7,16 +7,16 @@
 AUC_WD_metric(alpha, delta, K, R)
 }
 \arguments{
-\item{alpha}{Shape parameter 1}
+\item{alpha}{The first shape parameter estimated for the beta mixture model.}
 
-\item{delta}{Shape parameter 2}
+\item{delta}{The second shape parameter estimated for the beta mixture model.}
 
-\item{K}{The number of clusters estimated}
+\item{K}{The number of clusters estimated.}
 
-\item{R}{The number of sample types in the dataset}
+\item{R}{The number of sample types in the dataset.}
 }
 \value{
-The list with AUC and WD values
+The list with AUC and WD values.
 }
 \description{
 Function to find the level of similarities between the \eqn{R} cumulative distributions estimated in each of the \eqn{K} clusters.

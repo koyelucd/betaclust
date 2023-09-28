@@ -28,9 +28,9 @@ A dataset containing pre-processed beta methylation values from \eqn{R=2} sample
 The raw methylation array data was first quality controlled and preprocessed using the \href{https://rnbeads.org/}{RnBeads} package. The array data were then normalized and and probes located outside of CpG sites and on the sex chromosome were filtered out. The CpG sites with missing values were removed from the resulting dataset. A subset of the complete dataset has been uploaded in the package for testing purposes. The complete dataset is available on \href{https://github.com/koyelucd/betaclust}{GitHub}.
 }
 \references{
-{Mueller F, Scherer M, Assenov Y, Lutsik P, Walter J, Lengauer T, Bock C (2019). “RnBeads 2.0: comprehensive analysis of DNA methylation data.” Genome Biology, 20(55). \doi{10.1186/s13059-019-1664-9}, https://rnbeads.org.}
+{Mueller F, Scherer M, Assenov Y, Lutsik P, Walter J, Lengauer T, Bock C (2019). “RnBeads 2.0: comprehensive analysis of DNA methylation data.” Genome Biology, 20(55).}
 
-{Assenov Y, Mueller F, Lutsik P, Walter J, Lengauer T, Bock C (2014). “Comprehensive Analysis of DNA Methylation Data with RnBeads.” Nature Methods, 11(11), 1138–1140. \doi{10.1038/nmeth.3115}, https://rnbeads.org.}
+{Assenov Y, Mueller F, Lutsik P, Walter J, Lengauer T, Bock C (2014). “Comprehensive Analysis of DNA Methylation Data with RnBeads.” Nature Methods, 11(11), 1138–1140.}
 }
 \seealso{
 \code{\link{legacy.data}}

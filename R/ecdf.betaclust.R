@@ -74,7 +74,6 @@ ecdf.betaclust <- function(x, R=2, sample_name=NULL,title=NULL){
       ggplot2::stat_ecdf()+
       ggplot2::scale_color_manual("DNA Sample",values=colours)+
       ggplot2::ggtitle(txt)+
-      #ggplot2::ggtitle("Empirical Cumulative Distribution Function")+
       ggplot2::xlab("Beta value")+
       ggplot2::ylab("F(Beta value)")
    }else if(R>2 & R<7){
@@ -88,7 +87,6 @@ ecdf.betaclust <- function(x, R=2, sample_name=NULL,title=NULL){
        ggplot2::stat_ecdf()+
        ggplot2::scale_color_manual(values=colours)+
        ggplot2::ggtitle(txt)+
-       #ggplot2::ggtitle("Empirical Cumulative Distribution Function")+
        ggplot2::xlab("Beta value")+
        ggplot2::ylab("F(Beta value)")
   }
@@ -96,8 +94,6 @@ ecdf.betaclust <- function(x, R=2, sample_name=NULL,title=NULL){
     pecdf<-ggplot2::ggplot(data_plot, ggplot2::aes(beta_value, colour = Patient_Sample)) +
       ggplot2::stat_ecdf()+
       ggplot2::labs(color="DNA Sample")+
-      #ggplot2::scale_color_manual(values=colours)+
-      #ggplot2::ggtitle("Empirical Cumulative Distribution Function")+
       ggplot2::ggtitle(txt)+
       ggplot2::xlab("Beta value")+
       ggplot2::ylab("F(Beta value)")
