@@ -10,7 +10,7 @@ Authors@R: c(person("Koyel", "Majumdar",email = "koyel.majumdar@ucdconnect.ie", 
         person("Florence","Jaffrezic",email="florence.jaffrezic@inrae.fr",role="aut"),
         person("Thomas Brendan", "Murphy",email = "brendan.murphy@ucd.ie", role = c("aut"), comment = c(ORCID = "0000-0002-5668-7046")),
     person("Isobel Claire", "Gormley",email = "claire.gormley@ucd.ie", role = c("aut"), comment = c(ORCID = "0000-0001-7713-681X")))
-Description: A family of novel beta mixture models (BMMs) has been developed by Majumdar et al. (2022) <arXiv:2211.01938v1> to appositely model the beta-valued cytosine-guanine dinucleotide (CpG) sites, to objectively identify methylation state thresholds and to identify the differentially methylated CpG (DMC) sites using a model-based clustering approach. The family of beta mixture models employs different parameter constraints applicable to different study settings. The EM algorithm is used for parameter estimation, with a novel approximation during the M-step providing tractability and ensuring computational feasibility.
+Description: A family of novel beta mixture models (BMMs) has been developed by Majumdar et al. (2022) <doi:10.48550/arXiv.2211.01938> to appositely model the beta-valued cytosine-guanine dinucleotide (CpG) sites, to objectively identify methylation state thresholds and to identify the differentially methylated CpG (DMC) sites using a model-based clustering approach. The family of beta mixture models employs different parameter constraints applicable to different study settings. The EM algorithm is used for parameter estimation, with a novel approximation during the M-step providing tractability and ensuring computational feasibility.
 License: GPL-3
 Depends: R (>= 3.5.0)
 Imports: foreach, 
