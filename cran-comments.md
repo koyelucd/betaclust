@@ -196,4 +196,28 @@ Skipping checking math rendering: package 'V8' unavailable
 Notes:  
   
   - The notes in rhub only occurs in the rhub Windows environment. They are mentioned in the open issues of the rhub package.
-  - The note for both Ubuntu and Fedora ('tidy' and 'V8'), which, as far as I undertood, is caused by some promlem on the side of the testing platform.
+  - The note for both Ubuntu and Fedora ('tidy' and 'V8'), which, as far as I understood, is caused by some problem on the side of the testing platform.
+  
+  
+## Resubmission 2024-09-24
+This is the fourth submission of betaclust to CRAN.
+In this submission I have:
+  - Corrected a code issue while calculating ICL criteria for optimal model selection.  
+ 
+ ## Test environments  
+ 
+- R-hub windows-x86_64-devel (r-devel)  
+
+- devtools macOS 13.3.1 
+
+- R-hub Debian Linux, R-release, GCC   
+
+- R-hub ubuntu-gcc-release (r-release)  
+
+- R-hub fedora-clang-devel (r-devel) 
+
+## R CMD check results
+### Local check
+`devtools::check()` result:  
+
+0 errors ✔ | 0 warnings ✔ | 0 notes ✔

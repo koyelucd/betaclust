@@ -22,7 +22,7 @@ em_icl<-function(llk,C,M,N,R,model_name="K..",z){
   mod_len=length(model_name)
   icl=vector("numeric",mod_len)
 
-  bic<-em_bic(llk,C,K,model_name,patients,samples)
+  bic<-em_bic(llk,C,M,N,R,model_name)
   for(i in 1:mod_len)
   {
 

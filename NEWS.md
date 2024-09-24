@@ -1,3 +1,7 @@
+# betaclust VERSION 1.0.4
+
+-- Issue in calculating ICL fixed.
+
 # betaclust VERSION 1.0.1 - 1.0.3
 
 -- AUC and WD metric added for DMC identification.
